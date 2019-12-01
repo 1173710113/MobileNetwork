@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".CheckDiscussActivity"
+    android:orientation="vertical">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="哔哩哔哩注册为什么要去做题?"
+            android:textSize="24sp"
+            android:textStyle="bold"
+            />
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="为什么有人（不是亿万富翁，也不是老年人，只是年轻工作者）愿意多花一倍甚至两倍的钱乘坐Business class或First class，难道仅仅为了显示出自身的逼格或是身份象征吗？况且First class又不比Economy class飞得快，也不一定节省很多时间啊，相比于花相同金钱享受飞机上饮食的照顾，更不如用于企业投资或个人投资储蓄，亦或是拿来享受也比飞机上划算的多。有些人会谈到：First class的亿万富翁更多，生意更容易成功，但是难道仅仅为了这不一定的生意多花那么多钱吗，而且大部分头等舱空间独立性很高，人们交谈的几率少，生意更不一定能谈成。"
+            android:textSize="18sp" />
+
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/boarder"
+            android:text="写评论"/>
+
+        <com.example.demo1.ScrollListView
+            android:layout_marginTop="10pt"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/list_comment"
+            />
+    </LinearLayout>
+</ScrollView>

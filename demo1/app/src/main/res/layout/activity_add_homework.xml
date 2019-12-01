@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".AddHomeworkActivity"
+    android:orientation="vertical">
+
+    <EditText
+        android:id="@+id/edit_homework_name"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="标题"
+        />
+
+    <EditText
+        android:id="@+id/edit_homework_content"
+        android:layout_width="match_parent"
+        android:layout_height="300dp"
+        android:gravity="left"
+        android:hint="正文"/>
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="发布"/>
+</LinearLayout>
