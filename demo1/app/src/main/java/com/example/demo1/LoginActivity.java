@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -29,54 +30,35 @@ public class LoginActivity extends AppCompatActivity {
     public void Login(View view){
         String id = ((EditText)findViewById(R.id.user_id)).getText().toString();
         String password = ((EditText)findViewById(R.id.user_password)).getText().toString();
-        String path = "http://127.0.0.0:8081/mobile/user/login";
-        new getTask().execute(id,password,path);
-    }
-
-    class getTask extends AsyncTask {
-
-        @Override
-        protected Object doInBackground(Object[] params) {
-            //依次获取用户名，密码与路径
-            String name = params[0].toString();
-            String pass = params[1].toString();
-            String path = params[2].toString();
-
-            try {
-                //获取网络上get方式提交的整个路径
-                URL url = new URL(path);
-                //打开网络连接
-                HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-                //设置提交方式
-                conn.setRequestMethod("GET");
-                //设置网络超时时间
-                conn.setConnectTimeout(5000);
-                //获取结果码
-                int code = conn.getResponseCode();
-                if (code == 200) {
-                    //用io流与web后台进行数据交互
-                    InputStream is = conn.getInputStream();
-                    //字节流转字符流
-                    BufferedReader br = new BufferedReader(new InputStreamReader(is));
-                    //读出每一行的数据
-                    String s = br.readLine();
-                    //返回读出的每一行的数据
-                    return s;
+        final String path = "http://10.0.2.2:8081/mobile/user/login";
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                HttpURLConnection conn = null;
+                BufferedReader reader = null;
+                try{
+                    URL url = new URL(path);
+                    conn = (HttpURLConnection)url.openConnection();
+                    conn.setRequestMethod("GET");
+                    conn.setDoInput(true);
+                    InputStream in = conn.getInputStream();
+                    reader = new BufferedReader(new InputStreamReader(in));
+                    String json = reader.readLine();
+                    if(json == null){
+                        json = "fail";
+                    }
+                    Log.d("json:", json);
+                    reader.close();
+                } catch(Exception e)
+                {
+                    e.printStackTrace();
                 }
-            } catch (MalformedURLException e){
-                e.printStackTrace();
-            } catch (IOException e) {
-                e.printStackTrace();
+                finally {
+                    if(conn!=null){
+                        conn.disconnect();
+                    }
+                }
             }
-            return null;
-        }
-        @Override
-        protected void onPostExecute(Object o) {
-            super.onPostExecute(o);
-            //获取Android studio与web后台数据交互获得的值
-            String s= (String) o;
-            //吐司Android studio与web后台数据交互获得的值
-            Toast.makeText(LoginActivity.this, s, Toast.LENGTH_SHORT).show();
-        }
+        }).start();
     }
 }
