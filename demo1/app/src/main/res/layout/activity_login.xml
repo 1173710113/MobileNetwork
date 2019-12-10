@@ -18,17 +18,20 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="UserName"
-            android:layout_marginBottom="8pt"/>
+            android:layout_marginBottom="8pt"
+            android:id="@+id/user_id"/>
         <EditText
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="Password"
-            android:layout_marginBottom="8pt"/>
+            android:layout_marginBottom="8pt"
+            android:id="@+id/user_password"/>
         <Button
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Login"
-            android:id="@+id/button_login"/>
+            android:id="@+id/button_login"
+            android:onClick="Login"/>
 
     </LinearLayout>
 
