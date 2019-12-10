@@ -10,6 +10,9 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
 
+import com.example.demo1.adapter.ClassAdapter;
+import com.example.demo1.domain.CourseClass;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -18,12 +21,12 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        List<String> data = new ArrayList<>();
+        List<CourseClass> data = new ArrayList<>();
         for(int i=0; i<10; i++) {
-            data.add("计算机" + (i+1) + "班");
+            data.add(new CourseClass("计算机导论","杨忠杰", 175 ));
         }
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(
-                MainActivity.this, android.R.layout.simple_list_item_1, data
+        ClassAdapter adapter = new ClassAdapter(
+                MainActivity.this, R.layout.course_item, data
         );
         ListView listView = (ListView) findViewById(R.id.class_list);
         listView.setAdapter(adapter);
