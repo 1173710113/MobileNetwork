@@ -31,6 +31,7 @@ public class LoginActivity extends AppCompatActivity {
         String id = ((EditText)findViewById(R.id.user_id)).getText().toString();
         String password = ((EditText)findViewById(R.id.user_password)).getText().toString();
         final String path = "http://10.0.2.2:8081/mobile/user/login";
+
         new Thread(new Runnable() {
             @Override
             public void run() {
@@ -60,5 +61,7 @@ public class LoginActivity extends AppCompatActivity {
                 }
             }
         }).start();
+        Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+        startActivity(intent);
     }
 }
