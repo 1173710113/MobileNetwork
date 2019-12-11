@@ -57,4 +57,11 @@ public interface UserMapper {
 	 */
 	public List<User> queryUser(@Param("id") String id, @Param("type") String type, @Param("name") String name,
 			@Param("sex") String sex);
+	/**
+	 * 
+	 * @param account
+	 * @param password
+	 * @return
+	 */
+	public User login(@Param("account")String account, @Param("password")String password);
 }

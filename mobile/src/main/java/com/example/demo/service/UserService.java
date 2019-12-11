@@ -3,6 +3,8 @@
  */
 package com.example.demo.service;
 
+import com.example.demo.domain.User;
+
 /**
  * @author msi-user
  *
@@ -26,7 +28,7 @@ public interface UserService {
 	 * @param password
 	 * @return
 	 */
-	public String login(String id, String password);
+	public User login(String id, String password);
 	
 	/**
 	 * 
