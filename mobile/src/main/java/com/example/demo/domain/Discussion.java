@@ -3,63 +3,81 @@ package com.example.demo.domain;
 public class Discussion {
 
 	private String id;
-	private User poster;
+	private String posterId;
+	private String posterName;
 	private String postTime;
 	private String title;
 	private String content;
 	private int replyCount;
+
 	/**
 	 * @param id
-	 * @param poster
+	 * @param posterId
+	 * @param posterName
 	 * @param postTime
 	 * @param title
 	 * @param content
+	 * @param replyCount
 	 */
-	public Discussion(String id, User poster, String postTime, String title, String content, int replyCount) {
+	public Discussion(String id, String posterId, String posterName, String postTime, String title, String content,
+			int replyCount) {
 		super();
 		this.id = id;
-		this.poster = poster;
+		this.posterId = posterId;
+		this.posterName = posterName;
 		this.postTime = postTime;
 		this.title = title;
 		this.content = content;
 		this.replyCount = replyCount;
 	}
+
 	/**
 	 * @return the id
 	 */
 	public String getId() {
 		return id;
 	}
+
 	/**
-	 * @return the poster
+	 * @return the posterId
 	 */
-	public User getPoster() {
-		return poster;
+	public String getPosterId() {
+		return posterId;
 	}
+
+	/**
+	 * @return the poster_name
+	 */
+	public String getPoster_name() {
+		return posterName;
+	}
+
 	/**
 	 * @return the postTime
 	 */
 	public String getPostTime() {
 		return postTime;
 	}
+
 	/**
 	 * @return the title
 	 */
 	public String getTitle() {
 		return title;
 	}
+
 	/**
 	 * @return the content
 	 */
 	public String getContent() {
 		return content;
 	}
-	
+
 	/**
-	 * 
-	 * @return
+	 * @return the replyCount
 	 */
 	public int getReplyCount() {
 		return replyCount;
 	}
+
 }

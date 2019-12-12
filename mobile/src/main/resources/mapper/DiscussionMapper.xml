@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.example.demo.dao.DiscussionMapper">
+	<insert id="addDiscussion">
+		INSERT INTO discussion_table(user, title, content)
+		VALUES(#{user}, #{title}, #{content})
+	</insert>
+	
+	<delete id="deleteDiscussion">
+		DELETE FROM discussion_table
+		WHERE id=#{id}
+	</delete>
+	
+	<update id="updateDiscussionTitle">
+		UPDATE discussion_table
+		SET title=#{title}
+		WHERE id=#{id}
+	</update>
+	
+	<update id="updateDiscussionContent">
+		UPDATE discussion_table
+		SET content=#{content}
+		WHERE id=#{id}
+	</update>
+	
+	<select id="queryDiscussionByCourse" resultMap="discussion">
+		SELECT d.id as id,
+		u.id as user_id,
+		u.name as user_name,
+		d.time as time,
+		d.title as title,
+		d.content as content,
+		d.reply_count as reply_count
+		FROM user_table u,discussion_table d
+		WHERE d.course=#{course_id}
+	</select>
+	
+	<select id="queryDiscussionByCourseAndTitle" resultMap="discussion">
+		SELECT d.id as id,
+		u.id as user_id,
+		u.name as user_name,
+		d.time as time,
+		d.title as title,
+		d.content as content,
+		d.reply_count as reply_count
+		FROM user_table u,discussion_table d
+		WHERE d.course=#{course_id} and d.title LIKE "%"#{title}"%"
+	</select>
+	
+	<resultMap type="Discussion" id="discussion">
+		<id column="id" property="id"/>
+		<result column="user_id" property="posterId"/>
+		<result column="user_name" property="posterName"/>
+		<result column="time" property="PostTime"/>
+		<result column="title" property="title"/>
+		<result column="content" property="content"/>
+		<result column="reply_count" property="replyCount"/>
+	</resultMap>
+</mapper>
