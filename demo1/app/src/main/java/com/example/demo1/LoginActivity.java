@@ -42,10 +42,14 @@ public class LoginActivity extends AppCompatActivity {
                     InputStream in = conn.getInputStream();
                     reader = new BufferedReader(new InputStreamReader(in));
                     String json = reader.readLine();
-                    if(json == null){
-                        json = "fail";
+                    System.out.println(json);
+                    if(json.equals("success")){
+                        Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                        startActivity(intent);
                     }
-                    Log.d("json:", json);
+                    else{
+
+                    }
                     reader.close();
                 } catch(Exception e)
                 {
@@ -58,8 +62,7 @@ public class LoginActivity extends AppCompatActivity {
                 }
             }
         }).start();
-        Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-        startActivity(intent);
+
     }
 
 }

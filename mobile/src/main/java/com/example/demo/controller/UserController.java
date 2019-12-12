@@ -7,6 +7,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -16,6 +17,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.example.demo.domain.User;
 import com.example.demo.service.UserService;
+import com.example.demo.service.UserServiceImp;
 /**
  * @author msi-user
  *
@@ -27,11 +29,11 @@ public class UserController {
 	private UserService userService;
 	@RequestMapping(value = "/login/{account}/{password}", method = RequestMethod.GET)
 	@ResponseBody
-	public User login(@PathVariable("account") String account, @PathVariable("password") String password) {
-		System.out.println("123");
-		User user = new User("1173710113", "1173710113", "学生", "滕文杰", "男", "");
+	public String login(@PathVariable("account") String account, @PathVariable("password") String password) {
 		User us = userService.login(account,password);
-		System.out.print(us.getId());
-		return user;
+		if(us!=null) {
+			return "success";
+		}
+		return "fail";
 	}
 }

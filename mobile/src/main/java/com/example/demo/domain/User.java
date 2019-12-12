@@ -24,6 +24,13 @@ public class User {
 	 * @param sex
 	 * @param iconPath
 	 */
+	public User(String id, String password) {
+		
+		this.id = id;
+		this.password = password;
+		
+	}
+
 	public User(String id, String password, String type, String name, String sex, String iconPath) {
 		super();
 		this.id = id;
