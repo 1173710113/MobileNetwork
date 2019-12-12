@@ -20,7 +20,7 @@ public interface UserService {
 	 * @param sex
 	 * @return
 	 */
-	public String register(String id, String password, String type, String name, String sex);
+	public void register(String id, String password, String type, String name, String sex);
 	
 	/**
 	 * 

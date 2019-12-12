@@ -26,7 +26,7 @@ public interface UserMapper {
 	 * @param sex should be one of 男\女 or null.
 	 * @param iconPath
 	 */
-	public void addUser(@Param("id") String id, @Param("password") String password, @Param("type") String type,
+	public void register(@Param("id") String id, @Param("password") String password, @Param("type") String type,
 			@Param("name") String name, @Param("sex") String sex, @Param("icon_path") String iconPath);
 
 	/**

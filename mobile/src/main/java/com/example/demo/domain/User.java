@@ -24,12 +24,12 @@ public class User {
 	 * @param sex
 	 * @param iconPath
 	 */
-	public User(String id, String password) {
-		
-		this.id = id;
-		this.password = password;
-		
-	}
+//	public User(String id, String password) {
+//		
+//		this.id = id;
+//		this.password = password;
+//		
+//	}
 
 	public User(String id, String password, String type, String name, String sex, String iconPath) {
 		super();
@@ -39,6 +39,12 @@ public class User {
 		this.name = name;
 		this.sex = sex;
 		this.iconPath = iconPath;
+	}
+
+	@Override
+	public String toString() {
+		return "User [id=" + id + ", password=" + password + ", type=" + type + ", name=" + name + ", sex=" + sex
+				+ ", iconPath=" + iconPath + "]";
 	}
 
 	/**

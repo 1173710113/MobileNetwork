@@ -12,9 +12,9 @@ public class UserServiceImp implements UserService{
 	@Autowired
 	private UserMapper mapper;
 	@Override
-	public String register(String id, String password, String type, String name, String sex) {
+	public void register(String id, String password, String type, String name, String sex) {
 		// TODO Auto-generated method stub
-		return null;
+		mapper.register(id, password, type, name, sex, "12");
 	}
 
 	@Override
