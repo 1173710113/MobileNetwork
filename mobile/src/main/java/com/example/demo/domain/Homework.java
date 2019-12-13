@@ -37,6 +37,12 @@ public class Homework {
 		this.postTime = postTime;
 		this.course = course;
 	}
+	public Homework(String id, String title, String content) {
+		super();
+		this.id = id;
+		this.title = title;
+		this.content = content;
+	}
 	/**
 	 * @return the id
 	 */
