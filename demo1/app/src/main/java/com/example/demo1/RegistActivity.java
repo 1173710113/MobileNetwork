@@ -38,35 +38,32 @@ public class RegistActivity extends AppCompatActivity {
         final String name = ((EditText)findViewById(R.id.user_name)).getText().toString();
         final String type = ((Spinner)findViewById(R.id.user_type)).getSelectedItem().toString();
         final String sex = ((Spinner)findViewById(R.id.user_sex)).getSelectedItem().toString();
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                try{
-                    JSONObject obj = new JSONObject();
-                    obj.put("id",id);
-                    obj.put("password",password);
-                    obj.put("type",type);
-                    obj.put("name",name);
-                    obj.put("sex",sex);
-                    obj.put("iconpath","123457");
-                    OkHttpClient client = new OkHttpClient();
-                    MediaType type = MediaType.parse("application/json;charset=utf-8");
-                    RequestBody requestBody = RequestBody.create(type,""+obj.toString());
-                    System.out.println(obj.toString());
-                    Request request = new Request.Builder()
-                            .url("http://10.0.2.2:8081/mobile/user/add")
-                            .post(requestBody)
-                            .build();
-                    client.newCall(request).execute();
-                } catch(Exception e)
-                {
-                    e.printStackTrace();
-                }
-                finally {
-                    Intent intent = new Intent(RegistActivity.this, LoginActivity.class);
-                    startActivity(intent);
-                }
-            }
-        }).start();
+        try{
+            JSONObject obj = new JSONObject();
+            obj.put("id",id);
+            obj.put("password",password);
+            obj.put("type",type);
+            obj.put("name",name);
+            obj.put("sex",sex);
+            obj.put("iconpath","123457");
+            OkHttpClient client = new OkHttpClient();
+            MediaType mtype = MediaType.parse("application/json;charset=utf-8");
+            RequestBody requestBody = RequestBody.create(mtype,""+obj.toString());
+            System.out.println(obj.toString());
+            Request request = new Request.Builder()
+                    .url("http://10.0.2.2:8081/mobile/user/add")
+                    .post(requestBody)
+                    .build();
+            client.newCall(request).execute();
+        } catch(Exception e)
+        {
+            e.printStackTrace();
+        }
+        finally {
+            Intent intent = new Intent(RegistActivity.this, LoginActivity.class);
+            startActivity(intent);
+        }
+
+
     }
 }
