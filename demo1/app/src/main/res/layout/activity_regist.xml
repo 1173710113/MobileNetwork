@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".LoginActivity"
+    tools:context=".RegistActivity"
     android:gravity="center"
     >
 
@@ -26,19 +26,35 @@
             android:hint="Password"
             android:layout_marginBottom="8pt"
             android:id="@+id/user_password"/>
-        <Button
+        <Spinner
+            android:entries="@array/type"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="登录"
-            android:id="@+id/button_login"
-            android:onClick="Login"/>
-        <Button
+            android:id="@+id/user_type"
+            android:layout_marginBottom="8pt"
+            ></Spinner>
+        <EditText
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="注册"
+            android:hint="Name"
+            android:layout_marginBottom="8pt"
+            android:id="@+id/user_name"/>
+        <Spinner
+            android:entries="@array/sex"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/user_sex"
+            android:layout_marginBottom="8pt"
+            ></Spinner>
+
+        <Button
             android:id="@+id/button_regist"
-            android:layout_marginTop="8pt"
-            />
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:onClick="Regist"
+            android:text="完成" />
+
+
     </LinearLayout>
 
 </LinearLayout>

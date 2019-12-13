@@ -2,10 +2,13 @@ package com.example.demo1;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
@@ -30,7 +33,14 @@ public class LoginActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-
+        Button regist = findViewById(R.id.button_regist);
+        regist.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(LoginActivity.this, RegistActivity.class);
+                startActivity(intent);
+            }
+        });
     }
 
     public void Login(View view){
@@ -43,7 +53,7 @@ public class LoginActivity extends AppCompatActivity {
                 HttpURLConnection conn = null;
                 BufferedReader reader = null;
                 try{
-
+                    //提交请求
                     URL url = new URL(path);
                     conn = (HttpURLConnection)url.openConnection();
                     conn.setRequestMethod("GET");
@@ -51,25 +61,12 @@ public class LoginActivity extends AppCompatActivity {
                     InputStream in = conn.getInputStream();
                     reader = new BufferedReader(new InputStreamReader(in));
                     String json = reader.readLine();
-                    System.out.println(json);
-                    JSONObject obj = new JSONObject();
-                    obj.put("id","user1");
-                    obj.put("password","123457");
-                    obj.put("type","管理员");
-                    obj.put("name","123457");
-                    obj.put("sex","男");
-                    obj.put("iconpath","123457");
-                    OkHttpClient client = new OkHttpClient();
-
-                    MediaType type = MediaType.parse("application/json;charset=utf-8");
-                    RequestBody requestBody = RequestBody.create(type,""+obj.toString());
-                    System.out.println(obj.toString());
-                    Request request = new Request.Builder()
-                            .url("http://10.0.2.2:8081/mobile/user/add")
-                            .post(requestBody)
-                            .build();
-                    client.newCall(request).execute();
                     if(json.equals("success")){
+                        //记录用户信息
+                        SharedPreferences sharedPreferences = getSharedPreferences("userInfo", Context.MODE_PRIVATE);
+                        SharedPreferences.Editor editor = sharedPreferences.edit();
+                        editor.putString("account",id);
+                        //转跳页面
                         Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                         startActivity(intent);
                     }

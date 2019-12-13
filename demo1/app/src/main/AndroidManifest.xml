@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.demo1">
-    <uses-permission android:name="android.permission.INTERNET"></uses-permission>
+
+    <uses-permission android:name="android.permission.INTERNET" />
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -10,7 +12,8 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
-        <activity android:name=".CourseManageActivity"></activity>
+        <activity android:name=".RegistActivity"></activity>
+        <activity android:name=".CourseManageActivity" />
         <activity android:name=".AddUserActivity" />
         <activity android:name=".UserManageActivity" />
         <activity android:name=".AnalysisActivity" />
