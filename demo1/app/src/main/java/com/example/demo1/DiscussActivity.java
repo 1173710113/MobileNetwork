@@ -50,6 +50,8 @@ public class DiscussActivity extends AppCompatActivity {
                         @Override
                         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                             Intent intent = new Intent(DiscussActivity.this, CheckDiscussActivity.class);
+                            Discussion discussion = discussionList.get(position);
+                            intent.putExtra("discussion", discussion.toString());
                             startActivity(intent);
                         }
                     });
