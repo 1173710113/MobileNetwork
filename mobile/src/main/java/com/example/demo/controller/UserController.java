@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.example.demo.domain.User;
 import com.example.demo.service.UserService;
 import com.example.demo.service.UserServiceImp;
+
 /**
  * @author msi-user
  *
@@ -28,21 +29,22 @@ import com.example.demo.service.UserServiceImp;
 public class UserController {
 	@Autowired
 	private UserService userService;
+
 	@RequestMapping(value = "/login/{account}/{password}", method = RequestMethod.GET)
 	@ResponseBody
 	public String login(@PathVariable("account") String account, @PathVariable("password") String password) {
-		User us = userService.login(account,password);
-		if(us!=null) {
+		User us = userService.login(account, password);
+		if (us != null) {
 			return "success";
 		}
 		return "fail";
 	}
-	@RequestMapping(value = "/add",method = RequestMethod.POST)
+
+	@RequestMapping(value = "/add", method = RequestMethod.POST)
 	@ResponseBody
 	public String add(@RequestBody User user) {
 		System.out.println(user.toString());
 		userService.register(user.getId(), user.getPassword(), user.getType(), user.getName(), user.getSex());
-		
 		return "success";
 	}
 }

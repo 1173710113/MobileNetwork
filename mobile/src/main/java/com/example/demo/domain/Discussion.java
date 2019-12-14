@@ -5,6 +5,7 @@ public class Discussion {
 	private String id;
 	private String posterId;
 	private String posterName;
+	private String courseId;
 	private String postTime;
 	private String title;
 	private String content;
@@ -14,17 +15,19 @@ public class Discussion {
 	 * @param id
 	 * @param posterId
 	 * @param posterName
+	 * @param courseId
 	 * @param postTime
 	 * @param title
 	 * @param content
 	 * @param replyCount
 	 */
-	public Discussion(String id, String posterId, String posterName, String postTime, String title, String content,
-			int replyCount) {
+	public Discussion(String id, String posterId, String posterName, String courseId, String postTime, String title,
+			String content, int replyCount) {
 		super();
 		this.id = id;
 		this.posterId = posterId;
 		this.posterName = posterName;
+		this.courseId = courseId;
 		this.postTime = postTime;
 		this.title = title;
 		this.content = content;
@@ -46,10 +49,17 @@ public class Discussion {
 	}
 
 	/**
-	 * @return the poster_name
+	 * @return the posterName
 	 */
-	public String getPoster_name() {
+	public String getPosterName() {
 		return posterName;
+	}
+
+	/**
+	 * @return the courseId
+	 */
+	public String getCourseId() {
+		return courseId;
 	}
 
 	/**

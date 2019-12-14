@@ -5,8 +5,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
 <mapper namespace="com.example.demo.dao.DiscussionMapper">
 	<insert id="addDiscussion">
-		INSERT INTO discussion_table(user, title, content)
-		VALUES(#{user}, #{title}, #{content})
+		INSERT INTO discussion_table(user, time, title, content, course)
+		VALUES(#{user}, #{time}, #{title}, #{content}, #{course})
 	</insert>
 	
 	<delete id="deleteDiscussion">
@@ -24,6 +24,18 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		UPDATE discussion_table
 		SET content=#{content}
 		WHERE id=#{id}
+	</update>
+	
+	<update id="updateDiscussionReplyCountPlus">
+		UPDATE discussion_table
+		SET reply_count = reply_count - 1
+		WHERE id = #{id}
+	</update>
+	
+	<update id="updateDiscussionReplyCountMinus">
+		UPDATE discussion_table
+		SET reply_count = reply_count + 1
+		WHERE id = #{id}
 	</update>
 	
 	<select id="queryDiscussionByCourse" resultMap="discussion">

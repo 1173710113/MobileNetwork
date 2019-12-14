@@ -31,7 +31,8 @@ public class DiscussionAdapter extends ArrayAdapter<Discussion> {
         TextView discussionReplyCount = (TextView)view.findViewById(R.id.discussion_reply_count);
         discussionTitle.setText(discussion.getTitle());
         discussionPostDate.setText(discussion.getPostTime());
-        discussionPosterId.setText(discussion.getPoster().getId());
+        discussionPosterId.setText(discussion.getPosterId());
+        discussionPosterName.setText(discussion.getPosterName());
         discussionReplyCount.setText(Integer.toString(discussion.getReplyCount()));
         return view;
     }

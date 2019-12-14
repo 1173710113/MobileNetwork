@@ -23,7 +23,7 @@ public interface DiscussionMapper {
 	 * @param title cannot be null or ''.
 	 * @param content.
 	 */
-	public void addDiscussion(@Param("user")String user, @Param("title")String title, @Param("content")String content);
+	public void addDiscussion(@Param("user")String user, @Param("time")String time, @Param("title")String title, @Param("content")String content, @Param("course")String course);
 	
 	/**
 	 * delete discussion where discussion_id = id.
@@ -46,6 +46,18 @@ public interface DiscussionMapper {
 	public void updateDiscussionContent(@Param("id")String id, @Param("cotent")String content);
 	
 	/**
+	 * Set reply_count += 1 where discussion_id = id.
+	 * @param id
+	 */
+	public void updateDiscussionReplyCountPlus(@Param("id")String id);
+	
+	/**
+	 * Set reply_count -= 1 where discussion_id = id.
+	 * @param id
+	 */
+	public void updateDiscussionReplyCountMinus(@Param("id")String id);
+	
+	/**
 	 * 
 	 * @param courseId
 	 * @return
@@ -59,4 +71,5 @@ public interface DiscussionMapper {
 	 * @return
 	 */
 	public List<Discussion> queryDiscussionbyCourseAndTitle(@Param("course_id")String courseId, @Param("title")String title);
+	
 }
