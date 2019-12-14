@@ -22,4 +22,22 @@ public class JSONUtil {
         }
         return object;
     }
+
+    public static Discussion JSONParseDiscussion(JSONObject object) {
+        try {
+            String id = object.getString("id");
+            String  posterId = object.getString("posterId");
+            String posterName = object.getString("posterName");
+            String courseId = object.getString("courseId");
+            String postTime = object.getString("postTime");
+            String title = object.getString("title");
+            String content = object.getString("content");
+            int replyCount = object.getInt("replyCount");
+            Discussion discussion = new Discussion(id, posterId, posterName, courseId, postTime, title, content, replyCount);
+            return discussion;
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
 }

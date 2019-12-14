@@ -39,9 +39,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	</update>
 	
 	<select id="queryDiscussionByCourse" resultMap="discussion">
-		SELECT d.id as id,
+		SELECT 
+		d.id as id,
 		u.id as user_id,
 		u.name as user_name,
+		d.course as course_id,
 		d.time as time,
 		d.title as title,
 		d.content as content,
@@ -51,9 +53,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	</select>
 	
 	<select id="queryDiscussionByCourseAndTitle" resultMap="discussion">
-		SELECT d.id as id,
+		SELECT 
+		d.id as id,
 		u.id as user_id,
 		u.name as user_name,
+		d.course as course_id,
 		d.time as time,
 		d.title as title,
 		d.content as content,
@@ -66,7 +70,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		<id column="id" property="id"/>
 		<result column="user_id" property="posterId"/>
 		<result column="user_name" property="posterName"/>
-		<result column="time" property="PostTime"/>
+		<result column="course_id" property="courseId"/>
+		<result column="time" property="postTime"/>
 		<result column="title" property="title"/>
 		<result column="content" property="content"/>
 		<result column="reply_count" property="replyCount"/>

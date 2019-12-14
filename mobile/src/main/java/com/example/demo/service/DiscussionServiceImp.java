@@ -57,7 +57,6 @@ public class DiscussionServiceImp implements DiscussionService {
 	public void addReply(String discussionId, String uploaderId, String content) {
 		replyMapper.addReply(discussionId, uploaderId, content);
 		discussionMapper.updateDiscussionReplyCountPlus(discussionId);
-		
 	}
 
 	@Override

@@ -10,6 +10,7 @@ import android.widget.TextView;
 import com.example.demo1.R;
 import com.example.demo1.domain.Discussion;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class DiscussionAdapter extends ArrayAdapter<Discussion> {

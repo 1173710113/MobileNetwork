@@ -1,5 +1,7 @@
 package com.example.demo1.domain;
 
+import com.example.demo1.util.JSONUtil;
+
 public class Discussion {
 
     private String id;
@@ -88,6 +90,11 @@ public class Discussion {
      */
     public int getReplyCount() {
         return replyCount;
+    }
+
+    @Override
+    public String toString(){
+        return JSONUtil.DiscussionParseJSON(this).toString();
     }
 
 }

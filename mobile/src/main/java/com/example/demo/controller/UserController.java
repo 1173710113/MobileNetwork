@@ -18,8 +18,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.example.demo.domain.User;
 import com.example.demo.service.UserService;
-import com.example.demo.service.UserServiceImp;
-
 /**
  * @author msi-user
  *
@@ -33,17 +31,10 @@ public class UserController {
 	@RequestMapping(value = "/login/{account}/{password}", method = RequestMethod.GET)
 	@ResponseBody
 	public String login(@PathVariable("account") String account, @PathVariable("password") String password) {
-<<<<<<< HEAD
 		User us = userService.login(account, password);
 		if (us != null) {
 			return "success";
 		}
-=======
-//		User us = userService.login(account,password);
-//		if(us!=null) {
-//			return "success";
-//		}
->>>>>>> 64a1d2d7d30cf34033e2dc3ff89e7e427dcce864
 		return "fail";
 	}
 

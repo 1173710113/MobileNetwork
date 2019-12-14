@@ -6,13 +6,17 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 <mapper namespace="com.example.demo.dao.UserMapper">
 
 	<select id="login" resultMap="user">
-		SELECT id,password
+		SELECT *
 		FROM user_table
 		WHERE id = #{account} AND password = #{password} 
 	</select>
 	<resultMap type="User" id="user">
 		<id column="id" property="id"/>
 		<result column="password" property="password"/>
+		<result column="type" property="type"/>
+		<result column="name" property="name"/>
+		<result column="sex" property="sex"/>
+		<result column="icon_path" property="iconPath"/>
 	</resultMap>
 	<insert id="register">
 		INSERT INTO user_table

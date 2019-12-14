@@ -89,5 +89,5 @@ public class Discussion {
 	public int getReplyCount() {
 		return replyCount;
 	}
-
+	
 }
