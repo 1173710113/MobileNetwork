@@ -6,6 +6,5 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 <mapper namespace="com.example.demo.dao.CourseMapper">
 	<insert id="addCourse">
 		INSERT INTO course_table
-		(n) 
 	</insert>
 </mapper>

@@ -27,8 +27,13 @@ public class CheckDiscussActivity extends AppCompatActivity {
             this.discussion = JSONUtil.JSONParseDiscussion(new JSONObject((data)));
             ((TextView)findViewById(R.id.check_discussion_title)).setText(discussion.getTitle());
             ((TextView)findViewById(R.id.check_discussion_content)).setText(discussion.getContent());
+            initReplyList();
         } catch (JSONException e) {
             e.printStackTrace();
         }
+    }
+
+    public void initReplyList() {
+
     }
 }
