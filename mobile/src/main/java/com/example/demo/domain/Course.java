@@ -11,32 +11,39 @@ public class Course {
 
 	private String id;
 	private String name;
-	private User teacher;
+	private String teacherId;
+	private String teacherName;
 	private int maxVol;
 	private String destination;
-	private String time;
+	private String startTime;
+	private String endTime;
+	// 总课时
 	private int totalTime;
 	private int realVol;
-	
+
 	/**
 	 * @param id
 	 * @param name
-	 * @param teacher
+	 * @param teacherId
+	 * @param teacherName
 	 * @param maxVol
 	 * @param destination
-	 * @param time
+	 * @param startTime
+	 * @param endTime
 	 * @param totalTime
 	 * @param realVol
 	 */
-	public Course(String id, String name, User teacher, int maxVol, String destination, String time, int totalTime,
-			int realVol) {
+	public Course(String id, String name, String teacherId, String teacherName, int maxVol, String destination,
+			String startTime, String endTime, int totalTime, int realVol) {
 		super();
 		this.id = id;
 		this.name = name;
-		this.teacher = teacher;
+		this.teacherId = teacherId;
+		this.teacherName = teacherName;
 		this.maxVol = maxVol;
 		this.destination = destination;
-		this.time = time;
+		this.startTime = startTime;
+		this.endTime = endTime;
 		this.totalTime = totalTime;
 		this.realVol = realVol;
 	}
@@ -56,10 +63,17 @@ public class Course {
 	}
 
 	/**
-	 * @return the teacher
+	 * @return the teacherId
 	 */
-	public User getTeacher() {
-		return teacher;
+	public String getTeacherId() {
+		return teacherId;
+	}
+
+	/**
+	 * @return the teacherName
+	 */
+	public String getTeacherName() {
+		return teacherName;
 	}
 
 	/**
@@ -77,10 +91,17 @@ public class Course {
 	}
 
 	/**
-	 * @return the time
+	 * @return the startTime
 	 */
-	public String getTime() {
-		return time;
+	public String getStartTime() {
+		return startTime;
+	}
+
+	/**
+	 * @return the endTime
+	 */
+	public String getEndTime() {
+		return endTime;
 	}
 
 	/**
@@ -96,7 +117,5 @@ public class Course {
 	public int getRealVol() {
 		return realVol;
 	}
-	
-	
-	
+
 }

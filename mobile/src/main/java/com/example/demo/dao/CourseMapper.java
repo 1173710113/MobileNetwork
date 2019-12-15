@@ -24,39 +24,32 @@ public interface CourseMapper {
 	 * @param teacher
 	 * @param maxVol
 	 * @param destination
-	 * @param time
+	 * @param startTime
+	 * @param endTime
 	 * @param totalTime
 	 */
 	public void addCourse(@Param("id") String id, @Param("name") String name, @Param("teacher") String teacher,
-			@Param("max_vol") int maxVol, @Param("destination") String destination, @Param("time") String time,
+			@Param("max_vol") int maxVol, @Param("destination") String destination,
+			@Param("start_time") String startTime, @Param("endTime") String endTime,
 			@Param("total_time") int totalTime);
 
 	/**
 	 * 
-	 * @param id
+	 * @param id is the id of course.
 	 */
 	public void deleteCourse(@Param("id") String id);
 
 	/**
 	 * 
-	 * @param id
-	 * @param name
-	 * @param teacher
-	 * @param maxVol
-	 * @param destination
-	 * @param time
-	 * @param realTime
-	 * @param realVol
+	 * @param studentId
+	 * @return
 	 */
-	public void updateCourse(@Param("id") String id, @Param("name") String name, @Param("teacher") String teacher,
-			@Param("max_vol") int maxVol, @Param("destination") String destination, @Param("time") String time,
-			@Param("real_time") int realTime, @Param("real_vol") int realVol);
+	public List<Course> queryCourseByStudentId(@Param("student_id") String studentId);
 
 	/**
 	 * 
-	 * @param id
-	 * @param name
+	 * @param teacherId
 	 * @return
 	 */
-	public List<Course> queryCourse(@Param("id") String id, @Param("name") String name);
+	public List<Course> queryCourseByTeacherId(@Param("teacher_id") String teacherId);
 }
