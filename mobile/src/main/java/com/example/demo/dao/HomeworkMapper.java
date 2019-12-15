@@ -26,7 +26,7 @@ public interface HomeworkMapper {
 	 * @param postTime
 	 * @param course
 	 */
-	public void addHomework(@Param("id") String id, @Param("user") String poster, @Param("title") String title,
+	public void addHomework( @Param("userId") String poster, @Param("title") String title,
 			@Param("content") String content, @Param("deadline") String deadline, @Param("time") String postTime,
 			@Param("course") String course);
 

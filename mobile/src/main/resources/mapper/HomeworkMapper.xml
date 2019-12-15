@@ -7,7 +7,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
 	
 	<insert id="addHomework">
-		INSERT INTO homework_table
-		VALUES(#{id},#{user},#{title},#{content});
+		INSERT INTO homework_table (user,title,content,deadline,time,course)
+		VALUES(#{userId},#{title},#{content},#{deadline},#{time},#{course});
 	</insert>
 </mapper>

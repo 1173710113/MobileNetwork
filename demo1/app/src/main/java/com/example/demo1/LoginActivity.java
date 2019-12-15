@@ -66,6 +66,7 @@ public class LoginActivity extends AppCompatActivity {
                         SharedPreferences sharedPreferences = getSharedPreferences("userInfo", Context.MODE_PRIVATE);
                         SharedPreferences.Editor editor = sharedPreferences.edit();
                         editor.putString("account",id);
+                        editor.commit();
                         //转跳页面
                         Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                         startActivity(intent);

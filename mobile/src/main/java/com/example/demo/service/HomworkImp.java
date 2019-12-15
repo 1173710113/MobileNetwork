@@ -10,9 +10,10 @@ public class HomworkImp implements HomeworkService{
 	@Autowired
 	private HomeworkMapper mapper;
 	@Override
-	public void addHomework(String id, String title, String content) {
+	public void addHomework(String user_id, String title, String content,String deadline,
+			String postTime,String courseId) {
 		// TODO Auto-generated method stub
-		mapper.addHomework(id, "", title, content, "", "", "");
+		mapper.addHomework(user_id, title, content, deadline, postTime,courseId);
 	}
 
 }

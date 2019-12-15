@@ -10,12 +10,12 @@ package com.example.demo.domain;
 public class Homework {
 
 	private String id;
-	private User poster;
+	private String poster_id;
 	private String title;
 	private String content;
 	private String deadline;
 	private String postTime;
-	private Course course;
+	private String course_id;
 	
 	/**
 	 * @param id
@@ -26,16 +26,16 @@ public class Homework {
 	 * @param postTime
 	 * @param course
 	 */
-	public Homework(String id, User poster, String title, String content, String deadline, String postTime,
-			Course course) {
+	public Homework(String id, String poster_id, String title, String content, String deadline, String postTime,
+			String course_id) {
 		super();
 		this.id = id;
-		this.poster = poster;
+		this.poster_id = poster_id;
 		this.title = title;
 		this.content = content;
 		this.deadline = deadline;
 		this.postTime = postTime;
-		this.course = course;
+		this.course_id = course_id;
 	}
 	/**
 	 * @return the id
@@ -46,8 +46,8 @@ public class Homework {
 	/**
 	 * @return the poster
 	 */
-	public User getPoster() {
-		return poster;
+	public String getPoster() {
+		return poster_id;
 	}
 	/**
 	 * @return the title
@@ -76,7 +76,7 @@ public class Homework {
 	/**
 	 * @return the course
 	 */
-	public Course getCourse() {
-		return course;
+	public String getCourse() {
+		return course_id;
 	}
 }

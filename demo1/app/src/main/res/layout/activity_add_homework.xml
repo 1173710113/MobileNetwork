@@ -17,9 +17,19 @@
     <EditText
         android:id="@+id/edit_homework_content"
         android:layout_width="match_parent"
-        android:layout_height="300dp"
+        android:layout_height="250dp"
         android:gravity="left"
         android:hint="正文"/>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="截止日期"/>
+    <DatePicker
+        android:calendarViewShown="false"
+        android:datePickerMode="spinner"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/deadline_time"/>
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
