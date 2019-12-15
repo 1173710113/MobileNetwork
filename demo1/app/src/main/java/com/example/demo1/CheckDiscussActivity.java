@@ -6,16 +6,14 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.view.View;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import com.example.demo1.adapter.DiscussionAdapter;
 import com.example.demo1.adapter.ReplyAdapter;
 import com.example.demo1.domain.Discussion;
 import com.example.demo1.domain.Reply;
+import com.example.demo1.util.HttpUtil;
 import com.example.demo1.util.JSONUtil;
 
 import org.json.JSONArray;

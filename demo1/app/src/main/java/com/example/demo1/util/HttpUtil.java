@@ -1,4 +1,4 @@
-package com.example.demo1;
+package com.example.demo1.util;
 
 import org.json.JSONObject;
 

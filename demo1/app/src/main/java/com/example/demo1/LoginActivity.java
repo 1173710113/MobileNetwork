@@ -6,29 +6,38 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.util.Log;
+import android.os.Handler;
+import android.os.Message;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.example.demo1.util.HttpUtil;
+
+import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.BufferedReader;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
-import java.net.URL;
+import java.io.IOException;
 
-import okhttp3.FormBody;
-import okhttp3.MediaType;
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.RequestBody;
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.Response;
 
 
 public class LoginActivity extends AppCompatActivity {
-
+    private static final int SHOW_TOAST = 1;
+    private Handler handler = new Handler(){
+      public void handleMessage(Message msg) {
+          switch (msg.what){
+              case SHOW_TOAST:
+                  Toast.makeText(LoginActivity.this, "登入失败", Toast.LENGTH_SHORT).show();
+                  break;
+               default:
+                   break;
+          }
+      }
+    };
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -46,46 +55,52 @@ public class LoginActivity extends AppCompatActivity {
     public void Login(View view){
         final String id = ((EditText)findViewById(R.id.user_id)).getText().toString();
         final String password = ((EditText)findViewById(R.id.user_password)).getText().toString();
-        final String path = "http://10.0.2.2:8081/mobile/user/login/"+id+"/"+password;
-        new Thread(new Runnable() {
+        final String url = "http://10.0.2.2:8081/mobile/user/login/"+id+"/"+password;
+        HttpUtil.sendHttpRequest(url, new Callback() {
             @Override
-            public void run() {
-                HttpURLConnection conn = null;
-                BufferedReader reader = null;
-                try{
-                    //提交请求
-                    URL url = new URL(path);
-                    conn = (HttpURLConnection)url.openConnection();
-                    conn.setRequestMethod("GET");
-                    conn.setDoInput(true);
-                    InputStream in = conn.getInputStream();
-                    reader = new BufferedReader(new InputStreamReader(in));
-                    String json = reader.readLine();
-                    if(json.equals("success")){
-                        //记录用户信息
-                        SharedPreferences sharedPreferences = getSharedPreferences("userInfo", Context.MODE_PRIVATE);
-                        SharedPreferences.Editor editor = sharedPreferences.edit();
-                        editor.putString("account",id);
-                        editor.commit();
-                        //转跳页面
-                        Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-                        startActivity(intent);
-                    }
-                    else{
-                        Toast.makeText(LoginActivity.this, "账号或密码错误", Toast.LENGTH_LONG).show();
-                    }
-                    reader.close();
-                } catch(Exception e)
-                {
-                    e.printStackTrace();
-                }
-                finally {
-                    if(conn!=null){
-                        conn.disconnect();
-                    }
+            public void onFailure(Call call, IOException e) {
+
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                if(response.code() == 200) {
+                    String data = response.body().string();
+                    writeUserInfo(data);
+                    Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                    startActivity(intent);
+                } else  {
+                    Message msg = new Message();
+                    msg.what = SHOW_TOAST;
+                    handler.sendMessage(msg);
                 }
             }
-        }).start();
+        });
+
+    }
+
+    /**
+     * 将返回的User写入sharedPreferrence
+     * @param data
+     */
+    private void writeUserInfo(String data) {
+        try {
+            JSONObject object = new JSONObject(data);
+            String id = object.getString("id");
+            String name = object.getString("name");
+            String type = object.getString("type");
+            String sex = object.getString("sex");
+            SharedPreferences sharedPreferences = getSharedPreferences("userInfo", Context.MODE_PRIVATE);
+            SharedPreferences.Editor editor = sharedPreferences.edit();
+            editor.putString("id",id);
+            editor.putString("name", name);
+            editor.putString("type", type);
+            editor.putString("sex",sex);
+            editor.commit();
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
     }
 
 }

@@ -19,19 +19,16 @@ public interface CourseMapper {
 
 	/**
 	 * 
-	 * @param id
 	 * @param name
-	 * @param teacher
+	 * @param teacherId
 	 * @param maxVol
 	 * @param destination
 	 * @param startTime
 	 * @param endTime
-	 * @param totalTime
 	 */
-	public void addCourse(@Param("id") String id, @Param("name") String name, @Param("teacher") String teacher,
+	public void addCourse(@Param("name") String name, @Param("teacher_id") String teacherId,
 			@Param("max_vol") int maxVol, @Param("destination") String destination,
-			@Param("start_time") String startTime, @Param("endTime") String endTime,
-			@Param("total_time") int totalTime);
+			@Param("start_time") String startTime, @Param("end_time") String endTime);
 
 	/**
 	 * 

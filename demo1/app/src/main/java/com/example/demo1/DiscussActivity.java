@@ -10,16 +10,14 @@ import android.os.Message;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Adapter;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
 import com.example.demo1.adapter.DiscussionAdapter;
 import com.example.demo1.domain.Discussion;
-import com.example.demo1.domain.User;
+import com.example.demo1.util.HttpUtil;
 import com.example.demo1.util.JSONUtil;
-import com.google.gson.JsonObject;
 
 import org.json.JSONArray;
 import org.json.JSONException;

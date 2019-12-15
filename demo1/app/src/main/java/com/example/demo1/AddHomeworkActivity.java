@@ -9,6 +9,8 @@ import android.widget.DatePicker;
 import android.widget.TextView;
 import android.widget.TimePicker;
 
+import com.example.demo1.util.HttpUtil;
+
 import org.json.JSONObject;
 
 import java.io.IOException;
@@ -17,10 +19,6 @@ import java.util.Date;
 
 import okhttp3.Call;
 import okhttp3.Callback;
-import okhttp3.MediaType;
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.RequestBody;
 import okhttp3.Response;
 
 public class AddHomeworkActivity extends AppCompatActivity {

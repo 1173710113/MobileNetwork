@@ -1,7 +1,9 @@
 package com.example.demo1.util;
 
+import com.example.demo1.domain.Course;
 import com.example.demo1.domain.Discussion;
 import com.example.demo1.domain.Reply;
+import com.example.demo1.domain.User;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -52,6 +54,25 @@ public class JSONUtil {
             String content = object.getString("content");
             Reply reply = new Reply(id, replyDiscussion, posterId, posterName, time, content);
             return reply;
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public static Course JSONParseCourse(JSONObject object) {
+        try {
+            String id = object.getString("id");
+            String name = object.getString("name");
+            String teacherId = object.getString("teacherId");
+            String teacherName = object.getString("teacherName");
+            int maxVol = object.getInt("maxVol");
+            String destination = object.getString("destination");
+            String startTime = object.getString("startTime");
+            String endTime = object.getString("endTime");
+            int realVol = object.getInt("realVol");
+            Course course = new Course(id, name, teacherId, teacherName, maxVol, destination, startTime, endTime, realVol);
+            return course;
         } catch (JSONException e) {
             e.printStackTrace();
         }

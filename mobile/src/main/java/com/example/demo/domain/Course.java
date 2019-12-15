@@ -17,8 +17,6 @@ public class Course {
 	private String destination;
 	private String startTime;
 	private String endTime;
-	// 总课时
-	private int totalTime;
 	private int realVol;
 
 	/**
@@ -30,11 +28,10 @@ public class Course {
 	 * @param destination
 	 * @param startTime
 	 * @param endTime
-	 * @param totalTime
 	 * @param realVol
 	 */
 	public Course(String id, String name, String teacherId, String teacherName, int maxVol, String destination,
-			String startTime, String endTime, int totalTime, int realVol) {
+			String startTime, String endTime, int realVol) {
 		super();
 		this.id = id;
 		this.name = name;
@@ -44,7 +41,6 @@ public class Course {
 		this.destination = destination;
 		this.startTime = startTime;
 		this.endTime = endTime;
-		this.totalTime = totalTime;
 		this.realVol = realVol;
 	}
 
@@ -102,13 +98,6 @@ public class Course {
 	 */
 	public String getEndTime() {
 		return endTime;
-	}
-
-	/**
-	 * @return the totalTime
-	 */
-	public int getTotalTime() {
-		return totalTime;
 	}
 
 	/**

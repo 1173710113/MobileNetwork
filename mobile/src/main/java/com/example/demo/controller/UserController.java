@@ -30,12 +30,9 @@ public class UserController {
 
 	@RequestMapping(value = "/login/{account}/{password}", method = RequestMethod.GET)
 	@ResponseBody
-	public String login(@PathVariable("account") String account, @PathVariable("password") String password) {
+	public User login(@PathVariable("account") String account, @PathVariable("password") String password) {
 		User us = userService.login(account, password);
-		if (us != null) {
-			return "success";
-		}
-		return "fail";
+		return us;
 	}
 
 	@RequestMapping(value = "/add", method = RequestMethod.POST)

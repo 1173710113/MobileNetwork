@@ -8,6 +8,7 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.example.demo1.domain.Discussion;
+import com.example.demo1.util.HttpUtil;
 import com.example.demo1.util.JSONUtil;
 
 import org.json.JSONObject;
@@ -16,10 +17,6 @@ import java.io.IOException;
 
 import okhttp3.Call;
 import okhttp3.Callback;
-import okhttp3.MediaType;
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.RequestBody;
 import okhttp3.Response;
 
 public class AddDiscussionActivity extends AppCompatActivity implements View.OnClickListener{
@@ -36,7 +33,7 @@ public class AddDiscussionActivity extends AppCompatActivity implements View.OnC
     public void onClick(View view){
         String title = ((TextView)findViewById(R.id.add_discussion_title)).getText().toString();
         String content = ((TextView)findViewById(R.id.add_discussion_content)).getText().toString();
-        Discussion discussion = new Discussion(null, "1173710113", "滕文杰", "01", "2019-12-13 15:00:00", title, content, 0);
+        Discussion discussion = new Discussion(null, "1173710113", "滕文杰", "2", "2019-12-13 15:00:00", title, content, 0);
         JSONObject object = JSONUtil.DiscussionParseJSON(discussion);
         HttpUtil.sendHttpRequest("http://10.0.2.2:8081/mobile/discussion/add", object, new Callback() {
             @Override
