@@ -42,7 +42,6 @@ public class DiscussActivity extends AppCompatActivity {
         public void handleMessage(Message msg){
             switch (msg.what) {
                 case UPDATE_LIST:
-                    System.out.println(discussionList.size());
                     ArrayAdapter<Discussion> adapter = new DiscussionAdapter(DiscussActivity.this, R.layout.discussion_item, discussionList);
                     ListView listView = (ListView) findViewById(R.id.list_discuss);
                     listView.setAdapter(adapter);
@@ -69,7 +68,7 @@ public class DiscussActivity extends AppCompatActivity {
     }
 
     private void initDiscussionList() {
-        String courseId = "1";
+        String courseId = "2";
         String url = "http://10.0.2.2:8081/mobile/discussion/querydiscussion/" + courseId;
         HttpUtil.sendHttpRequest(url, new Callback() {
             @Override

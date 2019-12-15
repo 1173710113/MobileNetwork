@@ -1,6 +1,7 @@
 package com.example.demo1.util;
 
 import com.example.demo1.domain.Discussion;
+import com.example.demo1.domain.Reply;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -35,6 +36,22 @@ public class JSONUtil {
             int replyCount = object.getInt("replyCount");
             Discussion discussion = new Discussion(id, posterId, posterName, courseId, postTime, title, content, replyCount);
             return discussion;
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public static Reply JSONParseReply(JSONObject object) {
+        try {
+            String id = object.getString("id");
+            String replyDiscussion = object.getString("replyDiscussion");
+            String  posterId = object.getString("posterId");
+            String posterName = object.getString("posterName");
+            String time = object.getString("time");
+            String content = object.getString("content");
+            Reply reply = new Reply(id, replyDiscussion, posterId, posterName, time, content);
+            return reply;
         } catch (JSONException e) {
             e.printStackTrace();
         }

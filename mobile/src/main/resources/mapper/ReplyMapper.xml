@@ -16,18 +16,18 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	
 	<select id="queryReplyByDiscussion" resultMap="reply">
 		SELECT
-		r.id as id 
-		r.discussion_id as discussion
-		r.user as user_id
-		u.name as user_name
-		r.time as time
+		r.id as id,
+		r.discussion_id as discussion,
+		r.user as user_id,
+		u.name as user_name,
+		r.time as time,
 		r.content as content
 		FROM user_table u,reply_table r
 		WHERE r.discussion_id=#{discussion} and u.id=r.user
 	</select>
 	<resultMap id="reply" type="Reply">
 		<id column="id" property="id"/>
-		<result column="discussion" property="discussionId"/>
+		<result column="discussion" property="replyDiscussion"/>
 		<result column="user_id" property="posterId"/>
 		<result column="user_name" property="posterName"/>
 		<result column="time" property="time"/>

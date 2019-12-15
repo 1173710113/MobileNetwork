@@ -49,7 +49,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		d.content as content,
 		d.reply_count as reply_count
 		FROM user_table u,discussion_table d
-		WHERE d.course=#{course_id}
+		WHERE d.course=#{course_id} and u.id=d.user
 	</select>
 	
 	<select id="queryDiscussionByCourseAndTitle" resultMap="discussion">

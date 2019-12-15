@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.example.demo.domain.Discussion;
+import com.example.demo.domain.Reply;
 import com.example.demo.service.DiscussionService;
 
 @Controller
@@ -31,9 +32,18 @@ public class DiscussionController {
 	@GetMapping("/querydiscussion/{courseId}")
 	@ResponseBody
 	public List<Discussion> queryDiscussion(@PathVariable("courseId")String courseId) {
-		System.out.println("456");
-		List<Discussion> list = new ArrayList<>();
-		list.addAll(discussionService.getCourseDiscussion(courseId));
-		return list;
+		List<Discussion> discussionList = new ArrayList<>();
+		discussionList.addAll(discussionService.getCourseDiscussion(courseId));
+		return discussionList;
+	}
+	
+	@GetMapping("/queryreply/{discussionId}")
+	@ResponseBody
+	public List<Reply> queryReply(@PathVariable("discussionId")String discussionId){
+		List<Reply> replyList = new ArrayList<>();
+		replyList.addAll(discussionService.queryReplyByDiscussion(discussionId));
+		System.out.println(replyList.size());
+		System.out.println(discussionId);
+		return replyList;
 	}
 }
