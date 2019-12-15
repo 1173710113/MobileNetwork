@@ -11,7 +11,7 @@
  Target Server Version : 80018
  File Encoding         : 65001
 
- Date: 11/12/2019 11:58:45
+ Date: 15/12/2019 13:41:32
 */
 
 SET NAMES utf8mb4;
@@ -40,14 +40,15 @@ CREATE TABLE `course_table`  (
   `teacher` char(15) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
   `max_vol` int(4) NOT NULL,
   `destination` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
-  `time` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+  `start_time` datetime(0) NOT NULL,
+  `end_time` datetime(0) NOT NULL,
   `total_time` int(3) UNSIGNED NOT NULL,
   `real_vol` int(3) UNSIGNED NOT NULL DEFAULT 0,
   PRIMARY KEY (`id`) USING BTREE,
   INDEX `name`(`name`) USING BTREE,
   INDEX `course_table`(`teacher`) USING BTREE,
   CONSTRAINT `course_table` FOREIGN KEY (`teacher`) REFERENCES `user_table` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 2 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Table structure for discussion_table
@@ -56,13 +57,17 @@ DROP TABLE IF EXISTS `discussion_table`;
 CREATE TABLE `discussion_table`  (
   `id` int(32) UNSIGNED ZEROFILL NOT NULL AUTO_INCREMENT,
   `user` char(15) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
-  `time` datetime(6) NOT NULL ON UPDATE CURRENT_TIMESTAMP(6),
+  `time` datetime(0) NOT NULL,
   `title` char(52) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
   `content` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '',
+  `course` int(10) UNSIGNED NULL DEFAULT NULL,
+  `reply_count` int(10) UNSIGNED NOT NULL DEFAULT 0,
   PRIMARY KEY (`id`) USING BTREE,
   INDEX `user_id`(`user`) USING BTREE,
+  INDEX `reply_course`(`course`) USING BTREE,
+  CONSTRAINT `reply_course` FOREIGN KEY (`course`) REFERENCES `course_table` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `user_id` FOREIGN KEY (`user`) REFERENCES `user_table` (`id`) ON DELETE SET NULL ON UPDATE CASCADE
-) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 18 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Table structure for file_table
@@ -102,13 +107,15 @@ CREATE TABLE `homework_table`  (
 -- ----------------------------
 DROP TABLE IF EXISTS `reply_table`;
 CREATE TABLE `reply_table`  (
-  `discussion_id` int(10) UNSIGNED ZEROFILL NOT NULL AUTO_INCREMENT,
+  `discussion_id` int(10) UNSIGNED NOT NULL,
   `user` char(15) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
   `time` datetime(6) NOT NULL ON UPDATE CURRENT_TIMESTAMP(6),
   `content` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '',
-  INDEX `discussion_id`(`discussion_id`) USING BTREE,
+  `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT,
+  PRIMARY KEY (`id`) USING BTREE,
   INDEX `reply_user_id`(`user`) USING BTREE,
-  CONSTRAINT `discussion_id` FOREIGN KEY (`discussion_id`) REFERENCES `discussion_table` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  INDEX `reply_discussion_id`(`discussion_id`) USING BTREE,
+  CONSTRAINT `reply_discussion_id` FOREIGN KEY (`discussion_id`) REFERENCES `discussion_table` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `reply_user_id` FOREIGN KEY (`user`) REFERENCES `user_table` (`id`) ON DELETE SET NULL ON UPDATE CASCADE
 ) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
 

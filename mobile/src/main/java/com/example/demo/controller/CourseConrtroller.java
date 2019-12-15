@@ -8,6 +8,6 @@ package com.example.demo.controller;
  *
  */
 
-public class courseController {
+public class CourseConrtroller {
 
 }
