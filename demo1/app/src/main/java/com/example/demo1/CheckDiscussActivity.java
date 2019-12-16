@@ -6,7 +6,9 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.view.View;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -28,7 +30,7 @@ import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.Response;
 
-public class CheckDiscussActivity extends AppCompatActivity {
+public class CheckDiscussActivity extends AppCompatActivity implements View.OnClickListener{
     private Discussion discussion;
     private static final int UPDATE_LIST = 1;
     private List<Reply> replyList = new ArrayList<>();
@@ -51,22 +53,50 @@ public class CheckDiscussActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_check_discuss);
         Intent intent = getIntent();
+        //获得discussion
         String data = intent.getStringExtra("discussion");
         try {
             this.discussion = JSONUtil.JSONParseDiscussion(new JSONObject((data)));
             ((TextView)findViewById(R.id.check_discussion_title)).setText(discussion.getTitle());
             ((TextView)findViewById(R.id.check_discussion_content)).setText(discussion.getContent());
+            replyList.clear();
             initReplyList();
         } catch (JSONException e) {
             e.printStackTrace();
         }
+        Button btn = (Button)findViewById(R.id.add_reply_button);
+        btn.setOnClickListener(this);
     }
 
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()){
+            case R.id.add_reply_button:
+                Intent intent = new Intent(CheckDiscussActivity.this, AddReplyActivity.class);
+                intent.putExtra("discussion", discussion);
+                startActivity(intent);
+                break;
+            default:
+                break;
+        }
+    }
+
+    @Override
+    public void onResume(){
+        super.onResume();
+        initReplyList();
+    }
+
+
+    /**
+     * 向服务器请求回复数据
+     */
     public void initReplyList() {
         if(discussion == null)
         {
             return;
         }
+        //请求的url
         String url = "http://10.0.2.2:8081/mobile/discussion/queryreply/" + discussion.getId();
         HttpUtil.sendHttpRequest(url, new Callback() {
             @Override
@@ -76,6 +106,7 @@ public class CheckDiscussActivity extends AppCompatActivity {
 
             @Override
             public void onResponse(Call call, Response response) throws IOException {
+                replyList.clear();
                 String data = response.body().string();
                 System.out.println(data);
                 try {

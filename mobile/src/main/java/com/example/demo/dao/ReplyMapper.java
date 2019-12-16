@@ -16,13 +16,15 @@ import com.example.demo.domain.Reply;
  */
 @Mapper
 public interface ReplyMapper {
+
 	/**
 	 * 
 	 * @param discussion
 	 * @param posterId
 	 * @param content
+	 * @param time
 	 */
-	public void addReply(@Param("discussion")String discussion, @Param("poster_id")String posterId, @Param("content")String content);
+	public void addReply(@Param("discussion")String discussion, @Param("poster_id")String posterId, @Param("content")String content, @Param("time")String time);
 	
 	/**
 	 * 

@@ -5,8 +5,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
 <mapper namespace="com.example.demo.dao.ReplyMapper">
 	<insert id="addReply">
-		INSERT INTO reply_table(discussion_id, user, content)
-		VALUES(#{discussion},#{poster_id},#{content})
+		INSERT INTO reply_table(discussion_id, user, content, time)
+		VALUES(#{discussion},#{poster_id},#{content}, #{time})
 	</insert>
 	
 	<delete id="deleteReply">

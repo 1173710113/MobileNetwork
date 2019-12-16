@@ -15,9 +15,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	</delete>
 	<select id="queryCourseByStudentId" resultMap="course">
 		SELECT
-		c.id as id,
+		cs.course as id,
 		c.name as name,
-		u.id as teacher_id,
+		c.teacher as teacher_id,
 		u.name as teacher_name,
 		c.max_vol as max_vol,
 		c.destination as destination,
@@ -25,7 +25,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		c.end_time as end_time,
 		c.real_vol as real_vol
 		FROM user_table u,course_student cs,course_table c
-		WHERE cs.student=#{student_id} and u.id=c.teacher
+		WHERE cs.student=#{student_id} and c.id=cs.course and u.id=c.teacher
 	</select>
 	<select id="queryCourseByTeacherId" resultMap="course">
 		SELECT 

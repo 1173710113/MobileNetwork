@@ -97,6 +97,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onResponse(Call call, Response response) throws IOException {
                 if(response.code() == 200) {
+                    courseList.clear();
                     String data = response.body().string();
                     try {
                         JSONArray jsonArray = new JSONArray(data);
@@ -110,7 +111,6 @@ public class MainActivity extends AppCompatActivity {
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
-
                 }
             }
         });

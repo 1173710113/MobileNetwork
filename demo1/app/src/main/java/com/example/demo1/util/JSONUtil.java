@@ -97,4 +97,20 @@ public class JSONUtil {
         }
         return null;
     }
+
+    public static JSONObject replyParseJSON(Reply reply) {
+        JSONObject object = new JSONObject();
+        try {
+            object.put("id", reply.getId());
+            object.put("replyDiscussion", reply.getReplyDiscussion());
+            object.put("posterId", reply.getPosterId());
+            object.put("posterName", reply.getPosterName());
+            object.put("time", reply.getTime());
+            object.put("content", reply.getContent());
+            return object;
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
 }

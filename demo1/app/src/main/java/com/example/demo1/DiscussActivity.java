@@ -71,6 +71,7 @@ public class DiscussActivity extends AppCompatActivity {
         } catch (JSONException e) {
             e.printStackTrace();
         }
+        discussionList.clear();
         initDiscussionList();
     }
     @Override

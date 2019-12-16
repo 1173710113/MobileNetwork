@@ -45,12 +45,10 @@ public interface DiscussionService {
 	public List<Discussion> getCourseDiscussionByTitle(String courseId, String title);
 	
 	/**
-	 * Reply a discussion.
-	 * @param discussionId is the id of the discussion.
-	 * @param uploaderId is the id of whom made the reply.
-	 * @param content is the content of the reply and cannot be null or ''.
+	 * 
+	 * @param reply
 	 */
-	public void addReply(String discussionId, String uploaderId, String content);
+	public void addReply(Reply reply);
 	
 	/**
 	 * Get all the reply of the discussion.

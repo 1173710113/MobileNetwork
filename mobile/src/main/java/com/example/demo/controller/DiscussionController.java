@@ -36,6 +36,11 @@ public class DiscussionController {
 		return discussionList;
 	}
 	
+	@PostMapping("/addreply")
+	public void postReply(@RequestBody Reply reply) {
+		discussionService.addReply(reply);
+	}
+	
 	@GetMapping("/queryreply/{discussionId}")
 	@ResponseBody
 	public List<Reply> queryReply(@PathVariable("discussionId")String discussionId){

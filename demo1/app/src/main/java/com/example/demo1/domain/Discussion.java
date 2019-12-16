@@ -2,7 +2,9 @@ package com.example.demo1.domain;
 
 import com.example.demo1.util.JSONUtil;
 
-public class Discussion {
+import java.io.Serializable;
+
+public class Discussion implements Serializable {
 
     private String id;
     private String posterId;

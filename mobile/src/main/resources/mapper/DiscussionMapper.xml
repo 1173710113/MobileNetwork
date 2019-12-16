@@ -28,13 +28,13 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	
 	<update id="updateDiscussionReplyCountPlus">
 		UPDATE discussion_table
-		SET reply_count = reply_count - 1
+		SET reply_count = reply_count + 1
 		WHERE id = #{id}
 	</update>
 	
 	<update id="updateDiscussionReplyCountMinus">
 		UPDATE discussion_table
-		SET reply_count = reply_count + 1
+		SET reply_count = reply_count - 1
 		WHERE id = #{id}
 	</update>
 	

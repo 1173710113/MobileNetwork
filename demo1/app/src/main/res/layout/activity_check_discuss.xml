@@ -5,35 +5,46 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".CheckDiscussActivity"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:background="@color/backgroundGrey">
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:background="@color/backgroundGrey">
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textSize="24sp"
             android:textStyle="bold"
+            android:text="1+1=2?"
+            android:textColor="@color/black"
             android:id="@+id/check_discussion_title"
+            android:background="@color/white"
             />
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textSize="18sp"
-            android:id="@+id/check_discussion_content"/>
+            android:textSize="20sp"
+            android:text="1+1=2?"
+            android:id="@+id/check_discussion_content"
+            android:background="@color/white"
+            android:layout_marginBottom="15dp"/>
 
         <Button
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@drawable/boarder"
-            android:text="写评论"/>
+            android:id="@+id/add_reply_button"
+            android:text="写评论"
+            />
 
         <com.example.demo1.ScrollListView
-            android:layout_marginTop="10pt"
+            android:layout_marginTop="15dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/list_comment"
+            android:background="@color/white"
             />
     </LinearLayout>
 </ScrollView>
