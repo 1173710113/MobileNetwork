@@ -1,5 +1,7 @@
 package com.example.demo1.domain;
 
+import com.example.demo1.util.JSONUtil;
+
 public class Course {
     private String id;
     private String name;
@@ -97,6 +99,11 @@ public class Course {
      */
     public int getRealVol() {
         return realVol;
+    }
+
+    @Override
+    public String toString() {
+        return JSONUtil.CourseParseJSON(this).toString();
     }
 
 }

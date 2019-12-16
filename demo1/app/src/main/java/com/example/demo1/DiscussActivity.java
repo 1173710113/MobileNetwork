@@ -15,6 +15,7 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
 import com.example.demo1.adapter.DiscussionAdapter;
+import com.example.demo1.domain.Course;
 import com.example.demo1.domain.Discussion;
 import com.example.demo1.util.HttpUtil;
 import com.example.demo1.util.JSONUtil;
@@ -35,6 +36,7 @@ public class DiscussActivity extends AppCompatActivity {
 
     private final List<Discussion> discussionList = new ArrayList<>();
     private static final int UPDATE_LIST = 1;
+    private Course course;
 
     private Handler handler = new Handler() {
         public void handleMessage(Message msg){
@@ -62,11 +64,23 @@ public class DiscussActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_discuss);
+        Intent intent = getIntent();
+        String extraString = intent.getStringExtra("course");
+        try {
+            this.course = JSONUtil.JSONParseCourse(new JSONObject(extraString));
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        initDiscussionList();
+    }
+    @Override
+    protected void onResume() {
+        super.onResume();
         initDiscussionList();
     }
 
     private void initDiscussionList() {
-        String courseId = "2";
+        String courseId = course.getId();
         String url = "http://10.0.2.2:8081/mobile/discussion/querydiscussion/" + courseId;
         HttpUtil.sendHttpRequest(url, new Callback() {
             @Override
@@ -78,6 +92,7 @@ public class DiscussActivity extends AppCompatActivity {
             public void onResponse(Call call, Response response) throws IOException {
                 String data = response.body().string();
                 try {
+                    discussionList.clear();
                     JSONArray jsonArray = new JSONArray(data);
                     for(int i = 0; i < jsonArray.length(); i++) {
                         JSONObject object = jsonArray.getJSONObject(i);
@@ -105,6 +120,7 @@ public class DiscussActivity extends AppCompatActivity {
         switch (item.getItemId()) {
             case R.id.add_item:
                 Intent intent = new Intent(DiscussActivity.this, AddDiscussionActivity.class);
+                intent.putExtra("course", course.toString());
                 startActivity(intent);
                 break;
             default:

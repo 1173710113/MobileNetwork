@@ -11,6 +11,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import com.example.demo1.adapter.CourseAdapter;
 import com.example.demo1.adapter.DiscussionAdapter;
@@ -50,6 +51,7 @@ public class MainActivity extends AppCompatActivity {
                         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                             Intent intent = new Intent(MainActivity.this, ClassActivity.class);
                             Course course = courseList.get(position);
+                            intent.putExtra("course", course.toString());
                             startActivity(intent);
                         }
                     });
@@ -64,6 +66,8 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         initUser();
+        ((TextView)this.findViewById(R.id.main_activity_user_id)).setText(user.getId());
+        ((TextView)this.findViewById(R.id.main_activity_user_name)).setText(user.getName());
         initCourseList();
     }
 

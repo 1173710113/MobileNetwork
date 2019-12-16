@@ -25,7 +25,6 @@ public class DiscussionController {
 
 	@PostMapping("/add")
 	public void postDiscussion(@RequestBody Discussion discussion) {
-		System.out.println("123");
 		discussionService.addDiscussion(discussion);
 	}
 	

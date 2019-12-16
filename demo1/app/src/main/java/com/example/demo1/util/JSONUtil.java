@@ -9,6 +9,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 public class JSONUtil {
+
     public static JSONObject DiscussionParseJSON(Discussion discussion) {
         JSONObject object = new JSONObject();
         try {
@@ -73,6 +74,24 @@ public class JSONUtil {
             int realVol = object.getInt("realVol");
             Course course = new Course(id, name, teacherId, teacherName, maxVol, destination, startTime, endTime, realVol);
             return course;
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+    public static JSONObject CourseParseJSON(Course course) {
+        JSONObject object = new JSONObject();
+        try {
+            object.put("id", course.getId());
+            object.put("name", course.getName());
+            object.put("teacherId", course.getTeacherId());
+            object.put("teacherName", course.getTeacherName());
+            object.put("maxVol", course.getMaxVol());
+            object.put("destination", course.getDestination());
+            object.put("startTime", course.getStartTime());
+            object.put("endTime",course.getEndTime());
+            object.put("realVol", course.getRealVol());
+            return object;
         } catch (JSONException e) {
             e.printStackTrace();
         }
