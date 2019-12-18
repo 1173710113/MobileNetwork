@@ -3,20 +3,25 @@ package com.example.demo1;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.demo1.adapter.ReplyAdapter;
 import com.example.demo1.domain.Discussion;
 import com.example.demo1.domain.Reply;
 import com.example.demo1.util.HttpUtil;
 import com.example.demo1.util.JSONUtil;
+import com.example.demo1.util.TimeUtil;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -30,9 +35,10 @@ import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.Response;
 
-public class CheckDiscussActivity extends AppCompatActivity implements View.OnClickListener{
+public class CheckDiscussActivity extends AppCompatActivity{
     private Discussion discussion;
     private static final int UPDATE_LIST = 1;
+    private static final int SUCCESS = 2;
     private List<Reply> replyList = new ArrayList<>();
     private Handler handler = new Handler() {
         public void handleMessage(Message msg){
@@ -41,6 +47,9 @@ public class CheckDiscussActivity extends AppCompatActivity implements View.OnCl
                     ArrayAdapter<Reply> adapter = new ReplyAdapter(CheckDiscussActivity.this, R.layout.reply_item, replyList);
                     ListView listView = (ScrollListView)findViewById(R.id.list_comment);
                     listView.setAdapter(adapter);
+                    break;
+                case SUCCESS:
+                    Toast.makeText(CheckDiscussActivity.this, "添加成功", Toast.LENGTH_SHORT).show();
                     break;
                 default:
                     break;
@@ -64,22 +73,46 @@ public class CheckDiscussActivity extends AppCompatActivity implements View.OnCl
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        Button btn = (Button)findViewById(R.id.add_reply_button);
-        btn.setOnClickListener(this);
+        final EditText addReply = (EditText)findViewById(R.id.add_reply);
+        addReply.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                if ((event != null && KeyEvent.KEYCODE_ENTER == event.getKeyCode() && KeyEvent.ACTION_DOWN == event.getAction())) {
+                    addReply();
+                    return true;
+                    }
+                return false;
+            }
+        });
     }
 
-    @Override
-    public void onClick(View v) {
-        switch (v.getId()){
-            case R.id.add_reply_button:
-                Intent intent = new Intent(CheckDiscussActivity.this, AddReplyActivity.class);
-                intent.putExtra("discussion", discussion);
-                startActivity(intent);
-                break;
-            default:
-                break;
+    private void addReply() {
+        String content = ((EditText)findViewById(R.id.add_reply)).getText().toString();
+        if(content == null || content.equals("")) {
+            return;
         }
+        String replyDiscussion = discussion.getId();
+        String time = TimeUtil.getTime();
+        SharedPreferences pref = getSharedPreferences("userInfo",MODE_PRIVATE);
+        String posterId = pref.getString("id", "ERROR");
+        Reply reply = new Reply("", replyDiscussion, posterId, "", time, content);
+        JSONObject object = JSONUtil.replyParseJSON(reply);
+        String url = "http://10.0.2.2:8081/mobile/discussion/addreply";
+        HttpUtil.sendHttpRequest(url, object, new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                Message msg = new Message();
+                msg.what = SUCCESS;
+                handler.sendMessage(msg);
+            }
+        });
     }
+
 
     @Override
     public void onResume(){
