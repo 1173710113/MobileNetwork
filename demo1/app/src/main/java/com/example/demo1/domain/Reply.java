@@ -1,7 +1,9 @@
 package com.example.demo1.domain;
 
-public class Reply {
-    private String id;
+import org.litepal.crud.DataSupport;
+
+public class Reply extends DataSupport {
+    private String replyId;
     private String replyDiscussion;
     private String posterId;
     private String posterName;
@@ -18,7 +20,7 @@ public class Reply {
      */
     public Reply(String id, String replyDiscussion, String posterId, String posterName, String time, String content) {
         super();
-        this.id = id;
+        this.replyId = id;
         this.replyDiscussion = replyDiscussion;
         this.posterId = posterId;
         this.posterName = posterName;
@@ -30,7 +32,7 @@ public class Reply {
      * @return the id
      */
     public String getId() {
-        return id;
+        return replyId;
     }
 
     /**

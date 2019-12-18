@@ -97,7 +97,9 @@ public class DiscussActivity extends AppCompatActivity {
                     JSONArray jsonArray = new JSONArray(data);
                     for(int i = 0; i < jsonArray.length(); i++) {
                         JSONObject object = jsonArray.getJSONObject(i);
-                       discussionList.add(JSONUtil.JSONParseDiscussion(object));
+                        Discussion discussion = JSONUtil.JSONParseDiscussion(object);
+                        discussion.save();
+                       discussionList.add(discussion);
                     }
                     Message message = new Message();
                     message.what = UPDATE_LIST;

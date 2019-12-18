@@ -9,7 +9,6 @@ import android.widget.TextView;
 
 import com.example.demo1.R;
 import com.example.demo1.domain.Course;
-import com.example.demo1.domain.CourseClass;
 
 import java.util.List;
 

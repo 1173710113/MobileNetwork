@@ -2,11 +2,13 @@ package com.example.demo1.domain;
 
 import com.example.demo1.util.JSONUtil;
 
+import org.litepal.crud.DataSupport;
+
 import java.io.Serializable;
 
-public class Discussion implements Serializable {
+public class Discussion extends DataSupport implements Serializable {
 
-    private String id;
+    private String discussionId;
     private String posterId;
     private String posterName;
     private String courseId;
@@ -28,7 +30,7 @@ public class Discussion implements Serializable {
     public Discussion(String id, String posterId, String posterName, String courseId, String postTime, String title,
                       String content, int replyCount) {
         super();
-        this.id = id;
+        this.discussionId = id;
         this.posterId = posterId;
         this.posterName = posterName;
         this.courseId = courseId;
@@ -42,7 +44,7 @@ public class Discussion implements Serializable {
      * @return the id
      */
     public String getId() {
-        return id;
+        return discussionId;
     }
 
     /**

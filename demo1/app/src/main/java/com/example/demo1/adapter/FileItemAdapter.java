@@ -9,10 +9,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.demo1.R;
-import com.example.demo1.domain.CourseClass;
 import com.example.demo1.domain.XFile;
-
-import org.w3c.dom.Text;
 
 import java.util.List;
 

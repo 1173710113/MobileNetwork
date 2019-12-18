@@ -2,8 +2,10 @@ package com.example.demo1.domain;
 
 import com.example.demo1.util.JSONUtil;
 
-public class Course {
-    private String id;
+import org.litepal.crud.DataSupport;
+
+public class Course extends DataSupport {
+    private String courseId;
     private String name;
     private String teacherId;
     private String teacherName;
@@ -27,7 +29,7 @@ public class Course {
     public Course(String id, String name, String teacherId, String teacherName, int maxVol, String destination,
                   String startTime, String endTime, int realVol) {
         super();
-        this.id = id;
+        this.courseId = id;
         this.name = name;
         this.teacherId = teacherId;
         this.teacherName = teacherName;
@@ -42,7 +44,7 @@ public class Course {
      * @return the id
      */
     public String getId() {
-        return id;
+        return courseId;
     }
 
     /**

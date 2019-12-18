@@ -14,10 +14,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.example.demo1.adapter.CourseAdapter;
-import com.example.demo1.adapter.DiscussionAdapter;
 import com.example.demo1.domain.Course;
-import com.example.demo1.domain.CourseClass;
-import com.example.demo1.domain.Discussion;
 import com.example.demo1.domain.User;
 import com.example.demo1.util.HttpUtil;
 import com.example.demo1.util.JSONUtil;
@@ -25,6 +22,7 @@ import com.example.demo1.util.JSONUtil;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.litepal.LitePal;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -65,6 +63,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        LitePal.getDatabase();
         initUser();
         ((TextView)this.findViewById(R.id.main_activity_user_id)).setText(user.getId());
         ((TextView)this.findViewById(R.id.main_activity_user_name)).setText(user.getName());
@@ -103,7 +102,9 @@ public class MainActivity extends AppCompatActivity {
                         JSONArray jsonArray = new JSONArray(data);
                         for(int i = 0; i < jsonArray.length(); i++) {
                             JSONObject object = jsonArray.getJSONObject(i);
-                            courseList.add(JSONUtil.JSONParseCourse(object));
+                            Course course = JSONUtil.JSONParseCourse(object);
+                            course.save();
+                            courseList.add(course);
                         }
                         Message message = new Message();
                         message.what = UPDATE_LIST;

@@ -146,7 +146,9 @@ public class CheckDiscussActivity extends AppCompatActivity{
                     JSONArray jsonArray = new JSONArray(data);
                     for(int i = 0; i < jsonArray.length(); i++) {
                         JSONObject object = jsonArray.getJSONObject(i);
-                        replyList.add(JSONUtil.JSONParseReply(object));
+                        Reply reply = JSONUtil.JSONParseReply(object);
+                        reply.save();
+                        replyList.add(reply);
                     }
                     Message message = new Message();
                     message.what = UPDATE_LIST;
