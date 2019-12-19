@@ -7,7 +7,7 @@ package com.example.demo.domain;
  * @author msi-user
  *
  */
-public class File {
+public class XFile {
 
 	private String filePath;
 	private String fileName;
@@ -19,7 +19,7 @@ public class File {
 	 * @param poster
 	 * @param postTime
 	 */
-	public File(String filePath, String fileName, User poster, String postTime) {
+	public XFile(String filePath, String fileName, User poster, String postTime) {
 		super();
 		this.filePath = filePath;
 		this.fileName = fileName;
