@@ -16,9 +16,15 @@ import android.widget.ListView;
 import com.example.demo1.adapter.FileItemAdapter;
 import com.example.demo1.domain.User;
 import com.example.demo1.domain.XFile;
+import com.example.demo1.util.HttpUtil;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.Response;
 
 public class FileActivity extends AppCompatActivity {
 
@@ -39,6 +45,19 @@ public class FileActivity extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 XFile file = data.get(position);
+                String url = "http://10.0.2.2:8081/mobile/file/download/?fileName=SWC开发文档模版.docx";
+                HttpUtil.sendHttpRequest(url, new Callback() {
+                    @Override
+                    public void onFailure(Call call, IOException e) {
+
+                    }
+
+                    @Override
+                    public void onResponse(Call call, Response response) throws IOException {
+                        System.out.println("file");
+                        System.out.println(response.body().string());
+                    }
+                });
             }
         });
     }
