@@ -8,7 +8,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.example.demo.domain.Homework;
-import com.example.demo.domain.User;
 import com.example.demo.service.HomeworkService;
 
 @Controller

@@ -40,6 +40,7 @@ public class DownloadUtil {
 
         Request request = new Request.Builder()
                 .url(url)
+                .addHeader("Accept-Encoding", "identity")
                 .build();
         OkHttpClient client = new OkHttpClient();
         //异步请求
@@ -71,6 +72,7 @@ public class DownloadUtil {
 
                     is = response.body().byteStream();
                     long total = response.body().contentLength();
+                    Log.d("File", "文件大小:" + total);
                     fos = new FileOutputStream(file);
                     long sum = 0;
                     while ((len = is.read(buf)) != -1) {
@@ -87,7 +89,6 @@ public class DownloadUtil {
                     e.printStackTrace();
                     listener.onDownloadFailed(e);
                 }finally {
-
                     try {
                         if (is != null) {
                             is.close();

@@ -24,6 +24,7 @@ import com.example.demo1.domain.User;
 import com.example.demo1.domain.XFile;
 import com.example.demo1.util.DownloadUtil;
 import com.example.demo1.util.HttpUtil;
+import com.example.demo1.util.PermissionUtil;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -58,15 +59,8 @@ public class FileActivity extends AppCompatActivity {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 XFile file = data.get(position);
                 String url = "http://10.0.2.2:8081/mobile/file/download/?fileName=SWC开发文档模版.docx";
-                int REQUEST_EXTERNAL_STORAGE = 1;
-                String[] PERMISSIONS_STORAGE = {
-                        Manifest.permission.READ_EXTERNAL_STORAGE,
-                        Manifest.permission.WRITE_EXTERNAL_STORAGE
-                };
-                int permission = ActivityCompat.checkSelfPermission(FileActivity.this, Manifest.permission.WRITE_EXTERNAL_STORAGE);
-                if(permission != PackageManager.PERMISSION_GRANTED) {
-                    ActivityCompat.requestPermissions(FileActivity.this, PERMISSIONS_STORAGE, REQUEST_EXTERNAL_STORAGE);
-                }
+                //请求之前获得文件读写权限
+                PermissionUtil.getReadWriteExternalPermission(FileActivity.this);
                 DownloadUtil.get().download(url, Environment.getExternalStorageDirectory().getAbsolutePath(), "SWC开发文档模版.docx", new DownloadUtil.OnDownloadListener() {
                     @Override
                     public void onDownloadSuccess(File file) {

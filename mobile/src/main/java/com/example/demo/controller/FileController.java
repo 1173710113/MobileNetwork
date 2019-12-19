@@ -32,7 +32,13 @@ public class FileController {
 		String fileName = file.getOriginalFilename();
 		System.out.println(fileName);
 		String realPath = request.getSession().getServletContext().getRealPath("/upload");
-		file.transferTo(new File(realPath, fileName));
+		File targetFile = new File(realPath);
+		//create folder if the directory is not exist
+		if(!targetFile.exists() && !targetFile.isDirectory()) {
+			targetFile.mkdir();
+		}
+		File dir = new File(targetFile, fileName);
+		file.transferTo(dir);
 		return "success";
 	}
 	
@@ -40,10 +46,12 @@ public class FileController {
 	@ResponseBody
 	public String download(String fileName, HttpServletRequest request, HttpServletResponse response) throws Exception{
 		String realPath = request.getSession().getServletContext().getRealPath("upload");
-		FileInputStream stream = new FileInputStream(new File(realPath, fileName));
+		File file = new File(realPath, fileName);
+		FileInputStream stream = new FileInputStream(file);
 		String extendFileName = fileName.substring(fileName.lastIndexOf("."));
 		response.setContentType(request.getSession().getServletContext().getMimeType(extendFileName));
 		response.setHeader("content-disposition", "attachment;fileName=" + URLEncoder.encode(fileName, "UTF-8"));
+		response.setContentLengthLong(file.length());
 		ServletOutputStream out = response.getOutputStream();
 		FileCopyUtils.copy(stream, out);
 		return "success";
