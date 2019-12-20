@@ -151,6 +151,7 @@ public class FileActivity extends AppCompatActivity {
         RequestBody requestBody = new MultipartBody.Builder()
                 .setType(MultipartBody.FORM)
                 .addFormDataPart("file", uploadfile, RequestBody.create(MediaType.parse("*/*"), file)) // 第一个参数传到服务器的字段名，第二个你自己的文件名，第三个MediaType.parse("*/*")和我们之前说的那个type其实是一样的
+                .addFormDataPart("poster","1173710113")
                 .build();
         HttpUtil.postFile(url, requestBody, new Callback() {
             @Override

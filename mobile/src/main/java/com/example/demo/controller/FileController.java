@@ -28,14 +28,15 @@ import org.springframework.web.multipart.MultipartFile;
 public class FileController {
 	@RequestMapping("/upload")
 	@ResponseBody
-	public String upload(MultipartFile file, HttpServletRequest request)throws IOException {
+	public String upload(MultipartFile file, String poster, HttpServletRequest request)throws IOException {
 		String fileName = file.getOriginalFilename();
 		System.out.println(fileName);
-		String realPath = request.getSession().getServletContext().getRealPath("/upload");
+		System.out.println(poster);
+		String realPath = request.getSession().getServletContext().getRealPath("/upload/" + poster);
 		File targetFile = new File(realPath);
 		//create folder if the directory is not exist
 		if(!targetFile.exists() && !targetFile.isDirectory()) {
-			targetFile.mkdir();
+			targetFile.mkdirs();
 		}
 		File dir = new File(targetFile, fileName);
 		file.transferTo(dir);
