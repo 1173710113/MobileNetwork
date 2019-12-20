@@ -11,7 +11,7 @@
  Target Server Version : 80018
  File Encoding         : 65001
 
- Date: 15/12/2019 13:41:32
+ Date: 21/12/2019 01:01:19
 */
 
 SET NAMES utf8mb4;
@@ -42,20 +42,19 @@ CREATE TABLE `course_table`  (
   `destination` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
   `start_time` datetime(0) NOT NULL,
   `end_time` datetime(0) NOT NULL,
-  `total_time` int(3) UNSIGNED NOT NULL,
   `real_vol` int(3) UNSIGNED NOT NULL DEFAULT 0,
   PRIMARY KEY (`id`) USING BTREE,
   INDEX `name`(`name`) USING BTREE,
   INDEX `course_table`(`teacher`) USING BTREE,
   CONSTRAINT `course_table` FOREIGN KEY (`teacher`) REFERENCES `user_table` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE = InnoDB AUTO_INCREMENT = 2 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 4 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Table structure for discussion_table
 -- ----------------------------
 DROP TABLE IF EXISTS `discussion_table`;
 CREATE TABLE `discussion_table`  (
-  `id` int(32) UNSIGNED ZEROFILL NOT NULL AUTO_INCREMENT,
+  `id` int(32) UNSIGNED NOT NULL AUTO_INCREMENT,
   `user` char(15) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
   `time` datetime(0) NOT NULL,
   `title` char(52) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
@@ -67,7 +66,7 @@ CREATE TABLE `discussion_table`  (
   INDEX `reply_course`(`course`) USING BTREE,
   CONSTRAINT `reply_course` FOREIGN KEY (`course`) REFERENCES `course_table` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `user_id` FOREIGN KEY (`user`) REFERENCES `user_table` (`id`) ON DELETE SET NULL ON UPDATE CASCADE
-) ENGINE = InnoDB AUTO_INCREMENT = 18 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 31 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Table structure for file_table
@@ -76,10 +75,14 @@ DROP TABLE IF EXISTS `file_table`;
 CREATE TABLE `file_table`  (
   `path` char(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
   `name` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+  `size` bigint(50) UNSIGNED NOT NULL DEFAULT 0,
   `user` char(15) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
-  `time` datetime(6) NOT NULL ON UPDATE CURRENT_TIMESTAMP(6),
+  `course` int(10) UNSIGNED NOT NULL,
+  `time` datetime(6) NOT NULL,
   PRIMARY KEY (`path`) USING BTREE,
   INDEX `post_user`(`user`) USING BTREE,
+  INDEX `file_course`(`course`) USING BTREE,
+  CONSTRAINT `file_course` FOREIGN KEY (`course`) REFERENCES `course_table` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `post_user` FOREIGN KEY (`user`) REFERENCES `user_table` (`id`) ON DELETE SET NULL ON UPDATE CASCADE
 ) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
 
@@ -107,7 +110,7 @@ CREATE TABLE `homework_table`  (
 -- ----------------------------
 DROP TABLE IF EXISTS `reply_table`;
 CREATE TABLE `reply_table`  (
-  `discussion_id` int(10) UNSIGNED NOT NULL,
+  `discussion_id` int(32) UNSIGNED NOT NULL,
   `user` char(15) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
   `time` datetime(6) NOT NULL ON UPDATE CURRENT_TIMESTAMP(6),
   `content` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '',
@@ -117,7 +120,7 @@ CREATE TABLE `reply_table`  (
   INDEX `reply_discussion_id`(`discussion_id`) USING BTREE,
   CONSTRAINT `reply_discussion_id` FOREIGN KEY (`discussion_id`) REFERENCES `discussion_table` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `reply_user_id` FOREIGN KEY (`user`) REFERENCES `user_table` (`id`) ON DELETE SET NULL ON UPDATE CASCADE
-) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 19 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Table structure for user_table

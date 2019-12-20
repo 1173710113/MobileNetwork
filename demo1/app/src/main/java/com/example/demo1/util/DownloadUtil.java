@@ -69,7 +69,6 @@ public class DownloadUtil {
                 File file = new File(dir, destFileName);
 
                 try {
-
                     is = response.body().byteStream();
                     long total = response.body().contentLength();
                     Log.d("File", "文件大小:" + total);

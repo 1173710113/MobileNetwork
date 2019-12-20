@@ -29,7 +29,6 @@ public class HttpUtil {
         {
             e.printStackTrace();
         }
-
     }
 
     public static void sendHttpRequest(String url, Callback callback) {
@@ -40,6 +39,12 @@ public class HttpUtil {
         client.newCall(request).enqueue(callback);
     }
 
+    /**
+     * 上传文件用的
+     * @param url
+     * @param requestBody
+     * @param callback
+     */
     public static void postFile(String url, RequestBody requestBody, Callback callback) {
         OkHttpClient client = new OkHttpClient();
         Request request = new Request.Builder()
