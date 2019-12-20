@@ -5,9 +5,12 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 
 import android.Manifest;
+import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Xfermode;
+import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.Message;
@@ -18,11 +21,13 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.example.demo1.adapter.FileItemAdapter;
 import com.example.demo1.domain.User;
 import com.example.demo1.domain.XFile;
 import com.example.demo1.util.DownloadUtil;
+import com.example.demo1.util.FileUtil;
 import com.example.demo1.util.HttpUtil;
 import com.example.demo1.util.PermissionUtil;
 
@@ -37,9 +42,16 @@ import java.util.List;
 
 import okhttp3.Call;
 import okhttp3.Callback;
+import okhttp3.MediaType;
+import okhttp3.MultipartBody;
+import okhttp3.RequestBody;
 import okhttp3.Response;
 
+import static com.example.demo1.util.FileUtil.getRealPathFromURI;
+
 public class FileActivity extends AppCompatActivity {
+    private String path,uploadfile;
+    private File file;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -91,13 +103,67 @@ public class FileActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()) {
             case R.id.add_item:
-                Intent intent = new Intent(FileActivity.this, UplodaFileActivity.class);
-                startActivity(intent);
+                /*Intent intent = new Intent(FileActivity.this, UplodaFileActivity.class);
+                startActivity(intent);*/
+                Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+                intent.setType("*/*");
+                intent.addCategory(Intent.CATEGORY_OPENABLE);
+                startActivityForResult(intent, 1);
                 break;
             default:
                 break;
         }
         return true;
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        Log.w("File", "返回的数据：" + data);
+        if (resultCode == Activity.RESULT_OK) {
+            Uri uri = data.getData();
+            //使用第三方应用打开
+            if ("file".equalsIgnoreCase(uri.getScheme())) {
+                path = uri.getPath();
+                file = new File(path);
+                uploadfile = file.getName();
+                Log.w("File", "getName===" + uploadfile);
+                Toast.makeText(this, path + "11111", Toast.LENGTH_SHORT).show();
+                return;
+            }
+            //4.4以后
+            if (Build.VERSION.SDK_INT > Build.VERSION_CODES.KITKAT) {
+                // 获取文件路径
+                path = FileUtil.getPath(this, uri);
+                Log.w("File", path);
+                file = new File(path);
+                // 获得文件名
+                uploadfile = file.getName();
+                Log.w("File", "getName===" + uploadfile);
+                Toast.makeText(this, path, Toast.LENGTH_SHORT).show();
+            } else {//4.4以下下系统调用方法
+                path = getRealPathFromURI(this, uri);
+                Log.w("File", path);
+                Toast.makeText(FileActivity.this, path + "222222", Toast.LENGTH_SHORT).show();
+            }
+        }
+        String url = "http://10.0.2.2:8081/mobile/file/upload";
+        RequestBody requestBody = new MultipartBody.Builder()
+                .setType(MultipartBody.FORM)
+                .addFormDataPart("file", uploadfile, RequestBody.create(MediaType.parse("*/*"), file)) // 第一个参数传到服务器的字段名，第二个你自己的文件名，第三个MediaType.parse("*/*")和我们之前说的那个type其实是一样的
+                .build();
+        HttpUtil.postFile(url, requestBody, new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                e.printStackTrace();
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+
+            }
+        });
+
     }
 
 }

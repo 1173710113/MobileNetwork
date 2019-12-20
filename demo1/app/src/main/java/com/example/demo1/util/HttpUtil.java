@@ -40,4 +40,13 @@ public class HttpUtil {
         client.newCall(request).enqueue(callback);
     }
 
+    public static void postFile(String url, RequestBody requestBody, Callback callback) {
+        OkHttpClient client = new OkHttpClient();
+        Request request = new Request.Builder()
+                .url(url)
+                .post(requestBody)
+                .build();
+        client.newCall(request).enqueue(callback);
+    }
+
 }
