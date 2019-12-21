@@ -63,16 +63,14 @@ public class CheckDiscussActivity extends AppCompatActivity{
         setContentView(R.layout.activity_check_discuss);
         Intent intent = getIntent();
         //获得discussion
-        String data = intent.getStringExtra("discussion");
-        try {
-            this.discussion = JSONUtil.JSONParseDiscussion(new JSONObject((data)));
-            ((TextView)findViewById(R.id.check_discussion_title)).setText(discussion.getTitle());
-            ((TextView)findViewById(R.id.check_discussion_content)).setText(discussion.getContent());
-            replyList.clear();
-            initReplyList();
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
+        discussion = (Discussion)getIntent().getSerializableExtra("discussion");
+        //显示标题和内容
+        ((TextView)findViewById(R.id.check_discussion_title)).setText(discussion.getTitle());
+        ((TextView)findViewById(R.id.check_discussion_content)).setText(discussion.getContent());
+        //初始化回复列表
+        replyList.clear();
+        initReplyList();
+        //发送回复
         final EditText addReply = (EditText)findViewById(R.id.add_reply);
         addReply.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override

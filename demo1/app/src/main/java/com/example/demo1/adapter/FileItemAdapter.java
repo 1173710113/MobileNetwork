@@ -48,9 +48,9 @@ public class FileItemAdapter extends ArrayAdapter<XFile> {
         }
         fileName.setText(file.getFileName());
         fileUploadDate.setText(file.getPostTime());
-        fileUploaderId .setText(file.getPoster().getId());
-        fileUploaderName.setText(file.getPoster().getName());
-        fileLength.setText(file.getLength());
+        fileUploaderId .setText(file.getPosterId());
+        fileUploaderName.setText(file.getPosterName());
+        fileLength.setText(Long.toString(file.getFileSize()));
         return view;
     }
 }

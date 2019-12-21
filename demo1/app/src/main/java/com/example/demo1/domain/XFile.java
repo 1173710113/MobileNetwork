@@ -3,55 +3,79 @@ package com.example.demo1.domain;
 public class XFile {
     private String filePath;
     private String fileName;
-    private User poster;
+    private long fileSize;
+    private String posterId;
+    private String posterName;
+    private String courseId;
     private String postTime;
-    private String length;
 
     /**
      * @param filePath
      * @param fileName
-     * @param poster
+     * @param fileSize
+     * @param posterId
+     * @param posterName
+     * @param courseId
      * @param postTime
-     * @param length
      */
-    public XFile(String filePath, String fileName, User poster, String postTime, String length) {
+    public XFile(String filePath, String fileName, long fileSize, String posterId, String posterName, String courseId,
+                 String postTime) {
         super();
         this.filePath = filePath;
         this.fileName = fileName;
-        this.poster = poster;
+        this.fileSize = fileSize;
+        this.posterId = posterId;
+        this.posterName = posterName;
+        this.courseId = courseId;
         this.postTime = postTime;
-        this.length = length;
     }
+
     /**
      * @return the filePath
      */
     public String getFilePath() {
         return filePath;
     }
+
     /**
      * @return the fileName
      */
     public String getFileName() {
         return fileName;
     }
+
     /**
-     * @return the poster
+     * @return the fileSize
      */
-    public User getPoster() {
-        return poster;
+    public long getFileSize() {
+        return fileSize;
     }
+
+    /**
+     * @return the posterId
+     */
+    public String getPosterId() {
+        return posterId;
+    }
+
+    /**
+     * @return the posterName
+     */
+    public String getPosterName() {
+        return posterName;
+    }
+
+    /**
+     * @return the courseId
+     */
+    public String getCourseId() {
+        return courseId;
+    }
+
     /**
      * @return the postTime
      */
     public String getPostTime() {
         return postTime;
-    }
-
-    /**
-     *
-     * @return
-     */
-    public String getLength(){
-        return length;
     }
 }

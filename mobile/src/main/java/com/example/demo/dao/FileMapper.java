@@ -28,8 +28,8 @@ public interface FileMapper {
 	 * @param postTime
 	 */
 	public void addFile(@Param("path") String path, @Param("file_name") String fileName, @Param("size") long fileSize,
-			@Param("poster_id") String posterId, @Param("poster_name") String posterName,
-			@Param("course_id") String courseId, @Param("post_time") String postTime);
+			@Param("poster_id") String posterId, @Param("course_id") String courseId,
+			@Param("post_time") String postTime);
 
 	/**
 	 * 

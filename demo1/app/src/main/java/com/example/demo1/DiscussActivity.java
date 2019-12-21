@@ -50,7 +50,7 @@ public class DiscussActivity extends AppCompatActivity {
                         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                             Intent intent = new Intent(DiscussActivity.this, CheckDiscussActivity.class);
                             Discussion discussion = discussionList.get(position);
-                            intent.putExtra("discussion", discussion.toString());
+                            intent.putExtra("discussion", discussion);
                             startActivity(intent);
                         }
                     });
@@ -64,13 +64,7 @@ public class DiscussActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_discuss);
-        Intent intent = getIntent();
-        String extraString = intent.getStringExtra("course");
-        try {
-            this.course = JSONUtil.JSONParseCourse(new JSONObject(extraString));
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
+        course = (Course)getIntent().getSerializableExtra("course");
         discussionList.clear();
         initDiscussionList();
     }
@@ -123,7 +117,7 @@ public class DiscussActivity extends AppCompatActivity {
         switch (item.getItemId()) {
             case R.id.add_item:
                 Intent intent = new Intent(DiscussActivity.this, AddDiscussionActivity.class);
-                intent.putExtra("course", course.toString());
+                intent.putExtra("course", course);
                 startActivity(intent);
                 break;
             default:

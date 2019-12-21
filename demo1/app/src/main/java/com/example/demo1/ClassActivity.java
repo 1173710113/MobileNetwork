@@ -61,7 +61,7 @@ public class ClassActivity extends AppCompatActivity {
                         break;
                 }
                 if(intent != null) {
-                    intent.putExtra("course", course.toString());
+                    intent.putExtra("course", course);
                     startActivity(intent);
                 }
             }

@@ -4,7 +4,9 @@ import com.example.demo1.util.JSONUtil;
 
 import org.litepal.crud.DataSupport;
 
-public class Course extends DataSupport {
+import java.io.Serializable;
+
+public class Course extends DataSupport implements Serializable {
     private String courseId;
     private String name;
     private String teacherId;

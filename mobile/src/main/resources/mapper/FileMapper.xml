@@ -7,7 +7,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
 <insert id="addFile">
 	INSERT INTO file_table
-	VALUES(#{path}, #{file_name}, #{size}, #{poster_id}, #{poster_name}, #{course_id}, #{post_time}) 
+	VALUES(#{path}, #{file_name}, #{size}, #{poster_id}, #{course_id}, #{post_time}) 
 </insert>
 <delete id="deleteFile">
 	DELETE FROM file_table
@@ -23,7 +23,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	f.course as course_id,
 	f.time as post_time
 	FROM user_table u, file_table f
-	WHERE course_id=#{course_id} and u.id=f.user
+	WHERE f.course=#{course_id} and u.id=f.user
 </select>
 <resultMap id="file" type="XFile">
 	<id column="path" property="filePath"/>

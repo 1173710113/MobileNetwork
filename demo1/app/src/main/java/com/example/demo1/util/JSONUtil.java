@@ -4,6 +4,7 @@ import com.example.demo1.domain.Course;
 import com.example.demo1.domain.Discussion;
 import com.example.demo1.domain.Reply;
 import com.example.demo1.domain.User;
+import com.example.demo1.domain.XFile;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -108,6 +109,23 @@ public class JSONUtil {
             object.put("time", reply.getTime());
             object.put("content", reply.getContent());
             return object;
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public static XFile JSONParseXFile(JSONObject object) {
+        try {
+            String filePath = object.getString("filePath");
+            String fileName = object.getString("fileName");
+            long fileSize = object.getLong("fileSize");
+            String posterId = object.getString("posterId");
+            String posterName = object.getString("posterName");
+            String courseId = object.getString("courseId");
+            String postTime = object.getString("postTime");
+            XFile file = new XFile(filePath, fileName, fileSize, posterId, posterName, courseId, postTime);
+            return file;
         } catch (JSONException e) {
             e.printStackTrace();
         }

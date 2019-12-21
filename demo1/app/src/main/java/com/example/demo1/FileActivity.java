@@ -24,12 +24,18 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 import com.example.demo1.adapter.FileItemAdapter;
+import com.example.demo1.domain.Course;
 import com.example.demo1.domain.User;
 import com.example.demo1.domain.XFile;
 import com.example.demo1.util.DownloadUtil;
 import com.example.demo1.util.FileUtil;
 import com.example.demo1.util.HttpUtil;
+import com.example.demo1.util.JSONUtil;
 import com.example.demo1.util.PermissionUtil;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -51,26 +57,26 @@ import static com.example.demo1.util.FileUtil.getRealPathFromURI;
 
 public class FileActivity extends AppCompatActivity {
     private String path,uploadfile;
-    private File file;
+    private List<XFile> fileList = new ArrayList<>();
+    private Course course;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main2);
-        final List<XFile> data = new ArrayList<>();
-        for (int i = 0; i < 10; i++) {
-            data.add(new XFile("计算机导论1.ppt", "计算机导论1.ppt", new User("1173710113", null, null, "滕文杰", null, null), "11.20", "45.0kb"));
-        }
+        course = (Course)getIntent().getSerializableExtra("course");
+        initFileList();
         FileItemAdapter adapter = new FileItemAdapter(
-                FileActivity.this, R.layout.file_item, data
+                FileActivity.this, R.layout.file_item, fileList
         );
         ListView listView = (ListView) findViewById(R.id.list_view);
         listView.setAdapter(adapter);
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                XFile file = data.get(position);
-                String url = "http://10.0.2.2:8081/mobile/file/download/?fileName=SWC开发文档模版.docx";
+                XFile file = fileList.get(position);
+                String fileName = file.getFileName();
+                String url = "http://10.0.2.2:8081/mobile/file/download/" + fileName + "/" + course.getId();
                 //请求之前获得文件读写权限
                 PermissionUtil.getReadWriteExternalPermission(FileActivity.this);
                 DownloadUtil.get().download(url, Environment.getExternalStorageDirectory().getAbsolutePath(), "SWC开发文档模版.docx", new DownloadUtil.OnDownloadListener() {
@@ -91,6 +97,12 @@ public class FileActivity extends AppCompatActivity {
                 });
             }
         });
+    }
+
+    @Override
+    public void onResume(){
+        super.onResume();
+        initFileList();
     }
 
     @Override
@@ -118,6 +130,7 @@ public class FileActivity extends AppCompatActivity {
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        File file = null;
         super.onActivityResult(requestCode, resultCode, data);
         Log.w("File", "返回的数据：" + data);
         if (resultCode == Activity.RESULT_OK) {
@@ -151,7 +164,8 @@ public class FileActivity extends AppCompatActivity {
         RequestBody requestBody = new MultipartBody.Builder()
                 .setType(MultipartBody.FORM)
                 .addFormDataPart("file", uploadfile, RequestBody.create(MediaType.parse("*/*"), file)) // 第一个参数传到服务器的字段名，第二个你自己的文件名，第三个MediaType.parse("*/*")和我们之前说的那个type其实是一样的
-                .addFormDataPart("poster","1173710113")
+                .addFormDataPart("posterId",getSharedPreferences("userInfo", MODE_PRIVATE).getString("id", "ERROR"))
+                .addFormDataPart("courseId", course.getId())
                 .build();
         HttpUtil.postFile(url, requestBody, new Callback() {
             @Override
@@ -161,10 +175,35 @@ public class FileActivity extends AppCompatActivity {
 
             @Override
             public void onResponse(Call call, Response response) throws IOException {
-
             }
         });
 
+    }
+
+    private void initFileList() {
+        String url = "http://10.0.2.2:8081/mobile/file/query/" + course.getId();
+        HttpUtil.sendHttpRequest(url, new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                fileList.clear();
+                String data = response.body().string();
+                try {
+                    JSONArray jsonArray = new JSONArray(data);
+                    for(int i=0; i<jsonArray.length(); i++) {
+                        JSONObject object = jsonArray.getJSONObject(i);
+                        XFile file = JSONUtil.JSONParseXFile(object);
+                        fileList.add(file);
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
     }
 
 }
