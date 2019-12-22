@@ -37,4 +37,9 @@ public class UserController {
 		userService.register(user.getId(), user.getPassword(), user.getType(), user.getName(), user.getSex());
 		return "success";
 	}
+	
+	@RequestMapping("/updatepassword/{newPassword}")
+	public void updatePasssword(@PathVariable("newPassword") String newPassword) {
+		
+	}
 }

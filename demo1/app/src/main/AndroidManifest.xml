@@ -31,6 +31,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".FixPasswordActivity"/>
         <activity android:name=".UplodaFileActivity" />
         <activity android:name=".CheckDiscussActivity" />
         <activity android:name=".DiscussActivity" />

@@ -1,85 +1,53 @@
 package com.example.demo1;
 
-import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.widget.AppCompatEditText;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
-import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.demo1.BaseActivity;
-import com.example.sqlitetest.Bean.Saved_Student;
-import com.example.sqlitetest.Bean.Student;
-import com.example.sqlitetest.Httlpackage.MD5HTTL;
-import com.example.sqlitetest.R;
+import com.example.demo1.domain.Saved_Student;
+import com.example.demo1.util.HttpUtil;
 
-import org.litepal.crud.DataSupport;
+import java.io.IOException;
 
-import java.util.List;
-
-import static com.example.sqlitetest.Activity.Login.flag_right;
-import static com.example.sqlitetest.Activity.Login.list;
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.Response;
 
 public class FixPasswordActivity extends BaseActivity implements View.OnClickListener {
-    private AppCompatEditText old;
-    private AppCompatEditText new1;
-    private AppCompatEditText new2;
-    private ImageView back;
-    private Button define;
-    User student;
-    Saved_Student saved_student;
-    String mess1;
-    String mess;
-    String ID;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_fix_password);
-        old = findViewById(R.id.old_pass);
-        new1 = findViewById(R.id.new_pass);
-        new2 = findViewById(R.id.new2_pass);
-        back = findViewById(R.id.open_nav);
-        back.setImageResource(R.drawable.back);
-        define = findViewById(R.id.define);
+        Button define = (Button)findViewById(R.id.define);
         define.setOnClickListener(this);
-        back.setOnClickListener(this);
-        ID = getIntent().getStringExtra("student_id");
-        List<Student> list = DataSupport.where("student_number = ?", ID).find(Student.class);
-        Log.e("ID====",ID);
-        if (list.size() != 0) {
-            student = list.get(0);
-            Log.e("ID:==",student.getStudent_number()+"--------");
-        }
+        ((TextView)findViewById(R.id.fix_password_user_id)).setText(getSharedPreferences("userInfo", MODE_PRIVATE).getString("password", "ERROR"));
+        ((TextView)findViewById(R.id.fix_password_user_name)).setText(getSharedPreferences("userInfo", MODE_PRIVATE).getString("name", "ERROR"));
     }
 
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.define:
-                if (CheckOld()) {
-                    if (CheckNew()) {
-                        student.setPassword(MD5HTTL.md5(mess1));
-                        //DataSupport.updateAll("acc")
-                        student.updateAll("ID_password=?",MD5HTTL.md5(mess1));
-                        student.save();
-                        for (int i = 0; i < list.size(); i++) {
-                            if (list.get(i).getAccount().equals(student.getStudent_number())) {
-                                list.remove(i);
-                                //Log.e("FIx-----",student.getStudent_number());
-                                //Log.e("Fix-----------",list.get(i).getAccount());
-                                DataSupport.deleteAll(Saved_Student.class,"account=?",student.getStudent_number());
-                                List<Saved_Student> saved_studentList = DataSupport.findAll(Saved_Student.class);
-                                //Log.e("save_student.size=",saved_studentList.size()+"");
-                                //Log.e("list size--------",""+list.size());
-                                //list.clear();
+                String oldPassword = ((TextView)findViewById(R.id.old_pass)).getText().toString();
+                if (CheckOldPassword(oldPassword)) {
+                    String new1 = ((TextView)findViewById(R.id.new_pass)).getText().toString();
+                    String new2 = ((TextView)findViewById(R.id.new2_pass)).getText().toString();
+                    if (CheckNew(new1, new2)) {
+                        String url = "http://10.0.2.2:8081/mobile/user/updatepassword/" + new1;
+                        HttpUtil.sendHttpRequest(url, new Callback() {
+                            @Override
+                            public void onFailure(Call call, IOException e) {
+
                             }
-                        }
-                        flag_right = 0;
-                        Intent intent = new Intent(Fix_password.this, Login.class);
-                        startActivity(intent);
+
+                            @Override
+                            public void onResponse(Call call, Response response) throws IOException {
+
+                            }
+                        });
                     }
                 }
                 break;
@@ -89,13 +57,12 @@ public class FixPasswordActivity extends BaseActivity implements View.OnClickLis
         }
     }
 
-    private boolean CheckNew() {
-        String mess = new1.getText().toString();
-        mess1 = new2.getText().toString();
-        if (mess.equals(mess1) && mess.length() >= 6) {
+    private boolean CheckNew(String new1, String new2) {
+
+        if (new1.equals(new2) && new1.length() >= 6) {
             return true;
         } else {
-            if (mess.length() < 6) {
+            if (new1.length() < 6) {
                 Toast.makeText(this, "新密码应大于等于6位数", Toast.LENGTH_SHORT).show();
             } else {
                 Toast.makeText(this, "你填写的新密码两次不一致", Toast.LENGTH_SHORT).show();
@@ -104,14 +71,10 @@ public class FixPasswordActivity extends BaseActivity implements View.OnClickLis
         }
     }
 
-    private boolean CheckOld() {
-        //学号
+    private boolean CheckOldPassword(String password) {
         //原来的密码
-        mess = getIntent().getStringExtra("before_password");
-        //你填写的旧密码
-        String password = old.getText().toString();
-
-        if (MD5HTTL.md5(password).equals(mess)) {
+        String oldPassword = getSharedPreferences("userInfo", MODE_PRIVATE).getString("password", "ERROR");
+        if (password.equals(oldPassword)) {
             return true;
         } else {
             Toast.makeText(this, "你填写的旧密码错误", Toast.LENGTH_SHORT).show();
