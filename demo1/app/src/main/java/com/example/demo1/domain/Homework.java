@@ -3,24 +3,34 @@ package com.example.demo1.domain;
 public class Homework {
 
     private String id;
-    private String poster_id;
+    private String posterId;
+    private String posterName;
     private String title;
     private String content;
     private String deadline;
     private String postTime;
-    private String course_id;
-
-
-    public Homework(String id, String poster_id, String title, String content, String deadline, String postTime,
-                    String course_id) {
+    private String courseId;
+    /**
+     * @param id
+     * @param posterId
+     * @param posterName
+     * @param title
+     * @param content
+     * @param deadline
+     * @param postTime
+     * @param courseId
+     */
+    public Homework(String id, String posterId, String posterName, String title, String content, String deadline,
+                    String postTime, String courseId) {
         super();
         this.id = id;
-        this.poster_id = poster_id;
+        this.posterId = posterId;
+        this.posterName = posterName;
         this.title = title;
         this.content = content;
         this.deadline = deadline;
         this.postTime = postTime;
-        this.course_id = course_id;
+        this.courseId = courseId;
     }
     /**
      * @return the id
@@ -29,10 +39,16 @@ public class Homework {
         return id;
     }
     /**
-     * @return the poster
+     * @return the posterId
      */
-    public String getPoster() {
-        return poster_id;
+    public String getPosterId() {
+        return posterId;
+    }
+    /**
+     * @return the posterName
+     */
+    public String getPosterName() {
+        return posterName;
     }
     /**
      * @return the title
@@ -59,9 +75,9 @@ public class Homework {
         return postTime;
     }
     /**
-     * @return the course
+     * @return the courseId
      */
-    public String getCourse() {
-        return course_id;
+    public String getCourseId() {
+        return courseId;
     }
 }
