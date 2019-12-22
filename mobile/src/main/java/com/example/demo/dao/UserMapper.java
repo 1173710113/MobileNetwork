@@ -64,4 +64,5 @@ public interface UserMapper {
 	 * @return
 	 */
 	public User login(@Param("account")String account, @Param("password")String password);
+	public User getUserById(@Param("account")String account);
 }

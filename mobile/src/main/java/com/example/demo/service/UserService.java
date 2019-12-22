@@ -57,4 +57,5 @@ public interface UserService {
 	 * @return
 	 */
 	public String deleteUser(String id);
+	public User getUserById(String userId);
 }

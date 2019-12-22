@@ -49,4 +49,10 @@ public class UserServiceImp implements UserService{
 		return null;
 	}
 
+	@Override
+	public User getUserById(String userId) {
+		// TODO Auto-generated method stub
+		return mapper.getUserById(userId);
+	}
+
 }

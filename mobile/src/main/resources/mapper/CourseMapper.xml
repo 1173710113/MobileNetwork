@@ -52,4 +52,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		<result column="end_time" property="endTime"/>
 		<result column="real_vol" property="realVol"/>
 	</resultMap>
+	<select id="getStudentByCourse" resultType="String">
+		SELECT
+		student
+		FROM course_student
+		WHERE course={courseId}
+	</select>
+	
 </mapper>
