@@ -35,5 +35,6 @@ public interface CourseService {
 	 * @return
 	 */
 	public List<Course> queryCourseByTeacherId(String teacherId);
+	public List<String> getCourseStudent(String courseId);
 
 }

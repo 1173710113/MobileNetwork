@@ -49,4 +49,5 @@ public interface CourseMapper {
 	 * @return
 	 */
 	public List<Course> queryCourseByTeacherId(@Param("teacher_id") String teacherId);
+	public List<String> getStudentByCourse(@Param("courseId") String courseId);
 }

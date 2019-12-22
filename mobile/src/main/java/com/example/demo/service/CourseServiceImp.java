@@ -48,4 +48,10 @@ public class CourseServiceImp implements CourseService {
 		return courseList;
 	}
 
+	@Override
+	public List<String> getCourseStudent(String courseId) {
+		
+		return courseMapper.getStudentByCourse(courseId);
+	}
+
 }
