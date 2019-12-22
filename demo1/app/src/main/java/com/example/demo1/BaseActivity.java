@@ -1,4 +1,4 @@
-package com.example.demo1.util;
+package com.example.demo1;
 
 import androidx.appcompat.app.AppCompatActivity;
 
