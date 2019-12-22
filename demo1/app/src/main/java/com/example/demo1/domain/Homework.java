@@ -1,6 +1,8 @@
 package com.example.demo1.domain;
 
-public class Homework {
+import java.io.Serializable;
+
+public class Homework implements Serializable {
 
     private String id;
     private String posterId;

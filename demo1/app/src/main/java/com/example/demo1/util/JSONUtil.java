@@ -2,6 +2,7 @@ package com.example.demo1.util;
 
 import com.example.demo1.domain.Course;
 import com.example.demo1.domain.Discussion;
+import com.example.demo1.domain.Homework;
 import com.example.demo1.domain.Reply;
 import com.example.demo1.domain.User;
 import com.example.demo1.domain.XFile;
@@ -126,6 +127,24 @@ public class JSONUtil {
             String postTime = object.getString("postTime");
             XFile file = new XFile(filePath, fileName, fileSize, posterId, posterName, courseId, postTime);
             return file;
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public static Homework JSONParseHomework(JSONObject object) {
+        try {
+            String id = object.getString("id");
+            String posterId = object.getString("posterId");
+            String posterName = object.getString("posterName");
+            String title = object.getString("title");
+            String content = object.getString("content");
+            String deadline = object.getString("deadline");
+            String postTime = object.getString("postTime");
+            String courseId = object.getString("courseId");
+            Homework homework = new Homework(id, posterId, posterName, title, content, deadline, postTime, courseId);
+            return homework;
         } catch (JSONException e) {
             e.printStackTrace();
         }

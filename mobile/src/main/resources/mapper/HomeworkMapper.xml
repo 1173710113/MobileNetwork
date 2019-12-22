@@ -21,7 +21,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	h.time as time,
 	h.course as course_id
 	FROM user_table u, homework_table h
-	WHERE course={id} and u.id=h.user
+	WHERE course=#{id} and u.id=h.user
 	</select>
 	<resultMap id="homework" type="Homework">
 		<id column="id" property="id"/>

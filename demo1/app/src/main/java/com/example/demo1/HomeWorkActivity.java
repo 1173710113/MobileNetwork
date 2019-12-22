@@ -15,9 +15,20 @@ import android.widget.ListView;
 import com.example.demo1.adapter.HomeworkAdapter;
 import com.example.demo1.domain.Course;
 import com.example.demo1.domain.Homework;
+import com.example.demo1.util.HttpUtil;
+import com.example.demo1.util.JSONUtil;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.Response;
 
 public class HomeWorkActivity extends AppCompatActivity {
     List<Homework> homeworkList = new ArrayList<>();
@@ -27,6 +38,7 @@ public class HomeWorkActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home_work);
         course = (Course)getIntent().getSerializableExtra("course");
+        initHomeworkList();
         HomeworkAdapter adapter = new HomeworkAdapter(
                 HomeWorkActivity.this, R.layout.homework_item, homeworkList
         );
@@ -36,6 +48,8 @@ public class HomeWorkActivity extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Intent intent = new Intent(HomeWorkActivity.this, HomeworkDetailActivity.class);
+                Homework homework = homeworkList.get(position);
+                intent.putExtra("homework", homework);
                 startActivity(intent);
             }
         });
@@ -58,5 +72,30 @@ public class HomeWorkActivity extends AppCompatActivity {
                 break;
         }
         return true;
+    }
+
+    private void initHomeworkList() {
+        String url = "http://10.0.2.2:8081/mobile/homework/init/" + course.getId();
+        HttpUtil.sendHttpRequest(url, new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                String data = response.body().string();
+                try {
+                    JSONArray jsonArray = new JSONArray(data);
+                    for(int i=0; i <jsonArray.length(); i++) {
+                        JSONObject object = jsonArray.getJSONObject(i);
+                        Homework homework = JSONUtil.JSONParseHomework(object);
+                        homeworkList.add(homework);
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
     }
 }
