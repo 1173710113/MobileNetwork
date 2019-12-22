@@ -12,10 +12,13 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
+import com.example.demo1.domain.Homework;
+
 import java.util.ArrayList;
 import java.util.List;
 
 public class HomeWorkActivity extends AppCompatActivity {
+    List<Homework> homeworks;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

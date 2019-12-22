@@ -52,6 +52,6 @@ public interface HomeworkMapper {
 	 * @param title
 	 * @return
 	 */
-	public List<Homework> queryHomework(@Param("id") String id, @Param("title") String title);
+	public List<Homework> queryHomework(@Param("id") String id);
 
 }
