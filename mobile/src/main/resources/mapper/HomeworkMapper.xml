@@ -11,13 +11,22 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		VALUES(#{userId},#{title},#{content},#{deadline},#{time},#{course});
 	</insert>
 	<select id="queryHomework" resultMap="homework">
-	SELECT *
-	FROM homework_table
-	WHERE course={id}
+	SELECT
+	h.id as id,
+	h.user as poster_id,
+	u.name as poster_name,
+	h.title as title,
+	h.content as content,
+	h.deadline as deadline,
+	h.time as time,
+	h.course as course_id
+	FROM user_table u, homework_table h
+	WHERE course={id} and u.id=h.user
 	</select>
 	<resultMap id="homework" type="Homework">
 		<id column="id" property="id"/>
-		<result column="user" property="poster_id"/>
+		<result column="poster_id" property="posterId"/>
+		<result column="poster_name" property="posterName"/>
 		<result column="title" property="title"/>
 		<result column="content" property="content"/>
 		<result column="deadline" property="deadline"/>

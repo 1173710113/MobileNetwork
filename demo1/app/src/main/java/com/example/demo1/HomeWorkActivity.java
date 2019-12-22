@@ -12,23 +12,23 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
+import com.example.demo1.adapter.HomeworkAdapter;
+import com.example.demo1.domain.Course;
 import com.example.demo1.domain.Homework;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class HomeWorkActivity extends AppCompatActivity {
-    List<Homework> homeworks;
+    List<Homework> homeworkList = new ArrayList<>();
+    Course course;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home_work);
-        List<String> data = new ArrayList<String>();
-        for(int i=0; i<10; i++) {
-            data.add("Homework" + (i+1));
-        }
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(
-                HomeWorkActivity.this, android.R.layout.simple_list_item_1, data
+        course = (Course)getIntent().getSerializableExtra("course");
+        HomeworkAdapter adapter = new HomeworkAdapter(
+                HomeWorkActivity.this, R.layout.homework_item, homeworkList
         );
         ListView listView = (ListView) findViewById(R.id.list_homework);
         listView.setAdapter(adapter);
