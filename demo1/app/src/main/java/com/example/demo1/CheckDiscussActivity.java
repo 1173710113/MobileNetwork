@@ -17,6 +17,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.demo1.adapter.ReplyAdapter;
+import com.example.demo1.dialog.AddReplyDialog;
 import com.example.demo1.domain.Discussion;
 import com.example.demo1.domain.Reply;
 import com.example.demo1.util.HttpUtil;
@@ -35,7 +36,7 @@ import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.Response;
 
-public class CheckDiscussActivity extends AppCompatActivity{
+public class CheckDiscussActivity extends AppCompatActivity implements View.OnClickListener{
     private Discussion discussion;
     private static final int UPDATE_LIST = 1;
     private static final int SUCCESS = 2;
@@ -50,6 +51,7 @@ public class CheckDiscussActivity extends AppCompatActivity{
                     break;
                 case SUCCESS:
                     Toast.makeText(CheckDiscussActivity.this, "添加成功", Toast.LENGTH_SHORT).show();
+                    initReplyList();
                     break;
                 default:
                     break;
@@ -71,21 +73,34 @@ public class CheckDiscussActivity extends AppCompatActivity{
         replyList.clear();
         initReplyList();
         //发送回复
-        final EditText addReply = (EditText)findViewById(R.id.add_reply);
-        addReply.setOnEditorActionListener(new TextView.OnEditorActionListener() {
-            @Override
-            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-                if ((event != null && KeyEvent.KEYCODE_ENTER == event.getKeyCode() && KeyEvent.ACTION_DOWN == event.getAction())) {
-                    addReply();
-                    return true;
-                    }
-                return false;
-            }
-        });
+       TextView addReply = (TextView)findViewById(R.id.add_reply);
+       addReply.setOnClickListener(this);
     }
 
-    private void addReply() {
-        String content = ((EditText)findViewById(R.id.add_reply)).getText().toString();
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.add_reply:
+                AddReplyDialog dialog = new AddReplyDialog(this);
+                dialog.setCancelListener(new AddReplyDialog.IOnCancelListener() {
+                    @Override
+                    public void onCancel(AddReplyDialog dialog) {
+
+                    }
+                }).setConfirmListener(new AddReplyDialog.IOnConfirmListener() {
+                    @Override
+                    public void onConfirm(AddReplyDialog dialog) {
+                        String content = dialog.getContent();
+                        addReply(content);
+                        dialog.dismiss();
+                    }
+                }).show();
+                break;
+        }
+
+    }
+
+    private void addReply(String content) {
         if(content == null || content.equals("")) {
             return;
         }
@@ -157,4 +172,5 @@ public class CheckDiscussActivity extends AppCompatActivity{
             }
         });
     }
+
 }
