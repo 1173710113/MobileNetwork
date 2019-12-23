@@ -69,6 +69,7 @@ public class FileActivity extends AppCompatActivity {
                 showList();
             }
         };
+        Log.e(TAG, "Create");
         initFileList();
     }
 
@@ -104,13 +105,6 @@ public class FileActivity extends AppCompatActivity {
                 });
             }
         });
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        Log.e(TAG, "Rusumn");
-        initFileList();
     }
 
     @Override
@@ -225,7 +219,6 @@ public class FileActivity extends AppCompatActivity {
     }
 
     private void initFileList() {
-
         String url = "http://10.0.2.2:8081/mobile/file/query/" + course.getId();
         HttpUtil.sendHttpRequest(url, new Callback() {
             @Override

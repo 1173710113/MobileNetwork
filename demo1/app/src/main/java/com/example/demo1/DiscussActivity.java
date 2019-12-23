@@ -62,11 +62,6 @@ public class DiscussActivity extends AppCompatActivity {
         };
         initDiscussionList();
     }
-    @Override
-    protected void onResume() {
-        super.onResume();
-        initDiscussionList();
-    }
 
     private void initDiscussionList() {
         String courseId = course.getId();

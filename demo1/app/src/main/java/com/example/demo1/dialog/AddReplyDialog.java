@@ -53,7 +53,7 @@ public class AddReplyDialog extends Dialog implements View.OnClickListener {
         WindowManager.LayoutParams p = getWindow().getAttributes();
         Point size = new Point();
         d.getSize(size);
-        p.width = (int)(size.x*0.8); //设置为80%
+        p.width = (int)(size.x*0.9); //设置为90%
         getWindow().setAttributes(p);
 
         content = (EditText) findViewById(R.id.add_reply_dialog_content);
@@ -65,11 +65,10 @@ public class AddReplyDialog extends Dialog implements View.OnClickListener {
 
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.add_reply_dialog_content:
+            case R.id.add_reply_dialog_cancel:
                 if(cancelListener != null) {
                     cancelListener.onCancel(this);
                 }
-                dismiss();
                 break;
             case R.id.add_reply_dialog_confirm:
                 if(confirmListener != null) {

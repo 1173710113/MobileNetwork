@@ -79,7 +79,7 @@ public class CheckDiscussActivity extends AppCompatActivity implements View.OnCl
                 dialog.setCancelListener(new AddReplyDialog.IOnCancelListener() {
                     @Override
                     public void onCancel(AddReplyDialog dialog) {
-
+                        dialog.cancel();
                     }
                 }).setConfirmListener(new AddReplyDialog.IOnConfirmListener() {
                     @Override
@@ -117,14 +117,6 @@ public class CheckDiscussActivity extends AppCompatActivity implements View.OnCl
             }
         });
     }
-
-
-    @Override
-    public void onResume(){
-        super.onResume();
-        initReplyList();
-    }
-
 
     /**
      * 向服务器请求回复数据
