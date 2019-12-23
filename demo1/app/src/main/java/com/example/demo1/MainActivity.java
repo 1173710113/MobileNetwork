@@ -5,8 +5,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -16,6 +14,7 @@ import android.widget.TextView;
 import com.example.demo1.adapter.CourseAdapter;
 import com.example.demo1.domain.Course;
 import com.example.demo1.domain.User;
+import com.example.demo1.listener.UIHttpResponseListListener;
 import com.example.demo1.util.HttpUtil;
 import com.example.demo1.util.JSONUtil;
 
@@ -35,34 +34,29 @@ import okhttp3.Response;
 public class MainActivity extends AppCompatActivity {
     private List<Course> courseList = new ArrayList<>();
     private User user;
-    private static final int UPDATE_LIST = 1;
+    private UIHttpResponseListListener uiHttpResponseListListener;
 
-    private Handler handler = new Handler() {
-        public void handleMessage(Message msg){
-            switch (msg.what) {
-                case UPDATE_LIST:
-                    ArrayAdapter<Course> adapter = new CourseAdapter(MainActivity.this, R.layout.course_item, courseList);
-                    ListView listView = (ListView) findViewById(R.id.list_course);
-                    listView.setAdapter(adapter);
-                    listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                        @Override
-                        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                            Intent intent = new Intent(MainActivity.this, ClassActivity.class);
-                            Course course = courseList.get(position);
-                            intent.putExtra("course", course.toString());
-                            startActivity(intent);
-                        }
-                    });
-                    break;
-                default:
-                    break;
-            }
-        }
-    };
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        uiHttpResponseListListener = new UIHttpResponseListListener() {
+            @Override
+            public void onUIHttpResponseList() {
+                ArrayAdapter<Course> adapter = new CourseAdapter(MainActivity.this, R.layout.course_item, courseList);
+                ListView listView = (ListView) findViewById(R.id.list_course);
+                listView.setAdapter(adapter);
+                listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                        Intent intent = new Intent(MainActivity.this, ClassActivity.class);
+                        Course course = courseList.get(position);
+                        intent.putExtra("course", course.toString());
+                        startActivity(intent);
+                    }
+                });
+            }
+        };
         LitePal.getDatabase();
         initUser();
         ((TextView)this.findViewById(R.id.main_activity_user_id)).setText(user.getId());
@@ -106,9 +100,7 @@ public class MainActivity extends AppCompatActivity {
                             course.save();
                             courseList.add(course);
                         }
-                        Message message = new Message();
-                        message.what = UPDATE_LIST;
-                        handler.sendMessage(message);
+                        uiHttpResponseListListener.onHttpResponseList();
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }

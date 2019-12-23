@@ -10,14 +10,11 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
-import android.os.Handler;
-import android.os.Message;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -25,6 +22,7 @@ import com.example.demo1.adapter.FileItemAdapter;
 import com.example.demo1.domain.Course;
 import com.example.demo1.domain.XFile;
 import com.example.demo1.listener.ProgressRequestListener;
+import com.example.demo1.listener.UIHttpResponseListListener;
 import com.example.demo1.listener.UIProgressRequestListener;
 import com.example.demo1.util.DownloadUtil;
 import com.example.demo1.util.FileProgressUtil;
@@ -58,26 +56,20 @@ public class FileActivity extends AppCompatActivity {
     private List<XFile> fileList = new ArrayList<>();
     private Course course;
     private String TAG = "FileUpload";
-    private static final int SUCCESS = 1;
-    private Handler handler = new Handler() {
-        public void handleMessage(Message msg){
-            switch (msg.what) {
-                case SUCCESS:
-                    showList();
-                    break;
-                default:
-                    break;
-            }
-        }
-    };
+    private UIHttpResponseListListener uiHttpResponseListListener;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main2);
         course = (Course) getIntent().getSerializableExtra("course");
+        uiHttpResponseListListener = new UIHttpResponseListListener() {
+            @Override
+            public void onUIHttpResponseList() {
+                showList();
+            }
+        };
         initFileList();
-        showList();
     }
 
     private void showList() {
@@ -131,8 +123,6 @@ public class FileActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()) {
             case R.id.add_item:
-                /*Intent intent = new Intent(FileActivity.this, UplodaFileActivity.class);
-                startActivity(intent);*/
                 Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
                 intent.setType("*/*");
                 intent.addCategory(Intent.CATEGORY_OPENABLE);
@@ -235,6 +225,7 @@ public class FileActivity extends AppCompatActivity {
     }
 
     private void initFileList() {
+
         String url = "http://10.0.2.2:8081/mobile/file/query/" + course.getId();
         HttpUtil.sendHttpRequest(url, new Callback() {
             @Override
@@ -254,9 +245,7 @@ public class FileActivity extends AppCompatActivity {
                         XFile file = JSONUtil.JSONParseXFile(object);
                         fileList.add(file);
                     }
-                    Message msg = new Message();
-                    msg.what = SUCCESS;
-                    handler.sendMessage(msg);
+                    uiHttpResponseListListener.onHttpResponseList();
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }

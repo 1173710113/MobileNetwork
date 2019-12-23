@@ -5,8 +5,6 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -17,6 +15,7 @@ import android.widget.ListView;
 import com.example.demo1.adapter.DiscussionAdapter;
 import com.example.demo1.domain.Course;
 import com.example.demo1.domain.Discussion;
+import com.example.demo1.listener.UIHttpResponseListListener;
 import com.example.demo1.util.HttpUtil;
 import com.example.demo1.util.JSONUtil;
 
@@ -37,35 +36,30 @@ public class DiscussActivity extends AppCompatActivity {
     private final List<Discussion> discussionList = new ArrayList<>();
     private static final int UPDATE_LIST = 1;
     private Course course;
+    private UIHttpResponseListListener uiHttpResponseListListener;
 
-    private Handler handler = new Handler() {
-        public void handleMessage(Message msg){
-            switch (msg.what) {
-                case UPDATE_LIST:
-                    ArrayAdapter<Discussion> adapter = new DiscussionAdapter(DiscussActivity.this, R.layout.discussion_item, discussionList);
-                    ListView listView = (ListView) findViewById(R.id.list_discuss);
-                    listView.setAdapter(adapter);
-                    listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                        @Override
-                        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                            Intent intent = new Intent(DiscussActivity.this, CheckDiscussActivity.class);
-                            Discussion discussion = discussionList.get(position);
-                            intent.putExtra("discussion", discussion);
-                            startActivity(intent);
-                        }
-                    });
-                    break;
-                 default:
-                     break;
-            }
-        }
-    };
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_discuss);
         course = (Course)getIntent().getSerializableExtra("course");
-        discussionList.clear();
+        uiHttpResponseListListener = new UIHttpResponseListListener() {
+            @Override
+            public void onUIHttpResponseList() {
+                ArrayAdapter<Discussion> adapter = new DiscussionAdapter(DiscussActivity.this, R.layout.discussion_item, discussionList);
+                ListView listView = (ListView) findViewById(R.id.list_discuss);
+                listView.setAdapter(adapter);
+                listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                        Intent intent = new Intent(DiscussActivity.this, CheckDiscussActivity.class);
+                        Discussion discussion = discussionList.get(position);
+                        intent.putExtra("discussion", discussion);
+                        startActivity(intent);
+                    }
+                });
+            }
+        };
         initDiscussionList();
     }
     @Override
@@ -95,9 +89,7 @@ public class DiscussActivity extends AppCompatActivity {
                         discussion.save();
                        discussionList.add(discussion);
                     }
-                    Message message = new Message();
-                    message.what = UPDATE_LIST;
-                    handler.sendMessage(message);
+                    uiHttpResponseListListener.onHttpResponseList();
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
