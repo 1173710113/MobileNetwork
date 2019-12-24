@@ -52,10 +52,7 @@ public class UserController {
 
 	@RequestMapping("/updatepassword/{newPassword}")
 	public void updatePasssword(@PathVariable("newPassword") String newPassword) {
-<<<<<<< HEAD
-		updateUserPassword(newPassword);
-		return null;
-=======
+		userService.updateUserPassword(newPassword);
 
 	}
 
@@ -65,8 +62,6 @@ public class UserController {
 		Random r = new Random();
 		int n = r.nextInt(studnets.size());
 		String student = studnets.get(n);
-
 		return userService.getUserById(student);
->>>>>>> 60a8518c3f861992946324b61e3ef2c21e10e12d
 	}
 }
