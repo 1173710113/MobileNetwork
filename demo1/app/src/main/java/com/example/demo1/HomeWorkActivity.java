@@ -12,6 +12,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.bigkoo.pickerview.builder.TimePickerBuilder;
 import com.bigkoo.pickerview.listener.OnTimeSelectListener;
@@ -23,7 +24,9 @@ import com.example.demo1.domain.Homework;
 import com.example.demo1.util.HttpUtil;
 import com.example.demo1.util.JSONUtil;
 import com.example.demo1.util.TimeUtil;
+import com.example.demo1.util.ToastUtil;
 import com.example.demo1.util.UIUpdateUtilImp;
+import com.example.demo1.util.ValidateUtil;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -79,10 +82,12 @@ public class HomeWorkActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         switch(item.getItemId()) {
             case R.id.add_item:
+                //初始化dialog
                 AddHomeworkDialog dialog = new AddHomeworkDialog(HomeWorkActivity.this);
-                dialog.setPickerListener(new AddHomeworkDialog.IOnPickerListener() {
+                dialog.setPickerListener(new AddHomeworkDialog.IOnPickerListener() { //设置点击时间时间
                     @Override
                     public void onPicker(final AddHomeworkDialog dialog) {
+                        //设置TimePicker
                         TimePickerView pvTime = new TimePickerBuilder(HomeWorkActivity.this, new OnTimeSelectListener() {
                             @Override
                             public void onTimeSelect(Date date, View v) {
@@ -96,18 +101,22 @@ public class HomeWorkActivity extends AppCompatActivity {
                                 .build();
                         pvTime.show();
                     }
-                }).setCancelListener(new AddHomeworkDialog.IOnCancelListener() {
+                }).setCancelListener(new AddHomeworkDialog.IOnCancelListener() { //设置取消事件
                     @Override
                     public void onCancel(AddHomeworkDialog dialog) {
                         dialog.dismiss();
                     }
-                }).setConfirmListener(new AddHomeworkDialog.IOnConfirmListener() {
+                }).setConfirmListener(new AddHomeworkDialog.IOnConfirmListener() { //设置确定事件
                     @Override
                     public void onConfirm(final AddHomeworkDialog dialog) {
                         String posterId = getSharedPreferences("userInfo", MODE_PRIVATE).getString("id", "ERROR");
                         String title = dialog.getTitle();
                         String content = dialog.getContent();
                         String deadline = TimeUtil.parseTime(dialog.getDate());
+                        if(ValidateUtil.isEmpty(title) || ValidateUtil.isEmpty(content) || ValidateUtil.isEmpty(deadline)) {
+                            ToastUtil.showToast(HomeWorkActivity.this, "请填完");
+                            return;
+                        }
                         String postTime = TimeUtil.getTime();
                         String courseId = course.getId();
                         Homework homework = new Homework("", posterId, "", title, content, deadline, postTime, courseId);
@@ -123,6 +132,7 @@ public class HomeWorkActivity extends AppCompatActivity {
                             @Override
                             public void onResponse(Call call, Response response) throws IOException {
                                 initHomeworkList();
+                                ToastUtil.showToast(HomeWorkActivity.this, "发布成功");
                                 dialog.dismiss();
                             }
                         });

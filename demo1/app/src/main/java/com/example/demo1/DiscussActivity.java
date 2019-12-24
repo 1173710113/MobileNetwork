@@ -20,6 +20,7 @@ import com.example.demo1.domain.Discussion;
 import com.example.demo1.util.HttpUtil;
 import com.example.demo1.util.JSONUtil;
 import com.example.demo1.util.TimeUtil;
+import com.example.demo1.util.ToastUtil;
 import com.example.demo1.util.UIUpdateUtilImp;
 
 import org.json.JSONArray;
@@ -39,7 +40,6 @@ public class DiscussActivity extends AppCompatActivity {
     private final List<Discussion> discussionList = new ArrayList<>();
     private Course course;
     private UIUpdateUtilImp uiUpdateList;
-    private UIUpdateUtilImp uiUpdateToast;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,12 +61,6 @@ public class DiscussActivity extends AppCompatActivity {
                         startActivity(intent);
                     }
                 });
-            }
-        };
-        uiUpdateToast = new UIUpdateUtilImp() {
-            @Override
-            public void onUIUpdate() {
-                Toast.makeText(DiscussActivity.this,"添加成功", Toast.LENGTH_SHORT).show();
             }
         };
         initDiscussionList();
@@ -138,7 +132,7 @@ public class DiscussActivity extends AppCompatActivity {
                             @Override
                             public void onResponse(Call call, Response response) throws IOException {
                                 dialog.dismiss();
-                                uiUpdateToast.onUpdate();
+                                ToastUtil.showToast(DiscussActivity.this, "添加成功");
                                 initDiscussionList();
                             }
                         });

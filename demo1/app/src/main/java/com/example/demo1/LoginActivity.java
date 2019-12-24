@@ -15,6 +15,7 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.example.demo1.util.HttpUtil;
+import com.example.demo1.util.ToastUtil;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -27,18 +28,6 @@ import okhttp3.Response;
 
 
 public class LoginActivity extends AppCompatActivity {
-    private static final int SHOW_TOAST = 1;
-    private Handler handler = new Handler(){
-      public void handleMessage(Message msg) {
-          switch (msg.what){
-              case SHOW_TOAST:
-                  Toast.makeText(LoginActivity.this, "登入失败", Toast.LENGTH_SHORT).show();
-                  break;
-               default:
-                   break;
-          }
-      }
-    };
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -69,12 +58,11 @@ public class LoginActivity extends AppCompatActivity {
                     String data = response.body().string();
                     writeUserInfo(data);
                     Log.d("LoginActivity", "LoginUser:" + data);
+                    ToastUtil.showToast(LoginActivity.this, "登入成功");
                     Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                     startActivity(intent);
                 } else  {
-                    Message msg = new Message();
-                    msg.what = SHOW_TOAST;
-                    handler.sendMessage(msg);
+                    ToastUtil.showToast(LoginActivity.this, "登入失败");
                 }
             }
         });

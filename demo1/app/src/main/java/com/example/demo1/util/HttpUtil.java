@@ -31,6 +31,11 @@ public class HttpUtil {
         }
     }
 
+    /**
+     * 发送无JSON串的Http请求
+     * @param url
+     * @param callback
+     */
     public static void sendHttpRequest(String url, Callback callback) {
         OkHttpClient client = new OkHttpClient();
         Request request = new Request.Builder()

@@ -17,6 +17,7 @@ import com.example.demo1.domain.Reply;
 import com.example.demo1.util.HttpUtil;
 import com.example.demo1.util.JSONUtil;
 import com.example.demo1.util.TimeUtil;
+import com.example.demo1.util.ToastUtil;
 import com.example.demo1.util.UIUpdateUtilImp;
 
 import org.json.JSONArray;
@@ -35,7 +36,6 @@ public class CheckDiscussActivity extends AppCompatActivity implements View.OnCl
     private Discussion discussion;
     private List<Reply> replyList = new ArrayList<>();
     private UIUpdateUtilImp uiUpdateList;
-    private UIUpdateUtilImp uiUpdateToast;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,14 +53,6 @@ public class CheckDiscussActivity extends AppCompatActivity implements View.OnCl
                 ArrayAdapter<Reply> adapter = new ReplyAdapter(CheckDiscussActivity.this, R.layout.reply_item, replyList);
                 ListView listView = (ScrollListView)findViewById(R.id.list_comment);
                 listView.setAdapter(adapter);
-            }
-        };
-        //初始化UI Toast回调函数
-        uiUpdateToast = new UIUpdateUtilImp() {
-            @Override
-            public void onUIUpdate() {
-                Toast.makeText(CheckDiscussActivity.this, "添加成功", Toast.LENGTH_SHORT).show();
-                initReplyList();
             }
         };
         //初始化回复列表
@@ -112,7 +104,8 @@ public class CheckDiscussActivity extends AppCompatActivity implements View.OnCl
 
             @Override
             public void onResponse(Call call, Response response) throws IOException {
-               uiUpdateToast.onUpdate();
+                ToastUtil.showToast(CheckDiscussActivity.this,  "添加成功");
+                initReplyList();
             }
         });
     }
