@@ -11,12 +11,15 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.example.demo1.adapter.DiscussionAdapter;
+import com.example.demo1.dialog.AddDiscussionDialog;
 import com.example.demo1.domain.Course;
 import com.example.demo1.domain.Discussion;
 import com.example.demo1.util.HttpUtil;
 import com.example.demo1.util.JSONUtil;
+import com.example.demo1.util.TimeUtil;
 import com.example.demo1.util.UIUpdateUtilImp;
 
 import org.json.JSONArray;
@@ -36,6 +39,7 @@ public class DiscussActivity extends AppCompatActivity {
     private final List<Discussion> discussionList = new ArrayList<>();
     private Course course;
     private UIUpdateUtilImp uiUpdateList;
+    private UIUpdateUtilImp uiUpdateToast;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,6 +61,12 @@ public class DiscussActivity extends AppCompatActivity {
                         startActivity(intent);
                     }
                 });
+            }
+        };
+        uiUpdateToast = new UIUpdateUtilImp() {
+            @Override
+            public void onUIUpdate() {
+                Toast.makeText(DiscussActivity.this,"添加成功", Toast.LENGTH_SHORT).show();
             }
         };
         initDiscussionList();
@@ -102,9 +112,38 @@ public class DiscussActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()) {
             case R.id.add_item:
-                Intent intent = new Intent(DiscussActivity.this, AddDiscussionActivity.class);
-                intent.putExtra("course", course);
-                startActivity(intent);
+                AddDiscussionDialog dialog = new AddDiscussionDialog(DiscussActivity.this);
+                dialog.setCancelListener(new AddDiscussionDialog.IOnCancelListener() {
+                    @Override
+                    public void onCancel(AddDiscussionDialog dialog) {
+                        dialog.dismiss();
+                    }
+                }).setConfirmListener(new AddDiscussionDialog.IOnConfirmListener() {
+                    @Override
+                    public void onConfirm(final AddDiscussionDialog dialog) {
+                        String title = dialog.getTitle();
+                        String content = dialog.getContent();
+                        String posterId = getSharedPreferences("userInfo", MODE_PRIVATE).getString("id", "ERROR");
+                        String posterName = getSharedPreferences("userInfo", MODE_PRIVATE).getString("name", "ERROR");
+                        String courseId = course.getId();
+                        String time = TimeUtil.getTime();
+                        Discussion discussion = new Discussion(null, posterId, posterName, courseId, time, title, content, 0);
+                        JSONObject object = JSONUtil.DiscussionParseJSON(discussion);
+                        HttpUtil.sendHttpRequest("http://10.0.2.2:8081/mobile/discussion/add", object, new Callback() {
+                            @Override
+                            public void onFailure(Call call, IOException e) {
+
+                            }
+
+                            @Override
+                            public void onResponse(Call call, Response response) throws IOException {
+                                dialog.dismiss();
+                                uiUpdateToast.onUpdate();
+                                initDiscussionList();
+                            }
+                        });
+                    }
+                }).show();
                 break;
             default:
                 break;

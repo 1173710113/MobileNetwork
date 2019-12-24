@@ -15,7 +15,6 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
-        <activity android:name=".AddDiscussionActivity" />
         <activity android:name=".RegistActivity" />
         <activity android:name=".CourseManageActivity" />
         <activity android:name=".AddUserActivity" />
