@@ -4,26 +4,26 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:gravity="center"
-    android:padding="5dp"
+    android:padding="3dp"
     android:background="@color/white">
 
     <ImageView
-        android:layout_width="100px"
-        android:layout_height="100px"
+        android:layout_width="90px"
+        android:layout_height="90px"
         android:id="@+id/file_icon"
-        android:src="@drawable/doc"
+        android:src="@drawable/file_word"
         />
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:padding="5dp">
+        android:paddingLeft="2dp">
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="软件与过程1.ppt"
             android:textColor="@color/black"
-            android:textSize="16sp"
+            android:textSize="15sp"
             android:id="@+id/file_name"/>
         <LinearLayout
             android:layout_width="match_parent"
@@ -37,7 +37,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="10dp"
+                android:layout_marginLeft="4dp"
                 android:layout_marginRight="4dp"
                 android:text="来自"/>
              <TextView
@@ -50,15 +50,19 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="滕文杰"
-                android:textColor="#0080ff"
-                android:layout_marginLeft="3dp"
+                android:textColor="@color/black"
+                android:layout_marginLeft="2dp"
                 android:id="@+id/file_uploader_name"/>
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="10dp"
+                android:layout_marginLeft="4dp"
                 android:text="14.0MB"
                 android:id="@+id/file_length"/>
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:src="@drawable/sign_check"/>
         </LinearLayout>
     </LinearLayout>
 

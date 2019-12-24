@@ -1,5 +1,7 @@
 package com.example.demo.service;
 
+import java.sql.SQLIntegrityConstraintViolationException;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -13,9 +15,9 @@ public class UserServiceImp implements UserService{
 	@Autowired
 	private UserMapper mapper;
 	@Override
-	public void register(String id, String password, String type, String name, String sex) {
+	public void register(String id, String password, String type, String name, String sex)throws SQLIntegrityConstraintViolationException{
 		// TODO Auto-generated method stub
-		mapper.register(id, password, type, name, sex, "12");
+			mapper.register(id, password, type, name, sex, "12");
 	}
 
 	@Override
@@ -47,6 +49,12 @@ public class UserServiceImp implements UserService{
 	public String deleteUser(String id) {
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+	@Override
+	public User getUserById(String userId) {
+		// TODO Auto-generated method stub
+		return mapper.getUserById(userId);
 	}
 
 }

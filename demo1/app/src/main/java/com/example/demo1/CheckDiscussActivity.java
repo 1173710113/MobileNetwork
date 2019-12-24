@@ -2,26 +2,23 @@ package com.example.demo1;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
-import android.view.KeyEvent;
 import android.view.View;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.demo1.adapter.ReplyAdapter;
+import com.example.demo1.dialog.AddReplyDialog;
 import com.example.demo1.domain.Discussion;
 import com.example.demo1.domain.Reply;
 import com.example.demo1.util.HttpUtil;
 import com.example.demo1.util.JSONUtil;
 import com.example.demo1.util.TimeUtil;
+import com.example.demo1.util.ToastUtil;
+import com.example.demo1.util.UIUpdateUtilImp;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -35,57 +32,60 @@ import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.Response;
 
-public class CheckDiscussActivity extends AppCompatActivity{
+public class CheckDiscussActivity extends AppCompatActivity implements View.OnClickListener{
     private Discussion discussion;
-    private static final int UPDATE_LIST = 1;
-    private static final int SUCCESS = 2;
     private List<Reply> replyList = new ArrayList<>();
-    private Handler handler = new Handler() {
-        public void handleMessage(Message msg){
-            switch (msg.what) {
-                case UPDATE_LIST:
-                    ArrayAdapter<Reply> adapter = new ReplyAdapter(CheckDiscussActivity.this, R.layout.reply_item, replyList);
-                    ListView listView = (ScrollListView)findViewById(R.id.list_comment);
-                    listView.setAdapter(adapter);
-                    break;
-                case SUCCESS:
-                    Toast.makeText(CheckDiscussActivity.this, "添加成功", Toast.LENGTH_SHORT).show();
-                    break;
-                default:
-                    break;
-            }
-        }
-    };
+    private UIUpdateUtilImp uiUpdateList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_check_discuss);
-        Intent intent = getIntent();
         //获得discussion
         discussion = (Discussion)getIntent().getSerializableExtra("discussion");
         //显示标题和内容
         ((TextView)findViewById(R.id.check_discussion_title)).setText(discussion.getTitle());
         ((TextView)findViewById(R.id.check_discussion_content)).setText(discussion.getContent());
+        //初始化UI列表回调函数
+        uiUpdateList = new UIUpdateUtilImp() {
+            @Override
+            public void onUIUpdate() {
+                ArrayAdapter<Reply> adapter = new ReplyAdapter(CheckDiscussActivity.this, R.layout.reply_item, replyList);
+                ListView listView = (ScrollListView)findViewById(R.id.list_comment);
+                listView.setAdapter(adapter);
+            }
+        };
         //初始化回复列表
-        replyList.clear();
         initReplyList();
         //发送回复
-        final EditText addReply = (EditText)findViewById(R.id.add_reply);
-        addReply.setOnEditorActionListener(new TextView.OnEditorActionListener() {
-            @Override
-            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-                if ((event != null && KeyEvent.KEYCODE_ENTER == event.getKeyCode() && KeyEvent.ACTION_DOWN == event.getAction())) {
-                    addReply();
-                    return true;
-                    }
-                return false;
-            }
-        });
+       TextView addReply = (TextView)findViewById(R.id.add_reply);
+       addReply.setOnClickListener(this);
     }
 
-    private void addReply() {
-        String content = ((EditText)findViewById(R.id.add_reply)).getText().toString();
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.add_reply:
+                AddReplyDialog dialog = new AddReplyDialog(this);
+                dialog.setCancelListener(new AddReplyDialog.IOnCancelListener() {
+                    @Override
+                    public void onCancel(AddReplyDialog dialog) {
+                        dialog.cancel();
+                    }
+                }).setConfirmListener(new AddReplyDialog.IOnConfirmListener() {
+                    @Override
+                    public void onConfirm(AddReplyDialog dialog) {
+                        String content = dialog.getContent();
+                        addReply(content);
+                        dialog.dismiss();
+                    }
+                }).show();
+                break;
+        }
+
+    }
+
+    private void addReply(String content) {
         if(content == null || content.equals("")) {
             return;
         }
@@ -104,20 +104,11 @@ public class CheckDiscussActivity extends AppCompatActivity{
 
             @Override
             public void onResponse(Call call, Response response) throws IOException {
-                Message msg = new Message();
-                msg.what = SUCCESS;
-                handler.sendMessage(msg);
+                ToastUtil.showToast(CheckDiscussActivity.this,  "添加成功");
+                initReplyList();
             }
         });
     }
-
-
-    @Override
-    public void onResume(){
-        super.onResume();
-        initReplyList();
-    }
-
 
     /**
      * 向服务器请求回复数据
@@ -148,13 +139,12 @@ public class CheckDiscussActivity extends AppCompatActivity{
                         reply.save();
                         replyList.add(reply);
                     }
-                    Message message = new Message();
-                    message.what = UPDATE_LIST;
-                    handler.sendMessage(message);
+                   uiUpdateList.onUpdate();
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
             }
         });
     }
+
 }

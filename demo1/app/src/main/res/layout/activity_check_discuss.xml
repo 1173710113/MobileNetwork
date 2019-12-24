@@ -39,7 +39,7 @@
                 android:layout_height="wrap_content" />
         </LinearLayout>
     </ScrollView>
-    <EditText
+    <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="添加评论"
@@ -48,7 +48,5 @@
         android:layout_centerHorizontal="true"
         android:padding="5dp"
         android:layout_margin="10dp"
-        android:maxLines="3"
-        android:imeOptions="actionSend"
         android:id="@+id/add_reply"/>
 </RelativeLayout>

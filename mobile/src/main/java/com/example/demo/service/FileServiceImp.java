@@ -39,6 +39,7 @@ public class FileServiceImp implements FileService {
 	public List<XFile> queryFileByCourse(String courseId) {
 		List<XFile> fileList = new ArrayList<>();
 		fileList.addAll(fileMapper.queryFileByCourse(courseId));
+		System.out.println(fileList.size());
 		return fileList;
 	}
 

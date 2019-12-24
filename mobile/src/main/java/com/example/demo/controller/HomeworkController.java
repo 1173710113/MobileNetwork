@@ -21,12 +21,14 @@ public class HomeworkController {
 	@RequestMapping(value = "/add", method = RequestMethod.POST)
 	@ResponseBody
 	public void add(@RequestBody Homework homework) {
-		service.addHomework(homework.getPoster(), homework.getTitle(), 
-				homework.getContent(), homework.getDeadline(), homework.getPostTime(), homework.getCourse());
+		service.addHomework(homework.getPosterId(), homework.getTitle(), 
+				homework.getContent(), homework.getDeadline(), homework.getPostTime(), homework.getCourseId());
 	}
-	@RequestMapping(value = "/init/{courseId}", method = RequestMethod.POST)
+	@RequestMapping("/init/{courseId}")
 	@ResponseBody
 	public List<Homework> init(@PathVariable("courseId")String courseId) {
+		System.out.println("456");
 		return service.init(courseId);
 	}
+	
 }

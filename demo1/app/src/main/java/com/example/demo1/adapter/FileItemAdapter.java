@@ -1,6 +1,7 @@
 package com.example.demo1.adapter;
 
 import android.content.Context;
+import android.os.Looper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,6 +12,7 @@ import android.widget.TextView;
 import com.example.demo1.R;
 import com.example.demo1.domain.XFile;
 
+import java.text.DecimalFormat;
 import java.util.List;
 
 public class FileItemAdapter extends ArrayAdapter<XFile> {
@@ -34,23 +36,39 @@ public class FileItemAdapter extends ArrayAdapter<XFile> {
         String type = file.getFileName().split("\\.")[1];
         switch (type){
             case "doc":
-                fileIcon.setImageResource(R.drawable.doc);
+                fileIcon.setImageResource(R.drawable.file_word);
+                break;
+            case "docx":
+                fileIcon.setImageResource(R.drawable.file_word);
                 break;
             case "ppt":
-                fileIcon.setImageResource(R.drawable.ppt);
+                fileIcon.setImageResource(R.drawable.file_ppt);
                 break;
             case "pdf":
-                fileIcon.setImageResource(R.drawable.pdf);
+                fileIcon.setImageResource(R.drawable.file_pdf);
+                break;
+            case "zip":
+                fileIcon.setImageResource(R.drawable.file_zip);
                 break;
             default:
-                fileIcon.setImageResource(R.drawable.blank);
+                fileIcon.setImageResource(R.drawable.file_empty);
                 break;
         }
         fileName.setText(file.getFileName());
         fileUploadDate.setText(file.getPostTime());
         fileUploaderId .setText(file.getPosterId());
         fileUploaderName.setText(file.getPosterName());
-        fileLength.setText(Long.toString(file.getFileSize()));
+        long fileSize = file.getFileSize();
+        DecimalFormat df = new DecimalFormat("#.0");
+        String size = null;
+        if(fileSize >= 1024 && fileSize < 1048576) {
+            size = df.format((fileSize/1024.0)) + "KB";
+        } else if(fileSize >= 1048576) {
+            size = df.format((fileSize/1024.0/1024.0)) + "MB";
+        } else {
+            size = Long.toString(fileSize) + "B";
+        }
+        fileLength.setText(size);
         return view;
     }
 }

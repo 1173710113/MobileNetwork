@@ -3,6 +3,8 @@
  */
 package com.example.demo.service;
 
+import java.sql.SQLIntegrityConstraintViolationException;
+
 import com.example.demo.domain.User;
 
 /**
@@ -20,7 +22,7 @@ public interface UserService {
 	 * @param sex
 	 * @return
 	 */
-	public void register(String id, String password, String type, String name, String sex);
+	public void register(String id, String password, String type, String name, String sex) throws SQLIntegrityConstraintViolationException;
 	
 	/**
 	 * 
@@ -57,4 +59,5 @@ public interface UserService {
 	 * @return
 	 */
 	public String deleteUser(String id);
+	public User getUserById(String userId);
 }
