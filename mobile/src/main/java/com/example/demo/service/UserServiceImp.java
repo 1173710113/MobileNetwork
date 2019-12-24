@@ -27,7 +27,7 @@ public class UserServiceImp implements UserService{
 
 	@Override
 	public String updateUserPassword(String password) {
-		// TODO Auto-generated method stub
+		mapper.updateUserPassword(password);
 		return null;
 	}
 

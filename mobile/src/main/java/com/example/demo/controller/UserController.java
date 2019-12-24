@@ -40,6 +40,7 @@ public class UserController {
 	
 	@RequestMapping("/updatepassword/{newPassword}")
 	public void updatePasssword(@PathVariable("newPassword") String newPassword) {
-		
+		updateUserPassword(newPassword);
+		return null;
 	}
 }

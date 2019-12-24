@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.example.demo.dao.FileMapper">
+
+<insert id="addFile">
+	INSERT INTO file_table
+	VALUES(#{path}, #{file_name}, #{size}, #{poster_id}, #{course_id}, #{post_time}) 
+</insert>
+<delete id="deleteFile">
+	DELETE FROM file_table
+	WHERE path=#{path}
+</delete>
+<select id="queryFileByCourse" resultMap="file">
+	SELECT 
+	f.path as path,
+	f.name as name,
+	f.size as size,
+	f.user as poster_id,
+	u.name as poster_name,
+	f.course as course_id,
+	f.time as post_time
+	FROM user_table u, file_table f
+	WHERE f.course=#{course_id} and u.id=f.user
+</select>
+<resultMap id="file" type="XFile">
+	<id column="path" property="filePath"/>
+	<result column="name" property="fileName"/>
+	<result column="size" property="fileSize"/>
+	<result column="poster_id" property="posterId"/>
+	<result column="poster_name" property="posterName"/>
+	<result column="course_id" property="courseId"/>
+	<result column="post_time" property="postTime"/>
+</resultMap>
+</mapper>

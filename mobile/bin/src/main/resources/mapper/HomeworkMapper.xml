@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.example.demo.dao.HomeworkMapper">
+
+	
+	<insert id="addHomework">
+		INSERT INTO homework_table (user,title,content,deadline,time,course)
+		VALUES(#{userId},#{title},#{content},#{deadline},#{time},#{course});
+	</insert>
+	<select id="queryHomework" resultMap="homework">
+	SELECT *
+	FROM homework_table
+	WHERE course={id}
+	</select>
+	<resultMap id="homework" type="Homework">
+		<id column="id" property="id"/>
+		<result column="user" property="poster_id"/>
+		<result column="title" property="title"/>
+		<result column="content" property="content"/>
+		<result column="deadline" property="deadline"/>
+		<result column="time" property="postTime"/>
+		<result column="course" property="course_id"/>
+	</resultMap>
+</mapper>

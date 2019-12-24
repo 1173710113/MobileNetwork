@@ -1,4 +1,4 @@
-/**
+ g/**
  * 
  */
 package com.example.demo.dao;
@@ -64,4 +64,6 @@ public interface UserMapper {
 	 * @return
 	 */
 	public User login(@Param("account")String account, @Param("password")String password);
+	
+	public void updateUserPassword(@Param("password") String password);
 }
