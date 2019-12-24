@@ -66,6 +66,20 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		WHERE d.course=#{course_id} and d.title LIKE "%"#{title}"%"
 	</select>
 	
+	<select id="queryDiscussionByPoster" resultMap="discussion">
+		SELECT 
+		d.id as id,
+		d.user as user_id,
+		u.name as user_name,
+		d.course as course_id,
+		d.time as time,
+		d.title as title,
+		d.content as content,
+		d.reply_count as reply_count
+		FROM user_table u,discussion_table d
+		WHERE d.user=#{poster_id} and u.id=#{poster_id}
+	</select>
+	
 	<resultMap type="Discussion" id="discussion">
 		<id column="id" property="id"/>
 		<result column="user_id" property="posterId"/>

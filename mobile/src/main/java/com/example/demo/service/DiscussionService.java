@@ -46,6 +46,13 @@ public interface DiscussionService {
 	
 	/**
 	 * 
+	 * @param posterId
+	 * @return
+	 */
+	public List<Discussion> getPosterDiscussion(String posterId);
+	
+	/**
+	 * 
 	 * @param reply
 	 */
 	public void addReply(Reply reply);

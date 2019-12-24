@@ -28,8 +28,8 @@ public class DiscussionServiceImp implements DiscussionService {
 
 	@Override
 	public String addDiscussion(Discussion discussion) {
-		discussionMapper.addDiscussion(discussion.getPosterId(), discussion.getPostTime(), discussion.getTitle(), discussion.getContent(),
-				discussion.getCourseId());
+		discussionMapper.addDiscussion(discussion.getPosterId(), discussion.getPostTime(), discussion.getTitle(),
+				discussion.getContent(), discussion.getCourseId());
 		return null;
 	}
 
@@ -50,6 +50,13 @@ public class DiscussionServiceImp implements DiscussionService {
 	public List<Discussion> getCourseDiscussionByTitle(String courseId, String title) {
 		List<Discussion> list = new ArrayList<>();
 		list = discussionMapper.queryDiscussionbyCourseAndTitle(courseId, title);
+		return list;
+	}
+
+	@Override
+	public List<Discussion> getPosterDiscussion(String posterId) {
+		List<Discussion> list = new ArrayList<>();
+		list = discussionMapper.queryDiscussionByPoster(posterId);
 		return list;
 	}
 

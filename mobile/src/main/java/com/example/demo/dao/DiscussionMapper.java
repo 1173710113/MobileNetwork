@@ -72,4 +72,11 @@ public interface DiscussionMapper {
 	 */
 	public List<Discussion> queryDiscussionbyCourseAndTitle(@Param("course_id")String courseId, @Param("title")String title);
 	
+	/**
+	 * 
+	 * @param posterId
+	 * @return
+	 */
+	public List<Discussion> queryDiscussionByPoster(@Param("poster_id")String posterId);
+	
 }

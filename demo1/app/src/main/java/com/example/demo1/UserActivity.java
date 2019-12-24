@@ -12,12 +12,14 @@ import com.example.demo1.dialog.CustomDialog;
 import com.example.demo1.util.ToastUtil;
 
 public class UserActivity extends AppCompatActivity implements View.OnClickListener{
-    private TextView logOut;
+    private TextView myDiscussionText, logOut;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user);
+        myDiscussionText = (TextView)findViewById(R.id.my_discussion);
         logOut = (TextView)findViewById(R.id.log_out);
+        myDiscussionText.setOnClickListener(this);
         logOut.setOnClickListener(this);
     }
 
@@ -43,6 +45,11 @@ public class UserActivity extends AppCompatActivity implements View.OnClickListe
                         UserActivity.this.finish();
                     }
                 }).show();
+                break;
+            case R.id.my_discussion:
+                Intent intent = new Intent(UserActivity.this, DiscussActivity.class);
+                intent.putExtra("father", "user_call");
+                startActivity(intent);
                 break;
         }
     }
