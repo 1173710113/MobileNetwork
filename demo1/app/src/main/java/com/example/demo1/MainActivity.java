@@ -32,15 +32,18 @@ import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.Response;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements View.OnClickListener{
     private List<Course> courseList = new ArrayList<>();
     private User user;
     private UIUpdateUtilImp uiUpdateList;
+    private View userView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        userView = (View)findViewById(R.id.user_info);
+        userView.setOnClickListener(this);
         uiUpdateList = new UIUpdateUtilImp() {
             @Override
             public void onUIUpdate() {
@@ -63,6 +66,17 @@ public class MainActivity extends AppCompatActivity {
         ((TextView)this.findViewById(R.id.main_activity_user_id)).setText(user.getId());
         ((TextView)this.findViewById(R.id.main_activity_user_name)).setText(user.getName());
         initCourseList();
+    }
+
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()){
+            case R.id.user_info:
+                Intent intent = new Intent(MainActivity.this, UserActivity.class);
+                startActivity(intent);
+                break;
+        }
     }
 
     private void initUser() {

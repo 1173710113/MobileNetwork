@@ -4,7 +4,7 @@
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
     <application
         android:name="org.litepal.LitePalApplication"
@@ -15,6 +15,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
+        <activity android:name=".UserActivity"></activity>
         <activity android:name=".RegistActivity" />
         <activity android:name=".CourseManageActivity" />
         <activity android:name=".AddUserActivity" />
@@ -28,7 +29,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".FixPasswordActivity"/>
+        <activity android:name=".FixPasswordActivity" />
         <activity android:name=".CheckDiscussActivity" />
         <activity android:name=".DiscussActivity" />
         <activity android:name=".DrawActivity" />
