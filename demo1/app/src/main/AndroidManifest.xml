@@ -21,7 +21,6 @@
         <activity android:name=".UserManageActivity" />
         <activity android:name=".AnalysisActivity" />
         <activity android:name=".CallActivity" />
-        <activity android:name=".HomeworkDetailActivity" />
         <activity android:name=".LoginActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

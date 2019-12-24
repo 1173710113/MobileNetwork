@@ -19,6 +19,7 @@ import com.bigkoo.pickerview.listener.OnTimeSelectListener;
 import com.bigkoo.pickerview.view.TimePickerView;
 import com.example.demo1.adapter.HomeworkAdapter;
 import com.example.demo1.dialog.AddHomeworkDialog;
+import com.example.demo1.dialog.HomeworkDetailDialog;
 import com.example.demo1.domain.Course;
 import com.example.demo1.domain.Homework;
 import com.example.demo1.util.HttpUtil;
@@ -61,10 +62,9 @@ public class HomeWorkActivity extends AppCompatActivity {
                 listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                     @Override
                     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                        Intent intent = new Intent(HomeWorkActivity.this, HomeworkDetailActivity.class);
                         Homework homework = homeworkList.get(position);
-                        intent.putExtra("homework", homework);
-                        startActivity(intent);
+                        HomeworkDetailDialog dialog = new HomeworkDetailDialog(HomeWorkActivity.this);
+                        dialog.setTitle(homework.getTitle()).setContent(homework.getContent()).setDeadline(homework.getDeadline()).show();
                     }
                 });
             }
