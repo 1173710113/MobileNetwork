@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/bg_add_reply_dialog"
+    android:padding="5dp">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="标题"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        android:padding="5dp"
+        android:layout_margin="10dp"
+        android:id="@+id/homework_detail_dialog_title"/>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        android:background="@color/black"/>
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="内容"
+        android:textSize="18sp"
+        android:padding="5dp"
+        android:layout_margin="10dp"
+        android:id="@+id/homework_detail_dialog_content"/>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        android:background="@color/black"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="2019-12-15 15:00:00"
+        android:padding="5dp"
+        android:layout_margin="10dp"
+        android:textColor="@color/black"
+        android:id="@+id/homework_detail_dialog_deadline"/>
+</LinearLayout>
