@@ -14,11 +14,10 @@ import com.example.demo1.adapter.ReplyAdapter;
 import com.example.demo1.dialog.AddReplyDialog;
 import com.example.demo1.domain.Discussion;
 import com.example.demo1.domain.Reply;
-import com.example.demo1.listener.UIHttpResponseListListener;
-import com.example.demo1.listener.UIHttpResponseToastListener;
 import com.example.demo1.util.HttpUtil;
 import com.example.demo1.util.JSONUtil;
 import com.example.demo1.util.TimeUtil;
+import com.example.demo1.util.UIUpdateUtilImp;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -35,8 +34,8 @@ import okhttp3.Response;
 public class CheckDiscussActivity extends AppCompatActivity implements View.OnClickListener{
     private Discussion discussion;
     private List<Reply> replyList = new ArrayList<>();
-    private UIHttpResponseListListener uiHttpResponseListListener;
-    private UIHttpResponseToastListener uiHttpResponseToastListener;
+    private UIUpdateUtilImp uiUpdateList;
+    private UIUpdateUtilImp uiUpdateToast;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,18 +47,18 @@ public class CheckDiscussActivity extends AppCompatActivity implements View.OnCl
         ((TextView)findViewById(R.id.check_discussion_title)).setText(discussion.getTitle());
         ((TextView)findViewById(R.id.check_discussion_content)).setText(discussion.getContent());
         //初始化UI列表回调函数
-        uiHttpResponseListListener = new UIHttpResponseListListener() {
+        uiUpdateList = new UIUpdateUtilImp() {
             @Override
-            public void onUIHttpResponseList() {
+            public void onUIUpdate() {
                 ArrayAdapter<Reply> adapter = new ReplyAdapter(CheckDiscussActivity.this, R.layout.reply_item, replyList);
                 ListView listView = (ScrollListView)findViewById(R.id.list_comment);
                 listView.setAdapter(adapter);
             }
         };
         //初始化UI Toast回调函数
-        uiHttpResponseToastListener = new UIHttpResponseToastListener() {
+        uiUpdateToast = new UIUpdateUtilImp() {
             @Override
-            public void onUIHttpResponseToast() {
+            public void onUIUpdate() {
                 Toast.makeText(CheckDiscussActivity.this, "添加成功", Toast.LENGTH_SHORT).show();
                 initReplyList();
             }
@@ -113,7 +112,7 @@ public class CheckDiscussActivity extends AppCompatActivity implements View.OnCl
 
             @Override
             public void onResponse(Call call, Response response) throws IOException {
-                uiHttpResponseToastListener.onHttpResponseToast();
+               uiUpdateToast.onUpdate();
             }
         });
     }
@@ -147,7 +146,7 @@ public class CheckDiscussActivity extends AppCompatActivity implements View.OnCl
                         reply.save();
                         replyList.add(reply);
                     }
-                    uiHttpResponseListListener.onHttpResponseList();
+                   uiUpdateList.onUpdate();
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }

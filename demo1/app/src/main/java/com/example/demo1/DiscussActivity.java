@@ -15,9 +15,9 @@ import android.widget.ListView;
 import com.example.demo1.adapter.DiscussionAdapter;
 import com.example.demo1.domain.Course;
 import com.example.demo1.domain.Discussion;
-import com.example.demo1.listener.UIHttpResponseListListener;
 import com.example.demo1.util.HttpUtil;
 import com.example.demo1.util.JSONUtil;
+import com.example.demo1.util.UIUpdateUtilImp;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -34,18 +34,17 @@ import okhttp3.Response;
 public class DiscussActivity extends AppCompatActivity {
 
     private final List<Discussion> discussionList = new ArrayList<>();
-    private static final int UPDATE_LIST = 1;
     private Course course;
-    private UIHttpResponseListListener uiHttpResponseListListener;
+    private UIUpdateUtilImp uiUpdateList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_discuss);
         course = (Course)getIntent().getSerializableExtra("course");
-        uiHttpResponseListListener = new UIHttpResponseListListener() {
+        uiUpdateList = new UIUpdateUtilImp() {
             @Override
-            public void onUIHttpResponseList() {
+            public void onUIUpdate() {
                 ArrayAdapter<Discussion> adapter = new DiscussionAdapter(DiscussActivity.this, R.layout.discussion_item, discussionList);
                 ListView listView = (ListView) findViewById(R.id.list_discuss);
                 listView.setAdapter(adapter);
@@ -84,7 +83,7 @@ public class DiscussActivity extends AppCompatActivity {
                         discussion.save();
                        discussionList.add(discussion);
                     }
-                    uiHttpResponseListListener.onHttpResponseList();
+                    uiUpdateList.onUpdate();
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }

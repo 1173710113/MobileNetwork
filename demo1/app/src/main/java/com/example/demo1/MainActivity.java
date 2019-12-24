@@ -14,9 +14,9 @@ import android.widget.TextView;
 import com.example.demo1.adapter.CourseAdapter;
 import com.example.demo1.domain.Course;
 import com.example.demo1.domain.User;
-import com.example.demo1.listener.UIHttpResponseListListener;
 import com.example.demo1.util.HttpUtil;
 import com.example.demo1.util.JSONUtil;
+import com.example.demo1.util.UIUpdateUtilImp;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -34,15 +34,15 @@ import okhttp3.Response;
 public class MainActivity extends AppCompatActivity {
     private List<Course> courseList = new ArrayList<>();
     private User user;
-    private UIHttpResponseListListener uiHttpResponseListListener;
+    private UIUpdateUtilImp uiUpdateList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        uiHttpResponseListListener = new UIHttpResponseListListener() {
+        uiUpdateList = new UIUpdateUtilImp() {
             @Override
-            public void onUIHttpResponseList() {
+            public void onUIUpdate() {
                 ArrayAdapter<Course> adapter = new CourseAdapter(MainActivity.this, R.layout.course_item, courseList);
                 ListView listView = (ListView) findViewById(R.id.list_course);
                 listView.setAdapter(adapter);
@@ -100,7 +100,7 @@ public class MainActivity extends AppCompatActivity {
                             course.save();
                             courseList.add(course);
                         }
-                        uiHttpResponseListListener.onHttpResponseList();
+                        uiUpdateList.onUpdate();
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }

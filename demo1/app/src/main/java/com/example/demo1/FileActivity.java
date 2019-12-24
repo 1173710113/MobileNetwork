@@ -22,7 +22,6 @@ import com.example.demo1.adapter.FileItemAdapter;
 import com.example.demo1.domain.Course;
 import com.example.demo1.domain.XFile;
 import com.example.demo1.listener.ProgressRequestListener;
-import com.example.demo1.listener.UIHttpResponseListListener;
 import com.example.demo1.listener.UIProgressRequestListener;
 import com.example.demo1.util.DownloadUtil;
 import com.example.demo1.util.FileProgressUtil;
@@ -30,6 +29,7 @@ import com.example.demo1.util.FileUtil;
 import com.example.demo1.util.HttpUtil;
 import com.example.demo1.util.JSONUtil;
 import com.example.demo1.util.PermissionUtil;
+import com.example.demo1.util.UIUpdateUtilImp;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -56,16 +56,16 @@ public class FileActivity extends AppCompatActivity {
     private List<XFile> fileList = new ArrayList<>();
     private Course course;
     private String TAG = "FileUpload";
-    private UIHttpResponseListListener uiHttpResponseListListener;
+    private UIUpdateUtilImp uiUpdateList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main2);
         course = (Course) getIntent().getSerializableExtra("course");
-        uiHttpResponseListListener = new UIHttpResponseListListener() {
+        uiUpdateList = new UIUpdateUtilImp() {
             @Override
-            public void onUIHttpResponseList() {
+            public void onUIUpdate() {
                 showList();
             }
         };
@@ -238,7 +238,7 @@ public class FileActivity extends AppCompatActivity {
                         XFile file = JSONUtil.JSONParseXFile(object);
                         fileList.add(file);
                     }
-                    uiHttpResponseListListener.onHttpResponseList();
+                    uiUpdateList.onUpdate();
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
