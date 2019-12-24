@@ -10,7 +10,7 @@
         android:text="作业1"
         android:textSize="20sp"
         android:textColor="@color/black"
-        android:id="@+id/homework_content"/>
+        android:id="@+id/homework_title"/>
 
     <LinearLayout
         android:layout_width="match_parent"

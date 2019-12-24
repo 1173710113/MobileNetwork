@@ -150,4 +150,22 @@ public class JSONUtil {
         }
         return null;
     }
+
+    public static JSONObject HomeworkParseJSON(Homework homework) {
+        JSONObject object = new JSONObject();
+        try {
+            object.put("id", homework.getId());
+            object.put("posterId", homework.getPosterId());
+            object.put("posterName", homework.getPosterName());
+            object.put("title", homework.getTitle());
+            object.put("content", homework.getContent());
+            object.put("deadline", homework.getDeadline());
+            object.put("postTime", homework.getPostTime());
+            object.put("courseId", homework.getCourseId());
+            return object;
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
 }

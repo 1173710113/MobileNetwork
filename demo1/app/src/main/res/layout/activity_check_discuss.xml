@@ -48,7 +48,5 @@
         android:layout_centerHorizontal="true"
         android:padding="5dp"
         android:layout_margin="10dp"
-        android:maxLines="3"
-        android:imeOptions="actionSend"
         android:id="@+id/add_reply"/>
 </RelativeLayout>

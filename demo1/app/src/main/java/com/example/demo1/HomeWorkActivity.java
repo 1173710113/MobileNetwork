@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -12,11 +13,17 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
+import com.bigkoo.pickerview.builder.TimePickerBuilder;
+import com.bigkoo.pickerview.listener.OnTimeSelectListener;
+import com.bigkoo.pickerview.view.TimePickerView;
 import com.example.demo1.adapter.HomeworkAdapter;
+import com.example.demo1.dialog.AddHomeworkDialog;
 import com.example.demo1.domain.Course;
 import com.example.demo1.domain.Homework;
 import com.example.demo1.util.HttpUtil;
 import com.example.demo1.util.JSONUtil;
+import com.example.demo1.util.TimeUtil;
+import com.example.demo1.util.UIUpdateUtilImp;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -24,6 +31,7 @@ import org.json.JSONObject;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import okhttp3.Call;
@@ -31,28 +39,34 @@ import okhttp3.Callback;
 import okhttp3.Response;
 
 public class HomeWorkActivity extends AppCompatActivity {
-    List<Homework> homeworkList = new ArrayList<>();
-    Course course;
+    private List<Homework> homeworkList = new ArrayList<>();
+    private Course course;
+    private UIUpdateUtilImp uiUpdateList;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home_work);
         course = (Course)getIntent().getSerializableExtra("course");
-        initHomeworkList();
-        HomeworkAdapter adapter = new HomeworkAdapter(
-                HomeWorkActivity.this, R.layout.homework_item, homeworkList
-        );
-        ListView listView = (ListView) findViewById(R.id.list_homework);
-        listView.setAdapter(adapter);
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        uiUpdateList = new UIUpdateUtilImp() {
             @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Intent intent = new Intent(HomeWorkActivity.this, HomeworkDetailActivity.class);
-                Homework homework = homeworkList.get(position);
-                intent.putExtra("homework", homework);
-                startActivity(intent);
+            public void onUIUpdate() {
+                HomeworkAdapter adapter = new HomeworkAdapter(
+                        HomeWorkActivity.this, R.layout.homework_item, homeworkList
+                );
+                ListView listView = (ListView) findViewById(R.id.list_homework);
+                listView.setAdapter(adapter);
+                listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                        Intent intent = new Intent(HomeWorkActivity.this, HomeworkDetailActivity.class);
+                        Homework homework = homeworkList.get(position);
+                        intent.putExtra("homework", homework);
+                        startActivity(intent);
+                    }
+                });
             }
-        });
+        };
+        initHomeworkList();
     }
 
     @Override
@@ -65,8 +79,55 @@ public class HomeWorkActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         switch(item.getItemId()) {
             case R.id.add_item:
-                Intent intent = new Intent(HomeWorkActivity.this, AddHomeworkActivity.class);
-                startActivity(intent);
+                AddHomeworkDialog dialog = new AddHomeworkDialog(HomeWorkActivity.this);
+                dialog.setPickerListener(new AddHomeworkDialog.IOnPickerListener() {
+                    @Override
+                    public void onPicker(final AddHomeworkDialog dialog) {
+                        TimePickerView pvTime = new TimePickerBuilder(HomeWorkActivity.this, new OnTimeSelectListener() {
+                            @Override
+                            public void onTimeSelect(Date date, View v) {
+                                dialog.setDate(date);
+                            }
+                        })
+                                .setType(new boolean[]{true, true, true, true, true, true})
+                                .setCancelText("取消")//取消按钮文字
+                                .setSubmitText("确定")//确认按钮文字
+                                .isDialog(true)
+                                .build();
+                        pvTime.show();
+                    }
+                }).setCancelListener(new AddHomeworkDialog.IOnCancelListener() {
+                    @Override
+                    public void onCancel(AddHomeworkDialog dialog) {
+                        dialog.dismiss();
+                    }
+                }).setConfirmListener(new AddHomeworkDialog.IOnConfirmListener() {
+                    @Override
+                    public void onConfirm(final AddHomeworkDialog dialog) {
+                        String posterId = getSharedPreferences("userInfo", MODE_PRIVATE).getString("id", "ERROR");
+                        String title = dialog.getTitle();
+                        String content = dialog.getContent();
+                        String deadline = TimeUtil.parseTime(dialog.getDate());
+                        String postTime = TimeUtil.getTime();
+                        String courseId = course.getId();
+                        Homework homework = new Homework("", posterId, "", title, content, deadline, postTime, courseId);
+                        JSONObject object = JSONUtil.HomeworkParseJSON(homework);
+                        Log.e("Homework", object.toString());
+                        String url = "http://10.0.2.2:8081/mobile/homework/add";
+                        HttpUtil.sendHttpRequest(url, object, new Callback() {
+                            @Override
+                            public void onFailure(Call call, IOException e) {
+
+                            }
+
+                            @Override
+                            public void onResponse(Call call, Response response) throws IOException {
+                                initHomeworkList();
+                                dialog.dismiss();
+                            }
+                        });
+                    }
+                }).show();
                 break;
             default:
                 break;
@@ -84,6 +145,7 @@ public class HomeWorkActivity extends AppCompatActivity {
 
             @Override
             public void onResponse(Call call, Response response) throws IOException {
+                homeworkList.clear();
                 String data = response.body().string();
                 try {
                     JSONArray jsonArray = new JSONArray(data);
@@ -92,6 +154,7 @@ public class HomeWorkActivity extends AppCompatActivity {
                         Homework homework = JSONUtil.JSONParseHomework(object);
                         homeworkList.add(homework);
                     }
+                    uiUpdateList.onUpdate();
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }

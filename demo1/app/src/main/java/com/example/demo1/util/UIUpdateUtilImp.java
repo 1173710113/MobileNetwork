@@ -5,7 +5,7 @@ import android.os.Looper;
 import android.os.Message;
 
 import java.lang.ref.WeakReference;
-
+//用于在非主线程更新UI
 public abstract class UIUpdateUtilImp implements UIUpdateUtil {
     private static final int UPDATE = 1;
 

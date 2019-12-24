@@ -8,9 +8,9 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="添加评论"
-        android:textSize="20sp"
+        android:text="添加作业"
         android:gravity="center"
+        android:textSize="20sp"
         android:textStyle="bold"
         android:paddingBottom="2dp"/>
     <View
@@ -19,18 +19,34 @@
         android:background="@color/black"/>
     <EditText
         android:layout_width="match_parent"
-        android:layout_height="75pt"
-        android:hint="评论"
-        android:gravity="top"
-        android:id="@+id/add_reply_dialog_content"
+        android:layout_height="wrap_content"
+        android:hint="标题"
+        android:id="@+id/add_homework_dialog_title"
         android:background="@color/backgroundGrey"
         android:padding="5dp"
         android:layout_margin="10dp"/>
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="150dp"
+        android:hint="内容"
+        android:id="@+id/add_homework_dialog_content"
+        android:gravity="top"
+        android:background="@color/backgroundGrey"
+        android:padding="5dp"
+        android:layout_margin="10dp"/>
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="选择截止日期"
+        android:textSize="20sp"
+        android:padding="5dp"
+        android:layout_margin="10dp"
+        android:background="@color/backgroundGrey"
+        android:id="@+id/add_homework_dialog_picker"/>
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:gravity="center">
+        android:orientation="horizontal">
         <TextView
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -38,7 +54,7 @@
             android:text="取消"
             android:textSize="20sp"
             android:gravity="center"
-            android:id="@+id/add_reply_dialog_cancel" />
+            android:id="@+id/add_homework_dialog_cancel"/>
         <View
             android:layout_width="0.5dp"
             android:layout_height="match_parent"
@@ -50,6 +66,6 @@
             android:text="发布"
             android:textSize="20sp"
             android:gravity="center"
-            android:id="@+id/add_reply_dialog_confirm"/>
+            android:id="@+id/add_homework_dialog_confirm"/>
     </LinearLayout>
 </LinearLayout>

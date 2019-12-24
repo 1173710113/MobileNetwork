@@ -25,11 +25,11 @@ public class HomeworkAdapter extends ArrayAdapter<Homework> {
     public View getView(int position, View convertView, ViewGroup parent) {
         Homework homework = getItem(position);
         View view = LayoutInflater.from(getContext()).inflate(resourceId, parent,false);
-        TextView homeworkContent = (TextView)view.findViewById(R.id.homework_content);
+        TextView homeworkTitle = (TextView)view.findViewById(R.id.homework_title);
         TextView homeworkPostTime = (TextView)view.findViewById(R.id.homework_post_time);
         TextView homeworkPosterId = (TextView)view.findViewById(R.id.homework_poster_id);
         TextView homeworkPosterName = (TextView)view.findViewById(R.id.homework_poster_name);
-        homeworkContent.setText(homework.getContent());
+        homeworkTitle.setText(homework.getTitle());
         homeworkPostTime.setText(homework.getPostTime());
         homeworkPosterId.setText(homework.getPosterId());
         homeworkPosterName.setText(homework.getPosterName());
