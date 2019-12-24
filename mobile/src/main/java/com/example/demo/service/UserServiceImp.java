@@ -28,9 +28,8 @@ public class UserServiceImp implements UserService{
 	}
 
 	@Override
-	public String updateUserPassword(String password) {
+	public void updateUserPassword(String password) {
 		mapper.updateUserPassword(password);
-		return null;
 	}
 
 	@Override

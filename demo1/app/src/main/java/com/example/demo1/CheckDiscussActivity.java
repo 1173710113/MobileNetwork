@@ -23,6 +23,7 @@ import com.example.demo1.util.UIUpdateUtilImp;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.litepal.crud.DataSupport;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -74,40 +75,37 @@ public class CheckDiscussActivity extends AppCompatActivity implements View.OnCl
                     }
                 }).setConfirmListener(new AddReplyDialog.IOnConfirmListener() {
                     @Override
-                    public void onConfirm(AddReplyDialog dialog) {
+                    public void onConfirm(final AddReplyDialog dialog) {
                         String content = dialog.getContent();
-                        addReply(content);
+                        if(content == null || content.equals("")) {
+                            ToastUtil.showToast(CheckDiscussActivity.this, "内容不能为空");
+                            return;
+                        }
+                        String replyDiscussion = discussion.getId();
+                        String time = TimeUtil.getTime();
+                        SharedPreferences pref = getSharedPreferences("userInfo",MODE_PRIVATE);
+                        String posterId = pref.getString("id", "ERROR");
+                        Reply reply = new Reply("", replyDiscussion, posterId, "", time, content);
+                        JSONObject object = JSONUtil.replyParseJSON(reply);
+                        String url = "http://10.0.2.2:8081/mobile/discussion/addreply";
+                        HttpUtil.sendHttpRequest(url, object, new Callback() {
+                            @Override
+                            public void onFailure(Call call, IOException e) {
+                                ToastUtil.showToast(CheckDiscussActivity.this, "添加失败");
+                            }
+
+                            @Override
+                            public void onResponse(Call call, Response response) throws IOException {
+                                ToastUtil.showToast(CheckDiscussActivity.this,  "添加成功");
+                                initReplyList();
+                            }
+                        });
                         dialog.dismiss();
                     }
                 }).show();
                 break;
         }
 
-    }
-
-    private void addReply(String content) {
-        if(content == null || content.equals("")) {
-            return;
-        }
-        String replyDiscussion = discussion.getId();
-        String time = TimeUtil.getTime();
-        SharedPreferences pref = getSharedPreferences("userInfo",MODE_PRIVATE);
-        String posterId = pref.getString("id", "ERROR");
-        Reply reply = new Reply("", replyDiscussion, posterId, "", time, content);
-        JSONObject object = JSONUtil.replyParseJSON(reply);
-        String url = "http://10.0.2.2:8081/mobile/discussion/addreply";
-        HttpUtil.sendHttpRequest(url, object, new Callback() {
-            @Override
-            public void onFailure(Call call, IOException e) {
-
-            }
-
-            @Override
-            public void onResponse(Call call, Response response) throws IOException {
-                ToastUtil.showToast(CheckDiscussActivity.this,  "添加成功");
-                initReplyList();
-            }
-        });
     }
 
     /**
@@ -123,12 +121,15 @@ public class CheckDiscussActivity extends AppCompatActivity implements View.OnCl
         HttpUtil.sendHttpRequest(url, new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
-
+                replyList.clear();
+                replyList.addAll(DataSupport.where("replyDiscussion = ?", discussion.getId()).find(Reply.class));
+                uiUpdateList.onUpdate();
             }
 
             @Override
             public void onResponse(Call call, Response response) throws IOException {
                 replyList.clear();
+                DataSupport.deleteAll(Reply.class, "replyDiscussion = ?", discussion.getId());
                 String data = response.body().string();
                 System.out.println(data);
                 try {

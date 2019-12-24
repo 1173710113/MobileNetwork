@@ -11,7 +11,6 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
-import android.widget.Toast;
 
 import com.example.demo1.adapter.DiscussionAdapter;
 import com.example.demo1.dialog.AddDiscussionDialog;
@@ -22,10 +21,12 @@ import com.example.demo1.util.JSONUtil;
 import com.example.demo1.util.TimeUtil;
 import com.example.demo1.util.ToastUtil;
 import com.example.demo1.util.UIUpdateUtilImp;
+import com.example.demo1.util.ValidateUtil;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.litepal.crud.DataSupport;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -38,6 +39,7 @@ import okhttp3.Response;
 public class DiscussActivity extends AppCompatActivity {
 
     private final List<Discussion> discussionList = new ArrayList<>();
+    private ListView listView;
     private Course course;
     private UIUpdateUtilImp uiUpdateList;
 
@@ -45,12 +47,12 @@ public class DiscussActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_discuss);
+        listView = (ListView)findViewById(R.id.list_discuss);
         course = (Course)getIntent().getSerializableExtra("course");
         uiUpdateList = new UIUpdateUtilImp() {
             @Override
             public void onUIUpdate() {
                 ArrayAdapter<Discussion> adapter = new DiscussionAdapter(DiscussActivity.this, R.layout.discussion_item, discussionList);
-                ListView listView = (ListView) findViewById(R.id.list_discuss);
                 listView.setAdapter(adapter);
                 listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                     @Override
@@ -67,12 +69,14 @@ public class DiscussActivity extends AppCompatActivity {
     }
 
     private void initDiscussionList() {
-        String courseId = course.getId();
+        final String courseId = course.getId();
         String url = "http://10.0.2.2:8081/mobile/discussion/querydiscussion/" + courseId;
         HttpUtil.sendHttpRequest(url, new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
-
+                discussionList.clear();
+                discussionList.addAll(DataSupport.where("courseId = ?", courseId).find(Discussion.class));
+                uiUpdateList.onUpdate();
             }
 
             @Override
@@ -80,6 +84,7 @@ public class DiscussActivity extends AppCompatActivity {
                 String data = response.body().string();
                 try {
                     discussionList.clear();
+                    DataSupport.deleteAll(Discussion.class, "courseId = ?", courseId);
                     JSONArray jsonArray = new JSONArray(data);
                     for(int i = 0; i < jsonArray.length(); i++) {
                         JSONObject object = jsonArray.getJSONObject(i);
@@ -117,6 +122,10 @@ public class DiscussActivity extends AppCompatActivity {
                     public void onConfirm(final AddDiscussionDialog dialog) {
                         String title = dialog.getTitle();
                         String content = dialog.getContent();
+                        if(ValidateUtil.isEmpty(title)) {
+                            ToastUtil.showToast(DiscussActivity.this, "标题不能为空");
+                            return;
+                        }
                         String posterId = getSharedPreferences("userInfo", MODE_PRIVATE).getString("id", "ERROR");
                         String posterName = getSharedPreferences("userInfo", MODE_PRIVATE).getString("name", "ERROR");
                         String courseId = course.getId();
@@ -126,7 +135,8 @@ public class DiscussActivity extends AppCompatActivity {
                         HttpUtil.sendHttpRequest("http://10.0.2.2:8081/mobile/discussion/add", object, new Callback() {
                             @Override
                             public void onFailure(Call call, IOException e) {
-
+                                ToastUtil.showToast(DiscussActivity.this, "发送失败");
+                                dialog.dismiss();
                             }
 
                             @Override

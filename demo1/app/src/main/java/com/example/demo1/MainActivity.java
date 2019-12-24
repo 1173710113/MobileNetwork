@@ -22,6 +22,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.litepal.LitePal;
+import org.litepal.crud.DataSupport;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -84,13 +85,16 @@ public class MainActivity extends AppCompatActivity {
         HttpUtil.sendHttpRequest(url, new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
-
+                courseList.clear();
+                courseList.addAll(DataSupport.findAll(Course.class));
+                uiUpdateList.onUpdate();
             }
 
             @Override
             public void onResponse(Call call, Response response) throws IOException {
                 if(response.code() == 200) {
                     courseList.clear();
+                    DataSupport.deleteAll(Course.class);
                     String data = response.body().string();
                     try {
                         JSONArray jsonArray = new JSONArray(data);
