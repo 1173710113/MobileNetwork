@@ -11,6 +11,8 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import com.example.demo1.util.AESUtil;
+
 import org.json.JSONObject;
 
 import java.io.BufferedReader;
@@ -36,23 +38,23 @@ public class RegistActivity extends AppCompatActivity {
         setContentView(R.layout.activity_regist);
     }
 
-    public void Regist(View view){
-        final String id = ((EditText)findViewById(R.id.user_id)).getText().toString();
-        final String password = ((EditText)findViewById(R.id.user_password)).getText().toString();
-        final String name = ((EditText)findViewById(R.id.user_name)).getText().toString();
-        final String type = ((Spinner)findViewById(R.id.user_type)).getSelectedItem().toString();
-        final String sex = ((Spinner)findViewById(R.id.user_sex)).getSelectedItem().toString();
-        try{
+    public void Regist(View view) {
+        final String id = AESUtil.encryptAES(((EditText) findViewById(R.id.user_id)).getText().toString());
+        final String password = AESUtil.encryptAES(((EditText) findViewById(R.id.user_password)).getText().toString());
+        final String name = AESUtil.encryptAES(((EditText) findViewById(R.id.user_name)).getText().toString());
+        final String type = ((Spinner) findViewById(R.id.user_type)).getSelectedItem().toString();
+        final String sex = ((Spinner) findViewById(R.id.user_sex)).getSelectedItem().toString();
+        try {
             JSONObject obj = new JSONObject();
-            obj.put("id",id);
-            obj.put("password",password);
-            obj.put("type",type);
-            obj.put("name",name);
-            obj.put("sex",sex);
-            obj.put("iconpath","123457");
+            obj.put("id", id);
+            obj.put("password", password);
+            obj.put("type", type);
+            obj.put("name", name);
+            obj.put("sex", sex);
+            obj.put("iconpath", "123457");
             OkHttpClient client = new OkHttpClient();
             MediaType mtype = MediaType.parse("application/json;charset=utf-8");
-            RequestBody requestBody = RequestBody.create(mtype,""+obj.toString());
+            RequestBody requestBody = RequestBody.create(mtype, "" + obj.toString());
             System.out.println(obj.toString());
             Request request = new Request.Builder()
                     .url("http://10.0.2.2:8081/mobile/user/add")
@@ -69,11 +71,9 @@ public class RegistActivity extends AppCompatActivity {
 
                 }
             });
-        } catch(Exception e)
-        {
+        } catch (Exception e) {
             e.printStackTrace();
-        }
-        finally {
+        } finally {
             Intent intent = new Intent(RegistActivity.this, LoginActivity.class);
             startActivity(intent);
         }
