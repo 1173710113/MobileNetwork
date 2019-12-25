@@ -21,9 +21,13 @@ public class TestController {
 	private TestService service;
 	@RequestMapping(value = "/addtest", method = RequestMethod.POST)
 	@ResponseBody
-	public void add(@RequestBody Test test) {
+	public void addTest(@RequestBody Test test) {
 		service.addTest(test.getName(), test.getStartTime(), test.getEndTime(), test.getCourse_id());
 	}
-	
+	@RequestMapping(value = "/gettest/{courseId}", method = RequestMethod.GET)
+	@ResponseBody
+	public void getTestLise(@PathVariable("courseId") String courseId) {
+		service.getTestList(courseId);
+	}
 	
 }

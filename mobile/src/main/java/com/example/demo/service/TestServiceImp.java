@@ -21,9 +21,9 @@ public class TestServiceImp implements TestService {
 	}
 
 	@Override
-	public List<Test> getTestList() {
+	public List<Test> getTestList(String courseId) {
 		// TODO Auto-generated method stub
-		return null;
+		return testMapper.getTestList(courseId);
 	}
 
 
