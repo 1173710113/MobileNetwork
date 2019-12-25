@@ -16,6 +16,7 @@ import com.example.demo1.util.ValidateUtil;
 
 public class CustomDialog extends Dialog implements View.OnClickListener {
     private TextView titleText, contentText, cancelText, confirmText;
+    private String title, content;
     private CustomDialog.IOnCancelListener cancelListener;
     private CustomDialog.IOnConfirmListener confirmListener;
 
@@ -40,7 +41,13 @@ public class CustomDialog extends Dialog implements View.OnClickListener {
         getWindow().setAttributes(p);
 
         titleText = (TextView) findViewById(R.id.custom_dialog_title);
+        if(title != null) {
+            titleText.setText(title);
+        }
         contentText = (TextView) findViewById(R.id.custom_dialog_content);
+        if(content != null){
+            contentText.setText(content);
+        }
         cancelText = (TextView) findViewById(R.id.custom_dialog_cancel);
         confirmText = (TextView) findViewById(R.id.custom_dialog_confirm);
         cancelText.setOnClickListener(this);
@@ -63,15 +70,15 @@ public class CustomDialog extends Dialog implements View.OnClickListener {
     }
 
     public CustomDialog setTitle(String title) {
-        if (ValidateUtil.isEmpty(title)) {
-            titleText.setText(title);
+        if (!ValidateUtil.isEmpty(title)) {
+            this.title = title;
         }
         return this;
     }
 
     public CustomDialog setContent(String content) {
-        if (ValidateUtil.isEmpty(content)) {
-            contentText.setText(content);
+        if (!ValidateUtil.isEmpty(content)) {
+            this.content = content;
         }
         return this;
     }

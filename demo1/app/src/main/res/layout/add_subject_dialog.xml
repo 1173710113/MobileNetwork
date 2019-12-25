@@ -23,73 +23,77 @@
         android:layout_height="75pt"
         android:hint="题目"
         android:gravity="top"
-        android:id="@+id/add_reply_dialog_content"
+        android:id="@+id/add_question_content"
         android:background="@color/backgroundGrey"
         android:padding="5dp"
-        android:layout_margin="10dp"/>
+        android:layout_margin="10dp" />
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
-        <CheckBox
+        android:orientation="horizontal"
+        android:layout_margin="10dp">
+        <RadioGroup
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_margin="10dp"/>
-        <EditText
+            android:id="@+id/add_question_answer">
+            <RadioButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp"
+                android:id="@+id/add_question_answer_a"/>
+            <RadioButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp"
+                android:id="@+id/add_question_answer_b"/>
+            <RadioButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp"
+                android:id="@+id/add_question_answer_c"/>
+            <RadioButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp"
+                android:id="@+id/add_question_answer_d"/>
+        </RadioGroup>
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="请输入选项"
-            android:background="@color/backgroundGrey"
-            android:padding="5dp"
-            android:layout_margin="10dp"/>
-    </LinearLayout>
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
-        <CheckBox
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_margin="10dp"/>
-        <EditText
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="请输入选项"
-            android:background="@color/backgroundGrey"
-            android:padding="5dp"
-            android:layout_margin="10dp"/>
-    </LinearLayout>
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
-        <CheckBox
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_margin="10dp"/>
-        <EditText
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="请输入选项"
-            android:background="@color/backgroundGrey"
-            android:padding="5dp"
-            android:layout_margin="10dp"/>
-    </LinearLayout>
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
-        <CheckBox
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_margin="10dp"/>
-        <EditText
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="请输入选项"
-            android:background="@color/backgroundGrey"
-            android:padding="5dp"
-            android:layout_margin="10dp"/>
+            android:orientation="vertical">
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/backgroundGrey"
+                android:hint="请输入选项"
+                android:padding="5dp"
+                android:layout_marginBottom="10dp"
+                android:id="@+id/add_question_choice_a"/>
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/backgroundGrey"
+                android:hint="请输入选项"
+                android:padding="5dp"
+                android:layout_marginBottom="10dp"
+                android:id="@+id/add_question_choice_b"/>
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/backgroundGrey"
+                android:hint="请输入选项"
+                android:padding="5dp"
+                android:layout_marginBottom="10dp"
+                android:id="@+id/add_question_choice_c"/>
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/backgroundGrey"
+                android:hint="请输入选项"
+                android:padding="5dp"
+                android:layout_marginBottom="10dp"
+                android:id="@+id/add_question_choice_d"/>
+        </LinearLayout>
     </LinearLayout>
     <View
         android:layout_width="match_parent"
@@ -105,7 +109,8 @@
             android:layout_weight="1"
             android:text="取消"
             android:textSize="20sp"
-            android:gravity="center"/>
+            android:gravity="center"
+            android:id="@+id/add_question_cancel"/>
         <View
             android:layout_width="0.5dp"
             android:layout_height="match_parent"
@@ -114,8 +119,9 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="发布"
+            android:text="添加"
             android:textSize="20sp"
-            android:gravity="center"/>
+            android:gravity="center"
+            android:id="@+id/add_question_confirm"/>
     </LinearLayout>
 </LinearLayout>
