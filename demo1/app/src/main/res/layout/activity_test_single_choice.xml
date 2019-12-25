@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="5dp"
+    android:background="@drawable/bg_add_reply_dialog">
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="添加单选题"
+        android:gravity="center"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        android:paddingBottom="2dp"/>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        android:background="@color/black"/>
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="150dp"
+        android:hint="输入题目内容"
+        android:id="@+id/add_discussion_dialog_content"
+        android:gravity="top"
+        android:background="@color/backgroundGrey"
+        android:padding="5dp"
+        android:layout_margin="10dp"/>
+
+
+    <TableLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+
+        >
+
+        <TableRow>
+
+            <RadioGroup
+                android:id="@+id/radioGroup_gender"
+                android:layout_width="272dp"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:orientation="vertical">
+
+                <RadioButton
+                    android:id="@+id/Button_A"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:checked="true"
+                    android:text="A：编辑选项" />
+                <RadioButton
+                    android:id="@+id/Button_B"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:checked="true"
+                    android:text="B：编辑选项" />
+                <RadioButton
+                    android:id="@+id/Button_C"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:checked="true"
+                    android:text="C：编辑选项" />
+                <RadioButton
+                    android:id="@+id/Button_D"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:checked="true"
+                    android:text="D：编辑选项" />
+            </RadioGroup>
+        </TableRow>
+
+
+        <Button
+            android:id="@+id/button1"
+            android:layout_width="wrap_content"
+            android:layout_height="82dp"
+            android:text="确认提交"
+            android:textSize="25dp"/>
+    </TableLayout>
+
+</LinearLayout>
