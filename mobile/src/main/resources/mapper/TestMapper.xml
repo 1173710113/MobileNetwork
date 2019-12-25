@@ -21,7 +21,22 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		<result column="end_time" property="endTime"/>
 		<result column="name" property="name"/>
 		<result column="course_id" property="course_id"/>
-		
 	</resultMap>
+	<insert id="addQuestion">
+		INSERT INTO question_table(content,answer,test_id,score)
+		VALUES(#{content},#{answer},#{test_id},#{score});
+	</insert>
+	<select id="getQuestionList" resultMap="question">
+		SELECT *
+		FROM question_table
+		WHERE test_id = #{testId} 
+	</select>
 	
+	<resultMap type="Question" id="question">
+		<id column="id" property="id"/>
+		<result column="content" property="content"/>
+		<result column="answer" property="answer"/>
+		<result column="test_id" property="testId"/>
+		<result column="score" property="score"/>
+	</resultMap>
 </mapper>
