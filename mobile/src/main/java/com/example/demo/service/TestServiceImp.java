@@ -6,11 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.example.demo.dao.TestMapper;
-<<<<<<< HEAD
-=======
-import com.example.demo.dao.UserMapper;
+
 import com.example.demo.domain.Question;
->>>>>>> ad86fc2da929f5cae5859c23468be29a591af0ca
 import com.example.demo.domain.Test;
 
 @Service
@@ -29,8 +26,6 @@ public class TestServiceImp implements TestService {
 		return testMapper.getTestList(courseId);
 	}
 
-<<<<<<< HEAD
-=======
 	@Override
 	public void addQuestion(String content, String answer, String testId, String score) {
 		// TODO Auto-generated method stub
@@ -43,6 +38,4 @@ public class TestServiceImp implements TestService {
 		return testMapper.getQuestionList(testId);
 	}
 
-
->>>>>>> ad86fc2da929f5cae5859c23468be29a591af0ca
 }
