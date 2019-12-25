@@ -6,6 +6,8 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.example.demo1.util.HttpUtil;
 
 import java.io.IOException;
@@ -14,7 +16,7 @@ import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.Response;
 
-public class FixPasswordActivity extends BaseActivity implements View.OnClickListener {
+public class FixPasswordActivity extends AppCompatActivity implements View.OnClickListener {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

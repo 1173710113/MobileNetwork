@@ -37,7 +37,7 @@ public interface UserService {
 	 * @param password should not be null or '' and should only contain valid character.
 	 * @return
 	 */
-	public String updateUserPassword(String password);
+	public void updateUserPassword(String password);
 	
 	/**
 	 * 
@@ -59,5 +59,6 @@ public interface UserService {
 	 * @return
 	 */
 	public String deleteUser(String id);
+	
 	public User getUserById(String userId);
 }

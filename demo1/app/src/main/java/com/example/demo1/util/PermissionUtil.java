@@ -6,7 +6,6 @@ import android.content.pm.PackageManager;
 
 import androidx.core.app.ActivityCompat;
 
-import com.example.demo1.FileActivity;
 
 public class PermissionUtil {
     public static void getReadWriteExternalPermission(Activity activity){

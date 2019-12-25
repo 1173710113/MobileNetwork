@@ -3,16 +3,13 @@ package com.example.demo1;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.ListView;
-import android.widget.Toast;
 
 import com.bigkoo.pickerview.builder.TimePickerBuilder;
 import com.bigkoo.pickerview.listener.OnTimeSelectListener;
@@ -25,9 +22,9 @@ import com.example.demo1.domain.Homework;
 import com.example.demo1.util.HttpUtil;
 import com.example.demo1.util.JSONUtil;
 import com.example.demo1.util.TimeUtil;
-import com.example.demo1.util.ToastUtil;
 import com.example.demo1.util.UIUpdateUtilImp;
 import com.example.demo1.util.ValidateUtil;
+import com.hjq.toast.ToastUtils;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -114,7 +111,7 @@ public class HomeWorkActivity extends AppCompatActivity {
                         String content = dialog.getContent();
                         String deadline = TimeUtil.parseTime(dialog.getDate());
                         if(ValidateUtil.isEmpty(title) || ValidateUtil.isEmpty(content) || ValidateUtil.isEmpty(deadline)) {
-                            ToastUtil.showToast(HomeWorkActivity.this, "请填完");
+                            ToastUtils.show("请填完");
                             return;
                         }
                         String postTime = TimeUtil.getTime();
@@ -132,7 +129,7 @@ public class HomeWorkActivity extends AppCompatActivity {
                             @Override
                             public void onResponse(Call call, Response response) throws IOException {
                                 initHomeworkList();
-                                ToastUtil.showToast(HomeWorkActivity.this, "发布成功");
+                                ToastUtils.show("发布成功");
                                 dialog.dismiss();
                             }
                         });
