@@ -54,7 +54,9 @@ import static com.example.demo1.util.FileUtil.getRealPathFromURI;
 public class FileActivity extends AppCompatActivity {
     private String path, uploadfile;
     private List<XFile> fileList = new ArrayList<>();
+    private List<XFile> fileList2 = new ArrayList<>();
     private Course course;
+    private ListView listView;
     private String TAG = "FileUpload";
     private UIUpdateUtilImp uiUpdateList;
 
@@ -63,26 +65,15 @@ public class FileActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_file);
         course = (Course) getIntent().getSerializableExtra("course");
-        uiUpdateList = new UIUpdateUtilImp() {
-            @Override
-            public void onUIUpdate() {
-                showList();
-            }
-        };
-        Log.e(TAG, "Create");
-        initFileList();
-    }
-
-    private void showList() {
-        ListView listView = (ListView) findViewById(R.id.list_view);
-        FileItemAdapter adapter = new FileItemAdapter(
-                FileActivity.this, R.layout.file_item, fileList
+        listView = (ListView) findViewById(R.id.list_view);
+        final FileItemAdapter adapter = new FileItemAdapter(
+                FileActivity.this, R.layout.file_item, fileList2
         );
         listView.setAdapter(adapter);
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                XFile file = fileList.get(position);
+                XFile file = fileList2.get(position);
                 String fileName = file.getFileName();
                 String url = "http://10.0.2.2:8081/mobile/file/download/" + fileName + "/" + course.getId();
                 //请求之前获得文件读写权限
@@ -105,6 +96,16 @@ public class FileActivity extends AppCompatActivity {
                 });
             }
         });
+        uiUpdateList = new UIUpdateUtilImp() {
+            @Override
+            public void onUIUpdate() {
+                fileList2.clear();
+                fileList2.addAll(fileList);
+                adapter.notifyDataSetChanged();
+            }
+        };
+        Log.e(TAG, "Create");
+        initFileList();
     }
 
     @Override

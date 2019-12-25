@@ -1,7 +1,6 @@
 package com.example.demo1.adapter;
 
 import android.content.Context;
-import android.os.Looper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,6 +12,7 @@ import com.example.demo1.R;
 import com.example.demo1.domain.XFile;
 
 import java.text.DecimalFormat;
+import java.util.ArrayList;
 import java.util.List;
 
 public class FileItemAdapter extends ArrayAdapter<XFile> {

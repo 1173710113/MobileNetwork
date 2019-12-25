@@ -10,6 +10,7 @@ import android.widget.TextView;
 import com.example.demo1.R;
 import com.example.demo1.domain.Reply;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class ReplyAdapter extends ArrayAdapter<Reply> {

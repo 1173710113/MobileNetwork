@@ -6,18 +6,14 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
-import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
-import android.widget.Toast;
 
 import com.example.demo1.util.HttpUtil;
-import com.example.demo1.util.ToastUtil;
+import com.hjq.toast.ToastUtils;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -40,6 +36,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+        ToastUtils.init(getApplication());
         idText = (EditText) findViewById(R.id.user_id);
         passwordText = (EditText) findViewById(R.id.user_password);
         rememberPass = (CheckBox) findViewById(R.id.remember_pass);
@@ -58,6 +55,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         if (isAutoLogin) {
             autoLogin.setChecked(true);
             Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+            ToastUtils.show("登入成功");
             startActivity(intent);
             LoginActivity.this.finish();
         }
@@ -109,12 +107,13 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                     String data = response.body().string();
                     writeUserInfo(data);
                     Log.d("LoginActivity", "LoginUser:" + data);
-                    ToastUtil.showToast(LoginActivity.this, "登入成功");
+                    ToastUtils.show("登入成功");
+                    System.out.println("123456");
                     Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                     startActivity(intent);
                     LoginActivity.this.finish();
                 } else {
-                    ToastUtil.showToast(LoginActivity.this, "登入失败");
+                    ToastUtils.show("登入失败");
                 }
             }
         });

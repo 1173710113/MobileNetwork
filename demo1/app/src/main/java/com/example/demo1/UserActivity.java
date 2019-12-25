@@ -9,7 +9,7 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.example.demo1.dialog.CustomDialog;
-import com.example.demo1.util.ToastUtil;
+import com.hjq.toast.ToastUtils;
 
 public class UserActivity extends AppCompatActivity implements View.OnClickListener{
     private TextView myDiscussionText, logOut;
@@ -41,7 +41,7 @@ public class UserActivity extends AppCompatActivity implements View.OnClickListe
                         dialog.dismiss();
                         Intent intent = new Intent(UserActivity.this, LoginActivity.class);
                         startActivity(intent);
-                        ToastUtil.showToast(UserActivity.this, "已退出");
+                        ToastUtils.show("已退出");
                         UserActivity.this.finish();
                     }
                 }).show();

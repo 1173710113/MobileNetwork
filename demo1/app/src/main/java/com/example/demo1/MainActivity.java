@@ -34,31 +34,36 @@ import okhttp3.Response;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener{
     private List<Course> courseList = new ArrayList<>();
+    private List<Course> courseList2 = new ArrayList<>();
     private User user;
     private UIUpdateUtilImp uiUpdateList;
     private View userView;
+    private ListView listView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        final ArrayAdapter<Course> adapter = new CourseAdapter(MainActivity.this, R.layout.course_item, courseList2);
+        listView = (ListView) findViewById(R.id.list_course);
+        listView.setAdapter(adapter);
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Intent intent = new Intent(MainActivity.this, ClassActivity.class);
+                Course course = courseList2.get(position);
+                intent.putExtra("course", course.toString());
+                startActivity(intent);
+            }
+        });
         userView = (View)findViewById(R.id.user_info);
         userView.setOnClickListener(this);
         uiUpdateList = new UIUpdateUtilImp() {
             @Override
             public void onUIUpdate() {
-                ArrayAdapter<Course> adapter = new CourseAdapter(MainActivity.this, R.layout.course_item, courseList);
-                ListView listView = (ListView) findViewById(R.id.list_course);
-                listView.setAdapter(adapter);
-                listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                    @Override
-                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                        Intent intent = new Intent(MainActivity.this, ClassActivity.class);
-                        Course course = courseList.get(position);
-                        intent.putExtra("course", course.toString());
-                        startActivity(intent);
-                    }
-                });
+                courseList2.clear();
+                courseList2.addAll(courseList);
+                adapter.notifyDataSetChanged();
             }
         };
         LitePal.getDatabase();
