@@ -19,7 +19,7 @@
         android:requestLegacyExternalStorage="true"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme"
+        android:theme="@style/AppTheme1"
         android:usesCleartextTraffic="true">
         <activity android:name=".AddTestActivity"></activity>
         <activity android:name=".TestActivity" />
@@ -44,7 +44,8 @@
         <activity android:name=".HomeWorkActivity" />
         <activity android:name=".ClassActivity" />
         <activity android:name=".FileActivity" />
-        <activity android:name=".MainActivity" />
+        <activity android:name=".MainActivity"
+            android:label=""/>
     </application>
 
 </manifest>

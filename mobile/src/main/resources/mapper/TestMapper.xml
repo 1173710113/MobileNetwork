@@ -22,6 +22,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		<result column="name" property="name"/>
 		<result column="course_id" property="course_id"/>
 	</resultMap>
+	
 	<insert id="addQuestion">
 		INSERT INTO question_table(content,answer,test_id,score)
 		VALUES(#{content},#{answer},#{test_id},#{score});

@@ -27,7 +27,7 @@ public class CourseConrtroller {
 	@Autowired
 	CourseService courseService;
 
-	@GetMapping("/add")
+	@RequestMapping("/add")
 	public void addCourse(@RequestBody Course course) {
 		courseService.addCourse(course);
 	}
