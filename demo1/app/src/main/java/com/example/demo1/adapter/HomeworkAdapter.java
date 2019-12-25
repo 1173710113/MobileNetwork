@@ -11,14 +11,18 @@ import com.example.demo1.R;
 import com.example.demo1.domain.Homework;
 import com.example.demo1.domain.Reply;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class HomeworkAdapter extends ArrayAdapter<Homework> {
     private int resourceId;
+    private List<Homework> list = new ArrayList<>();
 
     public HomeworkAdapter(Context context, int textViewResourceId, List<Homework> objects) {
         super(context, textViewResourceId, objects);
         resourceId = textViewResourceId;
+        this.list.clear();
+        this.list.addAll(objects);
     }
 
     @Override
