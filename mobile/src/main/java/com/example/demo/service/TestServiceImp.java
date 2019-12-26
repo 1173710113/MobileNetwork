@@ -9,6 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.example.demo.dao.TestMapper;
 import com.example.demo.dao.UserMapper;
 import com.example.demo.domain.Question;
+import com.example.demo.domain.Score;
 import com.example.demo.domain.Test;
 @Service
 public class TestServiceImp implements TestService {
@@ -37,6 +38,18 @@ public class TestServiceImp implements TestService {
 	public List<Question> getQuestionList(String testId) {
 		// TODO Auto-generated method stub
 		return testMapper.getQuestionList(testId);
+	}
+
+	@Override
+	public void addScore(String testId, String studentId, String score) {
+		// TODO Auto-generated method stub
+		testMapper.addScore(testId, studentId, score);
+	}
+
+	@Override
+	public Score queryScore(String testId, String studentId) {
+		// TODO Auto-generated method stub
+		return testMapper.queryScore(studentId, testId);
 	}
 
 

@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.example.demo.domain.Homework;
 import com.example.demo.domain.Question;
+import com.example.demo.domain.Score;
 import com.example.demo.domain.Test;
 import com.example.demo.service.TestService;
 
@@ -40,6 +41,16 @@ public class TestController {
 	@ResponseBody
 	public List<Question> getQuestionList(@PathVariable("testId") String testId) {
 		return service.getQuestionList(testId);
+	}
+	@RequestMapping(value = "/addscore", method = RequestMethod.POST)
+	@ResponseBody
+	public void addScore(@RequestBody Score score) {
+		service.addScore(score.getTestId(), score.getStudentId(), score.getScore());
+	}
+	@RequestMapping(value = "/queryscore/{testId}/{studentId}", method = RequestMethod.GET)
+	@ResponseBody
+	public Score queryScore(@PathVariable("testId") String testId,@PathVariable("studentId") String studentId) {
+		return service.queryScore(testId, studentId);
 	}
 	
 }
