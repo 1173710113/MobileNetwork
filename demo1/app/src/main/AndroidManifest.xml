@@ -21,7 +21,11 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme1"
         android:usesCleartextTraffic="true">
-        <activity android:name=".AddTestActivity"></activity>
+        <activity android:name=".DiscussionByCourseActivity"></activity>
+        <activity
+            android:name=".StudentMainActivity"
+            android:label="" />
+        <activity android:name=".AddTestActivity" />
         <activity android:name=".TestActivity" />
         <activity android:name=".UserActivity" />
         <activity android:name=".RegistActivity" />
@@ -44,8 +48,9 @@
         <activity android:name=".HomeWorkActivity" />
         <activity android:name=".ClassActivity" />
         <activity android:name=".FileActivity" />
-        <activity android:name=".MainActivity"
-            android:label=""/>
+        <activity
+            android:name=".MainActivity"
+            android:label="" />
     </application>
 
 </manifest>

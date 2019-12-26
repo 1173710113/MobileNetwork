@@ -2,9 +2,12 @@ package com.example.demo1;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Looper;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -39,39 +42,50 @@ import okhttp3.Response;
 public class DiscussActivity extends AppCompatActivity {
 
     private final List<Discussion> discussionList = new ArrayList<>();
-    private List<Discussion> discussionList2 = new ArrayList<>();
+    private final List<Discussion> discussionList2 = new ArrayList<>();
     private ListView listView;
     private Course course;
     private UIUpdateUtilImp uiUpdateList;
     private String father;
+    private String TAG = "Discussion";
+    private ArrayAdapter<Discussion> adapter = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_discuss);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.discussion_activity_toolbar);
+        setSupportActionBar(toolbar);
         course = (Course)getIntent().getSerializableExtra("course");
         father = getIntent().getStringExtra("father");
         listView = (ListView)findViewById(R.id.list_discuss);
-        final ArrayAdapter<Discussion> adapter = new DiscussionAdapter(DiscussActivity.this, R.layout.discussion_item, discussionList);
-        listView.setAdapter(adapter);
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Intent intent = new Intent(DiscussActivity.this, CheckDiscussActivity.class);
-                Discussion discussion = discussionList2.get(position);
-                intent.putExtra("discussion", discussion);
-                startActivity(intent);
-            }
-        });
         uiUpdateList = new UIUpdateUtilImp() {
             @Override
             public void onUIUpdate() {
+                if(adapter == null) {
+                    adapter = new DiscussionAdapter(DiscussActivity.this, R.layout.discussion_item, discussionList);
+                    listView.setAdapter(adapter);
+                    listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                        @Override
+                        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                            Intent intent = new Intent(DiscussActivity.this, CheckDiscussActivity.class);
+                            Discussion discussion = discussionList2.get(position);
+                            intent.putExtra("discussion", discussion);
+                            startActivity(intent);
+                        }
+                    });
+                }
+                Log.e(TAG, "通知修改" + isMainThread());
                 discussionList2.clear();
                 discussionList2.addAll(discussionList);
                 adapter.notifyDataSetChanged();
             }
         };
         initDiscussionList();
+    }
+
+    public boolean isMainThread() {
+        return Looper.getMainLooper() == Looper.myLooper();
     }
 
     private void initDiscussionList() {
@@ -111,6 +125,7 @@ public class DiscussActivity extends AppCompatActivity {
                         discussion.save();
                        discussionList.add(discussion);
                     }
+                    Log.e(TAG, "获得数据"+ isMainThread());
                     uiUpdateList.onUpdate();
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -129,7 +144,7 @@ public class DiscussActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()) {
-            case R.id.add_item:
+            case R.id.main_toolbar_add:
                 AddDiscussionDialog dialog = new AddDiscussionDialog(DiscussActivity.this);
                 dialog.setCancelListener(new AddDiscussionDialog.IOnCancelListener() {
                     @Override

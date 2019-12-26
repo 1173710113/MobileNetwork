@@ -109,7 +109,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                     Log.d("LoginActivity", "LoginUser:" + data);
                     ToastUtils.show("登入成功");
                     System.out.println("123456");
-                    Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                    Intent intent = new Intent(LoginActivity.this, StudentMainActivity.class);
                     startActivity(intent);
                     LoginActivity.this.finish();
                 } else {
