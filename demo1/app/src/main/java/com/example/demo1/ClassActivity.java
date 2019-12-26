@@ -41,6 +41,9 @@ public class ClassActivity extends AppCompatActivity {
                     case 0:
                         intent = new Intent(ClassActivity.this, FileActivity.class);
                         break;
+                    case 1:
+                        intent = new Intent(ClassActivity.this, TestActivity.class);
+                        break;
                     case 2:
                         intent = new Intent(ClassActivity.this, HomeWorkActivity.class);
                         break;

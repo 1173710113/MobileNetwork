@@ -21,36 +21,29 @@ import com.example.demo.service.TestService;
 public class TestController {
 	@Autowired
 	private TestService service;
+
 	@RequestMapping(value = "/addtest", method = RequestMethod.POST)
 	@ResponseBody
 	public void addTest(@RequestBody Test test) {
 		service.addTest(test.getName(), test.getStartTime(), test.getEndTime(), test.getCourse_id());
 	}
+
 	@RequestMapping(value = "/gettest/{courseId}", method = RequestMethod.GET)
 	@ResponseBody
 	public List<Test> getTestList(@PathVariable("courseId") String courseId) {
 		return service.getTestList(courseId);
 	}
+
 	@RequestMapping(value = "/addquestion", method = RequestMethod.POST)
 	@ResponseBody
 	public void addquestion(@RequestBody Question question) {
-		service.addQuestion(question.getContent(), question.getAnswer(),
-				question.getTestId(), question.getTestId());
+		service.addQuestion(question.getContent(), question.getAnswer(), question.getTestId(), question.getTestId());
 	}
+
 	@RequestMapping(value = "/gettest/{testId}", method = RequestMethod.GET)
 	@ResponseBody
 	public List<Question> getQuestionList(@PathVariable("testId") String testId) {
 		return service.getQuestionList(testId);
 	}
-	@RequestMapping(value = "/addscore", method = RequestMethod.POST)
-	@ResponseBody
-	public void addScore(@RequestBody Score score) {
-		service.addScore(score.getTestId(), score.getStudentId(), score.getScore());
-	}
-	@RequestMapping(value = "/queryscore/{testId}/{studentId}", method = RequestMethod.GET)
-	@ResponseBody
-	public Score queryScore(@PathVariable("testId") String testId,@PathVariable("studentId") String studentId) {
-		return service.queryScore(testId, studentId);
-	}
-	
+
 }

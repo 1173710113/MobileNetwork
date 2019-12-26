@@ -8,6 +8,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		INSERT INTO test_table(start_time,end_time,name,course_id)
 		VALUES(#{startTime},#{endTime},#{name},#{courseId});
 	</insert>
+	
 	<select id="getTestList" resultMap="test">
 		SELECT *
 		FROM test_table
@@ -21,6 +22,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		<result column="name" property="name"/>
 		<result column="course_id" property="course_id"/>
 	</resultMap>
+	
 	<insert id="addQuestion">
 		INSERT INTO question_table(content,answer,test_id,score)
 		VALUES(#{content},#{answer},#{test_id},#{score});

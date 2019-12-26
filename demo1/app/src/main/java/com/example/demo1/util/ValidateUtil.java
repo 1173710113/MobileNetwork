@@ -1,5 +1,7 @@
 package com.example.demo1.util;
 
+import java.util.List;
+
 public class ValidateUtil {
 
     /**
@@ -10,6 +12,15 @@ public class ValidateUtil {
     public static boolean isEmpty(String str) {
         if(str.equals("") || str == null) {
             return true;
+        }
+        return false;
+    }
+
+    public static boolean isEmptys(List<String> list){
+        for(int i = 0; i <list.size(); i++) {
+            if(isEmpty(list.get(i))) {
+                return true;
+            }
         }
         return false;
     }
