@@ -51,7 +51,11 @@
         <ListView
             android:id="@+id/list_course"
             android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+            android:layout_height="match_parent"
+            android:layout_margin="15dp"
+            android:dividerHeight="20dp"
+            android:divider="@color/white"
+            android:background="@color/white"/>
     </LinearLayout>
 
 </LinearLayout>

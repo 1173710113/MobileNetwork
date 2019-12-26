@@ -4,8 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:gravity="center"
-    app:cardCornerRadius="15dp"
-    android:layout_margin="30dp"
+    app:cardCornerRadius="5dp"
     android:elevation="15dp"
     android:background="@color/searchBarGrey">
 
