@@ -12,6 +12,7 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 
+import com.example.demo1.util.AES;
 import com.example.demo1.util.HttpUtil;
 import com.hjq.toast.ToastUtils;
 
@@ -76,7 +77,11 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                     editor.putBoolean("auto_login", true);
                 }
                 editor.apply();
-                login();
+                try {
+                    login();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
                 break;
             case R.id.button_register:
                 Intent intent = new Intent(LoginActivity.this, RegistActivity.class);
@@ -91,10 +96,11 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         }
     }
 
-    public void login() {
+    public void login() throws Exception {
         final String id = idText.getText().toString();
         final String password = passwordText.getText().toString();
-        final String url = "http://10.0.2.2:8081/mobile/user/login/" + id + "/" + password;
+
+        final String url = "http://10.0.2.2:8081/mobile/user/login/" + AES.Encrypt(id,"abcdefghabcdefgh") + "/" + AES.Encrypt(password,"abcdefghabcdefgh");
         HttpUtil.sendHttpRequest(url, new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
@@ -102,12 +108,18 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             }
 
             @Override
-            public void onResponse(Call call, Response response) throws IOException {
+            public void onResponse(Call call, Response response) throws IOException  {
                 if (response.code() == 200) {
                     String data = response.body().string();
                     writeUserInfo(data);
                     Log.d("LoginActivity", "LoginUser:" + data);
                     ToastUtils.show("登入成功");
+                    try {
+                        System.out.println(AES.Encrypt(id,"abcdefghabcdefgh"));
+                    }catch (Exception e){
+                        System.out.println("11");
+                    }
+
                     System.out.println("123456");
                     Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                     startActivity(intent);
