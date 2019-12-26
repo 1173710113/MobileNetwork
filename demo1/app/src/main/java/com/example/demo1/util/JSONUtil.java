@@ -4,11 +4,17 @@ import com.example.demo1.domain.Course;
 import com.example.demo1.domain.Discussion;
 import com.example.demo1.domain.Homework;
 import com.example.demo1.domain.Reply;
+import com.example.demo1.domain.TeacherCourse;
 import com.example.demo1.domain.User;
 import com.example.demo1.domain.XFile;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.litepal.crud.DataSupport;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class JSONUtil {
 
@@ -167,5 +173,31 @@ public class JSONUtil {
             e.printStackTrace();
         }
         return null;
+    }
+
+    public static List<TeacherCourse> JSONParseTeacherCourse(String data) {
+        List<TeacherCourse> list = new ArrayList<>();
+        try {
+            JSONArray jsonArray = new JSONArray(data);
+            for (int i = 0; i < jsonArray.length(); i++) {
+                JSONObject object = jsonArray.getJSONObject(i);
+                System.out.println(object.toString());
+                String id = object.getString("id");
+                String name = object.getString("name");
+                String teacherId = object.getString("teacherId");
+                String teacherName = object.getString("teacherName");
+                int maxVol = object.getInt("maxVol");
+                String destination = object.getString("destination");
+                String startTime = object.getString("startTime");
+                String endTime = object.getString("endTime");
+                int realVol = object.getInt("realVol");
+                String code = object.getString("code");
+                TeacherCourse course = new TeacherCourse(id, name, teacherId, teacherName, maxVol, destination, startTime, endTime, realVol, code);
+                list.add(course);
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return list;
     }
 }

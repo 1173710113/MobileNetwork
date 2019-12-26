@@ -9,15 +9,15 @@ package com.example.demo.domain;
  */
 public class Course {
 
-	private String id;
-	private String name;
-	private String teacherId;
-	private String teacherName;
-	private int maxVol;
-	private String destination;
-	private String startTime;
-	private String endTime;
-	private int realVol;
+	protected String id;
+	protected String name;
+	protected String teacherId;
+	protected String teacherName;
+	protected int maxVol;
+	protected String destination;
+	protected String startTime;
+	protected String endTime;
+	protected int realVol;
 
 	/**
 	 * @param id

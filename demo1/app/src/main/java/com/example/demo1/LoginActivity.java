@@ -99,8 +99,8 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     public void login() throws Exception {
         final String id = idText.getText().toString();
         final String password = passwordText.getText().toString();
-
-        final String url = "http://10.0.2.2:8081/mobile/user/login/" + AES.Encrypt(id,"abcdefghabcdefgh") + "/" + AES.Encrypt(password,"abcdefghabcdefgh");
+        //final String url = "http://10.0.2.2:8081/mobile/user/login/" + AES.Encrypt(id,"abcdefghabcdefgh") + "/" + AES.Encrypt(password,"abcdefghabcdefgh");
+        final String url = "http://10.0.2.2:8081/mobile/user/login/" + id + "/" + password;
         HttpUtil.sendHttpRequest(url, new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
@@ -119,11 +119,16 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                     }catch (Exception e){
                         System.out.println("11");
                     }
-
-                    System.out.println("123456");
-                    Intent intent = new Intent(LoginActivity.this, StudentMainActivity.class);
-                    startActivity(intent);
-                    LoginActivity.this.finish();
+                    String type = getSharedPreferences("userInfo", MODE_PRIVATE).getString("type", null);
+                    if(type.equals("教师")) {
+                        Intent intent = new Intent(LoginActivity.this, TeacherMainActivity.class);
+                        startActivity(intent);
+                        LoginActivity.this.finish();
+                    } else {
+                        Intent intent = new Intent(LoginActivity.this, StudentMainActivity.class);
+                        startActivity(intent);
+                        LoginActivity.this.finish();
+                    }
                 } else {
                     ToastUtils.show("登入失败");
                 }

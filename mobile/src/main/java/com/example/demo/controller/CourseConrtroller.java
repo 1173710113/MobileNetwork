@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.example.demo.domain.Course;
+import com.example.demo.domain.TeacherCourse;
 import com.example.demo.service.CourseService;
 
 /**
@@ -40,7 +41,7 @@ public class CourseConrtroller {
 	
 	@GetMapping("/query/teacher/{teacherId}")
 	@ResponseBody
-	public List<Course> queryCourseByTeacherId(@PathVariable("teacherId")String teacherId) {
+	public List<TeacherCourse> queryCourseByTeacherId(@PathVariable("teacherId")String teacherId) {
 		return courseService.queryCourseByTeacherId(teacherId);
 	}
 	

@@ -30,18 +30,33 @@
                 android:layout_gravity="center"
                 android:orientation="vertical"
                 android:layout_marginLeft="4dp">
-                <TextView
-                    android:layout_width="wrap_content"
+                <LinearLayout
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="计算机网络"
-                    android:textSize="20sp"
-                    android:id="@+id/course_recycler_item_name"
-                    android:textColor="@color/primary_text"/>
+                    android:orientation="horizontal">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="计算机网络"
+                        android:textSize="20sp"
+                        android:id="@+id/teacher_course_recycler_item_name"
+                        android:textColor="@color/primary_text"/>
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="15dp"
+                            android:text="14524"
+                            android:gravity="right"
+                            android:textSize="15sp"
+                            android:layout_gravity="center"
+                            android:id="@+id/teacher_course_recycler_item_code"
+                            android:textColor="@color/accent"/>
+                </LinearLayout>
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="王中介"
-                    android:id="@+id/course_recycler_item_teacher_name"
+                    android:id="@+id/teacher_course_recycler_item_teacher_name"
                     android:textColor="@color/secondary_text"/>
             </LinearLayout>
         </LinearLayout>
@@ -68,7 +83,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="征信楼"
-                        android:id="@+id/course_recycler_item_destination"
+                        android:id="@+id/teacher_course_recycler_item_destination"
                         android:textSize="20sp"
                         android:textColor="@color/primary_text"/>
                 </LinearLayout>
@@ -87,7 +102,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="15"
-                        android:id="@+id/course_recycler_item_real_vol"
+                        android:id="@+id/teacher_course_recycler_item_real_vol"
                         android:textSize="20sp"
                         android:textColor="@color/primary_text"/>
                     <TextView
@@ -112,7 +127,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="2019-20-14 15:00:00"
-                    android:id="@+id/course_recycler_item_start_date"
+                    android:id="@+id/teacher_course_recycler_item_start_date"
                     android:textSize="20sp"
                     android:textColor="@color/primary_text"/>
             </LinearLayout>
@@ -130,7 +145,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="2019-20-14 15:00:00"
-                    android:id="@+id/course_recycler_item_end_date"
+                    android:id="@+id/teacher_course_recycler_item_end_date"
                     android:textSize="20sp"
                     android:textColor="@color/primary_text"/>
             </LinearLayout>
@@ -160,7 +175,7 @@
                         android:layout_width="15pt"
                         android:layout_height="15pt"
                         android:src="@drawable/ic_question_answer_black_18dp"
-                        android:id="@+id/course_recycler_item_discussion"/>
+                        android:id="@+id/teacher_course_recycler_item_discussion"/>
                     <ImageView
                         android:layout_width="15pt"
                         android:layout_height="15pt"

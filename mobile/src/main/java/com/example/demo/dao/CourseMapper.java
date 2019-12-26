@@ -26,9 +26,7 @@ public interface CourseMapper {
 	 * @param startTime
 	 * @param endTime
 	 */
-	public void addCourse(@Param("name") String name, @Param("teacher_id") String teacherId,
-			@Param("max_vol") int maxVol, @Param("destination") String destination,
-			@Param("start_time") String startTime, @Param("end_time") String endTime);
+	public void addCourse(Course course);
 
 	/**
 	 * 
@@ -49,16 +47,26 @@ public interface CourseMapper {
 	 * @return
 	 */
 	public List<Course> queryCourseByTeacherId(@Param("teacher_id") String teacherId);
+
 	public List<String> getStudentByCourse(@Param("courseId") String courseId);
+
+	public String queryCode(@Param("code") String code);
+
+	public String queryCodeByCourse(@Param("course_id") String courseId);
+
+	public void enroll(@Param("student") String student, @Param("course") String course);
+
+	public void updateCourseCountPlus(@Param("course_id") String courseId);
+
+	public void updateCourseCountMinus(@Param("course_id") String courseId);
+
+	public int queryCourseMaxVol(@Param("course_id") String courseId);
+
+	public int queryCourseRealVol(@Param("course_id") String courseId);
+
+	public String isStudentInCourse(@Param("student_id") String studentId, @Param("course_id") String courseId);
+
+	public void dropCourse(@Param("student_id") String studentId, @Param("course_id") String courseId);
 	
-	public String queryCode(@Param("code")String code);
-	
-	public void enroll(@Param("student")String student, @Param("course")String course);
-	
-	public void updateCourseCountPlus(@Param("course_id")String courseId);
-	public void updateCourseCountMinus(@Param("course_id")String courseId);
-	public int queryCourseMaxVol(@Param("course_id")String courseId);
-	public int queryCourseRealVol(@Param("course_id")String courseId);
-	public String isStudentInCourse(@Param("student_id")String studentId, @Param("course_id")String courseId);
-	public void dropCourse(@Param("student_id")String studentId, @Param("course_id")String courseId);
+	public void addCode(@Param("course_id")String courseId, @Param("code")String code, @Param("due_time")String dueTime);
 }

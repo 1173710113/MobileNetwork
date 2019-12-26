@@ -4,11 +4,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.example.demo.dao.CourseMapper">
-	<insert id="addCourse">
+	<insert id="addCourse" useGeneratedKeys="true" keyProperty="id">
 		INSERT INTO course_table
 		(name, teacher, max_vol,
 		destination, start_time, end_time)
-		VALUES(#{name},#{teacher_id},#{max_vol},#{destination},#{start_time},#{end_time})
+		VALUES(#{name},#{teacherId},#{maxVol},#{destination},#{startTime},#{endTime})
 	</insert>
 	<delete id="deleteCourse">
 		DELETE FROM course_table
@@ -74,6 +74,13 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		enroll_table
 		WHERE code=#{code}
 	</select>
+	
+	<select id="queryCodeByCourse" resultType="String">
+		SELECT code
+		FROM
+		enroll_table
+		WHERE course_id=#{course_id}
+	</select>
 
 	<insert id="enroll">
 		INSERT INTO course_student
@@ -120,6 +127,10 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		DELETE FROM course_student
 		WHERE student=#{student_id} and course=#{course_id}
 	</delete>
-
+	
+	<insert id="addCode">
+		INSERT INTO enroll_table
+		VALUES(#{code}, #{course_id}, #{due_time})
+	</insert>
 
 </mapper>

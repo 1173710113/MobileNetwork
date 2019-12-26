@@ -11,6 +11,8 @@ import org.springframework.stereotype.Service;
 
 import com.example.demo.dao.CourseMapper;
 import com.example.demo.domain.Course;
+import com.example.demo.domain.TeacherCourse;
+import com.example.demo.util.CodeUtil;
 import com.example.demo.util.ValidateUtil;
 
 /**
@@ -25,8 +27,12 @@ public class CourseServiceImp implements CourseService {
 
 	@Override
 	public void addCourse(Course course) {
-		courseMapper.addCourse(course.getName(), course.getTeacherId(), course.getMaxVol(), course.getDestination(),
-				course.getStartTime(), course.getEndTime());
+		String code = CodeUtil.createData();
+		String result = courseMapper.queryCode(code);
+		if(ValidateUtil.isEmpty(result)) {
+			courseMapper.addCourse(course);
+			courseMapper.addCode(course.getId(), code, course.getStartTime());
+		}
 	}
 
 	@Override
@@ -43,10 +49,20 @@ public class CourseServiceImp implements CourseService {
 	}
 
 	@Override
-	public List<Course> queryCourseByTeacherId(String teacherId) {
+	public List<TeacherCourse> queryCourseByTeacherId(String teacherId) {
 		List<Course> courseList = new ArrayList<>();
+		List<TeacherCourse> teacherCourseList = new ArrayList<>();
 		courseList.addAll(courseMapper.queryCourseByTeacherId(teacherId));
-		return courseList;
+		for(int i = 0; i< courseList.size(); i++) {
+			TeacherCourse course = new TeacherCourse(courseList.get(i));
+			String code = courseMapper.queryCodeByCourse(courseList.get(i).getId());
+			if(code == null) {
+				code = "";
+			}
+			course.setCode(code);
+			teacherCourseList.add(course);
+		}
+		return teacherCourseList;
 	}
 
 	@Override
