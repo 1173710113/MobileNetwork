@@ -50,4 +50,15 @@ public interface CourseMapper {
 	 */
 	public List<Course> queryCourseByTeacherId(@Param("teacher_id") String teacherId);
 	public List<String> getStudentByCourse(@Param("courseId") String courseId);
+	
+	public String queryCode(@Param("code")String code);
+	
+	public void enroll(@Param("student")String student, @Param("course")String course);
+	
+	public void updateCourseCountPlus(@Param("course_id")String courseId);
+	public void updateCourseCountMinus(@Param("course_id")String courseId);
+	public int queryCourseMaxVol(@Param("course_id")String courseId);
+	public int queryCourseRealVol(@Param("course_id")String courseId);
+	public String isStudentInCourse(@Param("student_id")String studentId, @Param("course_id")String courseId);
+	public void dropCourse(@Param("student_id")String studentId, @Param("course_id")String courseId);
 }

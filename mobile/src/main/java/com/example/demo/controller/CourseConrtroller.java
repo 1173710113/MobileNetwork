@@ -43,4 +43,18 @@ public class CourseConrtroller {
 	public List<Course> queryCourseByTeacherId(@PathVariable("teacherId")String teacherId) {
 		return courseService.queryCourseByTeacherId(teacherId);
 	}
+	
+	@RequestMapping("/enroll/{code}/{studentId}")
+	@ResponseBody
+	public String enroll(@PathVariable("code")String code, @PathVariable("studentId")String studentId) {
+		return courseService.enroll(code, studentId);
+	}
+	
+	@RequestMapping("/drop/{studentId}/{courseId}")
+	@ResponseBody
+	public String drop(@PathVariable("studentId")String studentId, @PathVariable("courseId")String courseId) {
+		String data = courseService.dropCourse(studentId, courseId);
+		System.out.println(data);
+		return data;
+	}
 }

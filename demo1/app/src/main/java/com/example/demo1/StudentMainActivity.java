@@ -14,11 +14,14 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import com.example.demo1.adapter.CourseRecyclerAdapter;
+import com.example.demo1.dialog.CustomDialog;
+import com.example.demo1.dialog.EnrollDialog;
 import com.example.demo1.domain.Course;
 import com.example.demo1.util.HttpUtil;
 import com.example.demo1.util.JSONUtil;
 import com.example.demo1.util.ValidateUtil;
 import com.google.android.material.navigation.NavigationView;
+import com.hjq.toast.ToastUtils;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -27,6 +30,7 @@ import org.litepal.crud.DataSupport;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import okhttp3.Call;
@@ -44,17 +48,63 @@ public class StudentMainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.student_main_drawer);
 
-        recyclerView = (RecyclerView)findViewById(R.id.student_main_recycler_list);
+        recyclerView = (RecyclerView) findViewById(R.id.student_main_recycler_list);
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(layoutManager);
         adapter = new CourseRecyclerAdapter(courseList);
+        adapter.setDeleteListener(new CourseRecyclerAdapter.IOnDeleteListener() {
+            @Override
+            public void onDelete(final String courseId) {
+                final CustomDialog dialog = new CustomDialog(StudentMainActivity.this);
+                dialog.setTitle("提示").setContent("确认退选课程吗？").setCancelListener(new CustomDialog.IOnCancelListener() {
+                    @Override
+                    public void onCancel() {
+                        dialog.dismiss();
+                    }
+                }).setConfirmListener(new CustomDialog.IOnConfirmListener() {
+                    @Override
+                    public void onConfirm() {
+                        String studentId = getSharedPreferences("userInfo", MODE_PRIVATE).getString("id", null);
+                        if (ValidateUtil.isEmptys(Arrays.asList(studentId, courseId))) {
+                            ToastUtils.show("退选失败");
+                            return;
+                        }
+                        String url = "http://10.0.2.2:8081/mobile/course/drop/" + studentId + "/" + courseId;
+                        HttpUtil.sendHttpRequest(url, new Callback() {
+                            @Override
+                            public void onFailure(Call call, IOException e) {
+                                ToastUtils.show("退选失败");
+                            }
+
+                            @Override
+                            public void onResponse(Call call, Response response) throws IOException {
+                                String data = response.body().string();
+                                if (!data.equals("success")) {
+                                    ToastUtils.show("退选失败");
+                                } else {
+                                    ToastUtils.show("退选成功");
+                                    dialog.dismiss();
+                                    runOnUiThread(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            queryCourse();
+                                        }
+                                    });
+                                }
+                            }
+                        });
+                    }
+                }).show();
+            }
+        });
         recyclerView.setAdapter(adapter);
-        Toolbar toolbar = (Toolbar)findViewById(R.id.student_main_toolbar);
+
+        Toolbar toolbar = (Toolbar) findViewById(R.id.student_main_toolbar);
         setSupportActionBar(toolbar);
-        mDrawerLayout = (DrawerLayout)findViewById(R.id.student_main_drawer);
-        NavigationView navView = (NavigationView)findViewById(R.id.student_main_nav);
+        mDrawerLayout = (DrawerLayout) findViewById(R.id.student_main_drawer);
+        NavigationView navView = (NavigationView) findViewById(R.id.student_main_nav);
         ActionBar actionBar = getSupportActionBar();
-        if(actionBar != null) {
+        if (actionBar != null) {
             actionBar.setDisplayHomeAsUpEnabled(true);
             actionBar.setHomeAsUpIndicator(R.drawable.ic_menu_white_18dp);
         }
@@ -74,17 +124,61 @@ public class StudentMainActivity extends AppCompatActivity {
         return true;
     }
 
-    public boolean onOptionsItemSelected(MenuItem item){
-        switch (item.getItemId()){
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
             case android.R.id.home:
                 mDrawerLayout.openDrawer(GravityCompat.START);
+                break;
+            case R.id.main_toolbar_add:
+                final EnrollDialog dialog = new EnrollDialog(StudentMainActivity.this);
+                dialog.setOnCancelListener(new EnrollDialog.IOnCancelListener() {
+                    @Override
+                    public void onCancel() {
+                        dialog.dismiss();
+                    }
+                }).setOnConfirmListener(new EnrollDialog.IOnConfirmListener() {
+                    @Override
+                    public void onConfirm() {
+                        String code = dialog.getCode();
+                        if (ValidateUtil.isEmpty(code) || code.length() != 6) {
+                            ToastUtils.show("请输入6位选课码");
+                            return;
+                        }
+                        String studentId = getSharedPreferences("userInfo", MODE_PRIVATE).getString("id", "ERROR");
+                        String url = "http://10.0.2.2:8081/mobile/course/enroll/" + code + "/" + studentId;
+                        HttpUtil.sendHttpRequest(url, new Callback() {
+                            @Override
+                            public void onFailure(Call call, IOException e) {
+                                ToastUtils.show("选课失败");
+                            }
+
+                            @Override
+                            public void onResponse(Call call, Response response) throws IOException {
+                                String data = response.body().string();
+                                if (!data.equals("success")) {
+                                    ToastUtils.show("选课失败");
+                                    return;
+                                }
+                                ToastUtils.show("选课成功");
+                                dialog.dismiss();
+                                runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        queryCourse();
+                                    }
+                                });
+                            }
+                        });
+                    }
+                }).show();
                 break;
         }
         return true;
     }
-    private void queryCourse(){
+
+    private void queryCourse() {
         String id = getSharedPreferences("userInfo", MODE_PRIVATE).getString("id", null);
-        if(id == null) {
+        if (id == null) {
             return;
         }
         String url = "http://10.0.2.2:8081/mobile/course/query/student/" + id;
@@ -104,8 +198,7 @@ public class StudentMainActivity extends AppCompatActivity {
             @Override
             public void onResponse(Call call, Response response) throws IOException {
                 final String data = response.body().string();
-                if (ValidateUtil.isEmpty(data))
-                {
+                if (ValidateUtil.isEmpty(data)) {
                     return;
                 }
                 runOnUiThread(new Runnable() {

@@ -6,6 +6,7 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ArrayAdapter;
+import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -38,6 +39,7 @@ public class CheckDiscussActivity extends AppCompatActivity implements View.OnCl
     private List<Reply> replyList2 = new ArrayList<>();
     private UIUpdateUtilImp uiUpdateList;
     private ListView listView;
+    TextView titleText, posterNameText, contentText, postDateText, countText;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,9 +48,19 @@ public class CheckDiscussActivity extends AppCompatActivity implements View.OnCl
         //获得discussion
         discussion = (Discussion)getIntent().getSerializableExtra("discussion");
         listView = (ScrollListView)findViewById(R.id.list_comment);
-        //显示标题和内容
-        ((TextView)findViewById(R.id.check_discussion_title)).setText(discussion.getTitle());
-        ((TextView)findViewById(R.id.check_discussion_content)).setText(discussion.getContent());
+
+        //显示头
+        titleText = (TextView)findViewById(R.id.check_discussion_title);
+        posterNameText = (TextView)findViewById(R.id.check_discussion_poster_name);
+        contentText = (TextView)findViewById(R.id.check_discussion_content);
+        postDateText = (TextView)findViewById(R.id.check_discussion_post_date);
+        countText = (TextView)findViewById(R.id.check_discussion_count);
+
+        titleText.setText(discussion.getTitle());
+        posterNameText.setText(discussion.getPosterName());
+        contentText.setText(discussion.getContent());
+        postDateText.setText(discussion.getPostTime());
+        countText.setText(Integer.toString(discussion.getReplyCount()));
 
         final ArrayAdapter<Reply> adapter = new ReplyAdapter(CheckDiscussActivity.this, R.layout.reply_item, replyList2);
         listView.setAdapter(adapter);

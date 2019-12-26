@@ -36,5 +36,9 @@ public interface CourseService {
 	 */
 	public List<Course> queryCourseByTeacherId(String teacherId);
 	public List<String> getCourseStudent(String courseId);
+	
+	public String enroll(String code, String studentId);
+	
+	public String dropCourse(String studentId, String courseId);
 
 }

@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 
 import com.example.demo.dao.CourseMapper;
 import com.example.demo.domain.Course;
+import com.example.demo.util.ValidateUtil;
 
 /**
  * @author msi-user
@@ -52,6 +53,36 @@ public class CourseServiceImp implements CourseService {
 	public List<String> getCourseStudent(String courseId) {
 		
 		return courseMapper.getStudentByCourse(courseId);
+	}
+
+	@Override
+	public String enroll(String code, String studentId) {
+		String course = courseMapper.queryCode(code);
+		if(ValidateUtil.isEmpty(course)) {
+			return "fail";
+		}
+		int real = courseMapper.queryCourseRealVol(course);
+		int max = courseMapper.queryCourseMaxVol(course);
+		if(real >= max) {
+			return "fail";
+		}
+		courseMapper.enroll(studentId, course);
+		courseMapper.updateCourseCountPlus(course);
+		return "success";
+	}
+
+	@Override
+	public String dropCourse(String studentId, String courseId) {
+		String tempCourse = courseMapper.isStudentInCourse(studentId, courseId);
+		if(ValidateUtil.isEmpty(tempCourse)) {
+			return "fail";
+		}
+		if(courseMapper.queryCourseRealVol(courseId) < 1) {
+			return "fail";
+		}
+		courseMapper.dropCourse(studentId, courseId);
+		courseMapper.updateCourseCountMinus(courseId);
+		return "success";
 	}
 
 }

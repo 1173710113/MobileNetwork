@@ -21,7 +21,11 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme1"
         android:usesCleartextTraffic="true">
-        <activity android:name=".DiscussionByCourseActivity"></activity>
+        <activity android:name=".DiscussionDetailActivity"
+            android:label=""></activity>
+        <activity
+            android:name=".DiscussionByCourseActivity"
+            android:label="" />
         <activity
             android:name=".StudentMainActivity"
             android:label="" />

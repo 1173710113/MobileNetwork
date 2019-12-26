@@ -1,4 +1,4 @@
-package com.example.demo1.util;
+package com.example.demo.util;
 
 import java.util.List;
 
@@ -9,12 +9,14 @@ public class ValidateUtil {
      * @param str
      * @return
      */
+
     public static boolean isEmpty(String str) {
         if(str == null || str.equals("")) {
             return true;
         }
         return false;
     }
+
 
     public static boolean isEmptys(List<String> list){
         for(int i = 0; i <list.size(); i++) {

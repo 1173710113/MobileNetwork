@@ -1,5 +1,6 @@
 package com.example.demo1.adapter;
 
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -8,8 +9,10 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.demo1.DiscussionDetailActivity;
 import com.example.demo1.R;
 import com.example.demo1.domain.Discussion;
+import com.example.demo1.util.ValidateUtil;
 
 import java.util.List;
 
@@ -26,7 +29,7 @@ public class DiscussionRecyclerAdapter extends RecyclerView.Adapter<DiscussionRe
             posterNameText = (TextView)view.findViewById(R.id.discussion_recycler_item_poster_name);
             contentText = (TextView)view.findViewById(R.id.discussion_recycler_item_content);
             postDateText = (TextView)view.findViewById(R.id.discussion_recycler_item_post_date);
-            contentText = (TextView)view.findViewById(R.id.discussion_recycler_item_count);
+            countText = (TextView)view.findViewById(R.id.discussion_recycler_item_count);
         }
     }
 
@@ -44,16 +47,30 @@ public class DiscussionRecyclerAdapter extends RecyclerView.Adapter<DiscussionRe
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        Discussion discussion = mDiscussionList.get(position);
+        final Discussion discussion = mDiscussionList.get(position);
         holder.titleText.setText(discussion.getTitle());
         holder.posterNameText.setText(discussion.getPosterName());
-        holder.contentText.setText(discussion.getContent());
+        String content = discussion.getContent();
+        if(ValidateUtil.isEmpty(content)) {
+            holder.contentText.setVisibility(View.GONE);
+        } else {
+            holder.contentText.setText(discussion.getContent());
+        }
         holder.postDateText.setText(discussion.getPostTime());
-        holder.contentText.setText(Integer.toString(discussion.getReplyCount()));
+        holder.countText.setText(Integer.toString(discussion.getReplyCount()));
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(v.getContext(), DiscussionDetailActivity.class);
+                intent.putExtra("discussion", discussion);
+                v.getContext().startActivity(intent);
+            }
+        });
     }
 
     @Override
     public int getItemCount() {
         return mDiscussionList.size();
     }
+
 }

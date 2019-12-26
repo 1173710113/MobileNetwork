@@ -36,7 +36,7 @@
                 android:layout_height="wrap_content"
                 android:text="如何使用lambada表达式？"
                 android:textSize="20sp"
-                android:id="@+id/discussion_recycler_item_title"
+                android:id="@+id/homework_recycler_item_title"
                 android:textColor="@color/primary_text"/>
             <LinearLayout
                 android:layout_width="match_parent"
@@ -46,7 +46,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="王中介"
-                    android:id="@+id/discussion_recycler_item_poster_name"
+                    android:id="@+id/homework_recycler_item_poster_name"
                     android:textColor="@color/secondary_text"/>
             </LinearLayout>
         </LinearLayout>
@@ -69,7 +69,7 @@
                 android:layout_marginLeft="10dp"
                 android:layout_marginRight="10dp"
                 android:text="123215645645645645456"
-                android:id="@+id/discussion_recycler_item_content"
+                android:id="@+id/homework_recycler_item_content"
                 android:textSize="20sp"
                 android:ellipsize="end"
                 android:textColor="@color/secondary_text"/>
@@ -89,26 +89,10 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:id="@+id/discussion_recycler_item_post_date"
+                android:id="@+id/homework_recycler_item_post_date"
                 android:text="2019-15-15 15:15:15"
                 android:textColor="@color/secondary_text"/>
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="right">
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="15"
-                    android:id="@+id/discussion_recycler_item_count"
-                    android:textColor="@color/primary_text"/>
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="评论"
-                    android:textColor="@color/primary_text"/>
-            </LinearLayout>
         </LinearLayout>
     </LinearLayout>
 </androidx.cardview.widget.CardView>
