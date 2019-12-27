@@ -1,9 +1,11 @@
 package com.example.demo1.domain;
 
+import org.litepal.crud.DataSupport;
+
 import java.io.Serializable;
 
-public class Test implements Serializable {
-	protected String id;
+public class Test extends DataSupport implements Serializable {
+	protected String testId;
 	protected String name;
 	protected String startTime;
 	protected String endTime;
@@ -17,17 +19,17 @@ public class Test implements Serializable {
 	}
 	public Test(String id, String name, String startTime, String endTime, String course_id) {
 		super();
-		this.id = id;
+		this.testId = id;
 		this.name = name;
 		this.startTime = startTime;
 		this.endTime = endTime;
 		this.course_id = course_id;
 	}
 	public String getId() {
-		return id;
+		return testId;
 	}
 	public void setId(String id) {
-		this.id = id;
+		this.testId = id;
 	}
 	public String getName() {
 		return name;
@@ -49,7 +51,7 @@ public class Test implements Serializable {
 	}
 	@Override
 	public String toString() {
-		return "Test [id=" + id + ", name=" + name + ", startTime=" + startTime + ", endTime=" + endTime + "]";
+		return "Test [id=" + testId + ", name=" + name + ", startTime=" + startTime + ", endTime=" + endTime + "]";
 	}
 	
 }

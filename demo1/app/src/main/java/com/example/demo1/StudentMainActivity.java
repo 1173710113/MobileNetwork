@@ -116,6 +116,11 @@ public class StudentMainActivity extends AppCompatActivity {
         queryCourse();
     }
 
+    public void onResume(){
+        super.onResume();
+        mDrawerLayout.closeDrawers();
+        queryCourse();
+    }
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.main_toolbar, menu);
         return true;
@@ -196,6 +201,14 @@ public class StudentMainActivity extends AppCompatActivity {
             public void onResponse(Call call, Response response) throws IOException {
                 final String data = response.body().string();
                 if (ValidateUtil.isEmpty(data)) {
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            courseList.clear();
+                            courseList.addAll(DataSupport.findAll(Course.class));
+                            adapter.notifyDataSetChanged();
+                        }
+                    });
                     return;
                 }
                 runOnUiThread(new Runnable() {

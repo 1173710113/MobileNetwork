@@ -47,7 +47,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	<select id="queryScore" resultMap="score">
 		SELECT *
 		FROM score_table
-		WHERE test_id = #{testId} and student_id = #{studentID} 
+		WHERE test_id = #{test_id} and student_id = #{student_id} 
 	</select>
 	<resultMap type="Score" id="score">
 		<id column="id" property="id"/>

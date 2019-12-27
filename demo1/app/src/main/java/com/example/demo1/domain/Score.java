@@ -1,7 +1,9 @@
 package com.example.demo1.domain;
 
-public class Score {
-	private String id;
+import org.litepal.crud.DataSupport;
+
+public class Score extends DataSupport {
+	private String scoreId;
 	private String testId;
 	private String studentId;
 	private String score;
@@ -15,17 +17,17 @@ public class Score {
 	}
 	public Score(String id, String testId, String studentId, String score, String everyScore) {
 		super();
-		this.id = id;
+		this.scoreId = id;
 		this.testId = testId;
 		this.studentId = studentId;
 		this.score = score;
 		this.everyScore = everyScore;
 	}
 	public String getId() {
-		return id;
+		return scoreId;
 	}
 	public void setId(String id) {
-		this.id = id;
+		this.scoreId = id;
 	}
 	public String getTestId() {
 		return testId;

@@ -45,6 +45,10 @@ public class MyNavView {
                                 activity.finish();
                             }
                         }).show();
+                        break;
+                    case R.id.student_main_nav_talk:
+                        Intent intent = new Intent(context, DiscussionByCourseActivity.class);
+                        context.startActivity(intent);
                 }
                 return true;
             }

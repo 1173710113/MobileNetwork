@@ -15,11 +15,15 @@ import android.view.MenuItem;
 
 import com.example.demo1.adapter.TestRecyclerAdapter;
 import com.example.demo1.domain.Course;
+import com.example.demo1.domain.Score;
 import com.example.demo1.domain.Test;
 import com.example.demo1.util.HttpUtil;
 import com.example.demo1.util.JSONUtil;
 import com.example.demo1.util.MyNavView;
+import com.example.demo1.util.ValidateUtil;
 import com.google.android.material.navigation.NavigationView;
+
+import org.litepal.crud.DataSupport;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -44,7 +48,7 @@ public class TeacherTestActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.custom_layout_1);
-        course = (Course)getIntent().getSerializableExtra("course");
+        course = (Course) getIntent().getSerializableExtra("course");
         recyclerView = (RecyclerView) findViewById(R.id.custom_layout_1_recycler_list);
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(layoutManager);
@@ -83,7 +87,7 @@ public class TeacherTestActivity extends AppCompatActivity {
         return true;
     }
 
-    private void queryTest(){
+    private void queryTest() {
         String url = "http://10.0.2.2:8081/mobile/test/gettest/" + course.getId();
         HttpUtil.sendHttpRequest(url, new Callback() {
             @Override
@@ -94,11 +98,20 @@ public class TeacherTestActivity extends AppCompatActivity {
             @Override
             public void onResponse(Call call, Response response) throws IOException {
                 final String data = response.body().string();
-                        final List<Test> list = JSONUtil.JSONParseTest(data);
-                        final Map<Test, Integer> map = new HashMap<>();
-                        for(int i = 0; i < list.size(); i++) {
-                            String url = "http://10.0.2.2:8081/mobile/test/getteststudent/" + list.get(i).getId();
-                            final int finalI = i;
+                DataSupport.deleteAll(Test.class);
+                final List<Test> list = JSONUtil.JSONParseTest(data);
+                for (Test test : list) {
+                    test.save();
+                }
+                String type = getSharedPreferences("userInfo", MODE_PRIVATE).getString("type",null);
+                switch (type) {
+                    case "学生":
+                        String id = getSharedPreferences("userInfo", MODE_PRIVATE).getString("id", null);
+                        if(id == null){
+                            return;
+                        }
+                        for(Test test: list){
+                            String url = "http://10.0.2.2:8081/mobile/test/queryscore/" + test.getId() + "/" + id;
                             HttpUtil.sendHttpRequest(url, new Callback() {
                                 @Override
                                 public void onFailure(Call call, IOException e) {
@@ -107,21 +120,52 @@ public class TeacherTestActivity extends AppCompatActivity {
 
                                 @Override
                                 public void onResponse(Call call, Response response) throws IOException {
-                                    Integer count = Integer.parseInt(response.body().string());
-                                    map.put(list.get(finalI), count);
+                                        if(response.code() == 200) {
+                                            final String data = response.body().string();
+                                            if(!ValidateUtil.isEmpty(data)){
+                                                runOnUiThread(new Runnable() {
+                                                    @Override
+                                                    public void run() {
+                                                        Score score = JSONUtil.JSONParseScore(data);
+                                                        DataSupport.deleteAll(Score.class, "scoreId = ?", score.getId());
+                                                        score.save();
+                                                        adapter.notifyDataSetChanged();
+                                                    }
+                                                });
+                                            }
+                                        }
                                 }
                             });
                         }
-                        runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                testList.clear();
-                                mMap.clear();
-                                testList.addAll(list);
-                                mMap.putAll(map);
-                                adapter.notifyDataSetChanged();
-                            }
-                        });
+                        break;
+                }
+                final Map<Test, Integer> map = new HashMap<>();
+                for (int i = 0; i < list.size(); i++) {
+                    String url = "http://10.0.2.2:8081/mobile/test/getteststudent/" + list.get(i).getId();
+                    final int finalI = i;
+                    HttpUtil.sendHttpRequest(url, new Callback() {
+                        @Override
+                        public void onFailure(Call call, IOException e) {
+
+                        }
+
+                        @Override
+                        public void onResponse(Call call, Response response) throws IOException {
+                            Integer count = Integer.parseInt(response.body().string());
+                            map.put(list.get(finalI), count);
+                        }
+                    });
+                }
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        testList.clear();
+                        mMap.clear();
+                        testList.addAll(list);
+                        mMap.putAll(map);
+                        adapter.notifyDataSetChanged();
+                    }
+                });
             }
         });
     }

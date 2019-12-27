@@ -1,10 +1,13 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <litepal>
     <dbname value="MobileDatabase"></dbname>
-    <version value="2"></version>
+    <version value="3"></version>
     <list>
         <mapping class="com.example.demo1.domain.Course"></mapping>
         <mapping class="com.example.demo1.domain.Discussion"></mapping>
         <mapping class="com.example.demo1.domain.Reply"></mapping>
+        <mapping class="com.example.demo1.domain.SingleChoiceQuestion"></mapping>
+        <mapping class="com.example.demo1.domain.Test"></mapping>
+        <mapping class="com.example.demo1.domain.Score"></mapping>
     </list>
 </litepal>

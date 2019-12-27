@@ -60,13 +60,13 @@ public class TestController {
 		return service.getStudentList(testId).size();
 	}
 
-	@RequestMapping("/gettest/{testId}/{studentId}")
+	@RequestMapping("/isjoin/{testId}/{studentId}")
 	@ResponseBody
-	public boolean isJoinTest(@PathVariable("testId") String testId, @PathVariable("testId") String studentId) {
+	public String isJoinTest(@PathVariable("testId") String testId, @PathVariable("studentId") String studentId) {
 		if (service.queryScore(testId, studentId) == null) {
-			return false;
+			return "false";
 		}
-		return true;
+		return "true";
 	}
 
 }

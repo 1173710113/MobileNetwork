@@ -270,4 +270,19 @@ public class JSONUtil {
         }
         return object;
     }
+
+    public static Score JSONParseScore(String data) {
+        try {
+            JSONObject object = new JSONObject(data);
+            String id = object.getString("id");
+            String testId = object.getString("testId");
+            String studentId = object.getString("studentId");
+            String score = object.getString("score");
+            String everyScore = object.getString("everyScore");
+            return new Score(id, testId, studentId, score, everyScore);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
 }

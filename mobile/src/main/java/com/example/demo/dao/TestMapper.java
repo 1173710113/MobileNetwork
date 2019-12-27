@@ -21,7 +21,7 @@ public interface TestMapper {
 
 	public List<Question> getQuestionList(@Param("testId") String testId);
 
-	public Score queryScore(@Param("studentId") String studentId, @Param("testId") String testId);
+	public Score queryScore(@Param("student_id") String studentId, @Param("test_id") String testId);
 
 	public void addScore(@Param("test_id") String testId, @Param("student_id") String studentId,
 			@Param("score") String score, @Param("everyScore") String everyScore);

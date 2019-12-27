@@ -54,22 +54,22 @@ public class DiscussionByCourseActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.custom_layout_1);
 
-        course = (Course)getIntent().getSerializableExtra("course");
+        course = (Course) getIntent().getSerializableExtra("course");
 
-        recyclerView = (RecyclerView)findViewById(R.id.custom_layout_1_recycler_list);
+        recyclerView = (RecyclerView) findViewById(R.id.custom_layout_1_recycler_list);
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(layoutManager);
         adapter = new DiscussionRecyclerAdapter(discussionList);
         recyclerView.setAdapter(adapter);
 
-        Toolbar toolbar = (Toolbar)findViewById(R.id.custom_layout_1_toolbar);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.custom_layout_1_toolbar);
         setSupportActionBar(toolbar);
-        mDrawerLayout = (DrawerLayout)findViewById(R.id.custom_layout_1_drawer);
-        NavigationView navView = (NavigationView)findViewById(R.id.custom_layout_1_nav);
+        mDrawerLayout = (DrawerLayout) findViewById(R.id.custom_layout_1_drawer);
+        NavigationView navView = (NavigationView) findViewById(R.id.custom_layout_1_nav);
         MyNavView.initNavView(DiscussionByCourseActivity.this, DiscussionByCourseActivity.this, navView);
 
         ActionBar actionBar = getSupportActionBar();
-        if(actionBar != null) {
+        if (actionBar != null) {
             actionBar.setDisplayHomeAsUpEnabled(true);
             actionBar.setHomeAsUpIndicator(R.drawable.ic_menu_white_18dp);
         }
@@ -81,12 +81,15 @@ public class DiscussionByCourseActivity extends AppCompatActivity {
         return true;
     }
 
-    public boolean onOptionsItemSelected(MenuItem item){
-        switch (item.getItemId()){
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
             case android.R.id.home:
                 mDrawerLayout.openDrawer(GravityCompat.START);
                 break;
             case R.id.main_toolbar_add:
+                if(course == null) {
+                    return true;
+                }
                 AddDiscussionDialog dialog = new AddDiscussionDialog(DiscussionByCourseActivity.this);
                 dialog.setCancelListener(new AddDiscussionDialog.IOnCancelListener() {
                     @Override
@@ -98,7 +101,7 @@ public class DiscussionByCourseActivity extends AppCompatActivity {
                     public void onConfirm(final AddDiscussionDialog dialog) {
                         String title = dialog.getTitle();
                         String content = dialog.getContent();
-                        if(ValidateUtil.isEmpty(title)) {
+                        if (ValidateUtil.isEmpty(title)) {
                             ToastUtils.show("标题不能为空");
                             return;
                         }
@@ -129,44 +132,90 @@ public class DiscussionByCourseActivity extends AppCompatActivity {
         return true;
     }
 
+    public void onResume() {
+        super.onResume();
+        mDrawerLayout.closeDrawers();
+        queryDiscussion();
+    }
+
     private void queryDiscussion() {
-        String courseId = course.getId();
-        String url = "http://10.0.2.2:8081/mobile/discussion/querydiscussion/" + courseId;
-        HttpUtil.sendHttpRequest(url, new Callback() {
-            @Override
-            public void onFailure(Call call, IOException e) {
 
-            }
+        if (course != null) {
+            String courseId = course.getId();
+            String url = "http://10.0.2.2:8081/mobile/discussion/querydiscussion/" + courseId;
+            HttpUtil.sendHttpRequest(url, new Callback() {
+                @Override
+                public void onFailure(Call call, IOException e) {
 
-            @Override
-            public void onResponse(Call call, Response response) throws IOException {
-                final String data = response.body().string();
-                if (ValidateUtil.isEmpty(data))
-                {
-                    return;
                 }
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        List<Discussion> list = new ArrayList<>();
-                        try {
-                            DataSupport.deleteAll(Discussion.class, "courseId = ?", course.getId());
-                            JSONArray jsonArray = new JSONArray(data);
-                            for(int i = 0; i < jsonArray.length(); i++) {
-                                JSONObject object = jsonArray.getJSONObject(i);
-                                Discussion discussion = JSONUtil.JSONParseDiscussion(object);
-                                discussion.save();
-                                list.add(discussion);
-                            }
-                            discussionList.clear();
-                            discussionList.addAll(list);
-                            adapter.notifyDataSetChanged();
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
+
+                @Override
+                public void onResponse(Call call, Response response) throws IOException {
+                    final String data = response.body().string();
+                    if (ValidateUtil.isEmpty(data)) {
+                        return;
                     }
-                });
-            }
-        });
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            List<Discussion> list = new ArrayList<>();
+                            try {
+                                DataSupport.deleteAll(Discussion.class, "courseId = ?", course.getId());
+                                JSONArray jsonArray = new JSONArray(data);
+                                for (int i = 0; i < jsonArray.length(); i++) {
+                                    JSONObject object = jsonArray.getJSONObject(i);
+                                    Discussion discussion = JSONUtil.JSONParseDiscussion(object);
+                                    discussion.save();
+                                    list.add(discussion);
+                                }
+                                discussionList.clear();
+                                discussionList.addAll(list);
+                                adapter.notifyDataSetChanged();
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    });
+                }
+            });
+        } else {
+            final String id =getSharedPreferences("userInfo", MODE_PRIVATE).getString("id", null);
+            String url = "http://10.0.2.2:8081/mobile/discussion/querydiscussionbyposter/" + id;
+            HttpUtil.sendHttpRequest(url, new Callback() {
+                @Override
+                public void onFailure(Call call, IOException e) {
+
+                }
+
+                @Override
+                public void onResponse(Call call, Response response) throws IOException {
+                    final String data = response.body().string();
+                    if (ValidateUtil.isEmpty(data)) {
+                        return;
+                    }
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            List<Discussion> list = new ArrayList<>();
+                            try {
+                                DataSupport.deleteAll(Discussion.class, "posterId = ?", id);
+                                JSONArray jsonArray = new JSONArray(data);
+                                for (int i = 0; i < jsonArray.length(); i++) {
+                                    JSONObject object = jsonArray.getJSONObject(i);
+                                    Discussion discussion = JSONUtil.JSONParseDiscussion(object);
+                                    discussion.save();
+                                    list.add(discussion);
+                                }
+                                discussionList.clear();
+                                discussionList.addAll(list);
+                                adapter.notifyDataSetChanged();
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    });
+                }
+            });
+        }
     }
 }

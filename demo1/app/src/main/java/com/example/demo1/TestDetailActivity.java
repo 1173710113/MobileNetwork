@@ -8,6 +8,7 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -28,6 +29,7 @@ import com.google.android.material.navigation.NavigationView;
 import com.hjq.toast.ToastUtils;
 
 import org.json.JSONObject;
+import org.litepal.crud.DataSupport;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -101,6 +103,13 @@ public class TestDetailActivity extends AppCompatActivity {
                 String type = getSharedPreferences("userInfo", MODE_PRIVATE).getString("type", null);
                 switch (type){
                     case "学生":
+                        String id = getSharedPreferences("userInfo", Context.MODE_PRIVATE).getString("id", null);
+                        if(id != null) {
+                            List<Score> result = DataSupport.where("testId = ? and studentId = ?", test.getId(), id).find(Score.class);
+                            if(result != null && result.size() != 0) {
+                                return true;
+                            }
+                        }
                         final CustomDialog dialog = new CustomDialog(TestDetailActivity.this);
                         dialog.setTitle("提示").setContent("确认提交？").setCancelListener(new CustomDialog.IOnCancelListener() {
                             @Override

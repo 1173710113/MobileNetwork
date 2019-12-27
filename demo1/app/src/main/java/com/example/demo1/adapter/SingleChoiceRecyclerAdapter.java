@@ -2,6 +2,7 @@ package com.example.demo1.adapter;
 
 import android.content.Context;
 import android.graphics.Color;
+import android.os.strictmode.CredentialProtectedWhileLockedViolation;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,8 +15,12 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.demo1.R;
+import com.example.demo1.domain.Score;
 import com.example.demo1.domain.SingleChoiceQuestion;
 
+import org.litepal.crud.DataSupport;
+
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -35,14 +40,20 @@ public class SingleChoiceRecyclerAdapter extends RecyclerView.Adapter<SingleChoi
          RadioGroup choiceGroup;
          RadioButton a,b,c,d;
          LinearLayout choiceLayout;
+         Map<String, TextView> holderMap;
 
          public ViewHolder(@NonNull View itemView) {
              super(itemView);
              content = (TextView)itemView.findViewById(R.id.single_choice_content);
+             holderMap = new HashMap<>();
              choiceA = (TextView)itemView.findViewById(R.id.single_choice_A);
+             holderMap.put("A", choiceA);
              choiceB = (TextView)itemView.findViewById(R.id.single_choice_B);
+             holderMap.put("B", choiceB);
              choiceC = (TextView)itemView.findViewById(R.id.single_choice_C);
+             holderMap.put("C", choiceC);
              choiceD = (TextView)itemView.findViewById(R.id.single_choice_D);
+             holderMap.put("D", choiceD);
              choiceGroup = (RadioGroup)itemView.findViewById(R.id.single_choice_answer);
              a = (RadioButton)itemView.findViewById(R.id.single_answer_a);
              b = (RadioButton)itemView.findViewById(R.id.single_answer_b);
@@ -73,12 +84,39 @@ public class SingleChoiceRecyclerAdapter extends RecyclerView.Adapter<SingleChoi
                 holder.choiceC.setText("C." + question.getChoiceC());
                 holder.choiceD.setText("D." + question.getChoiceD());
                 holder.choiceGroup.setVisibility(View.GONE);
+                String answer = question.getAnswer();
+                holder.holderMap.get(answer).setTextColor(Color.parseColor("448AFF"));
                 break;
             case "学生":
                 holder.a.setText("A." + question.getChoiceA());
                 holder.b.setText("B." + question.getChoiceB());
                 holder.c.setText("C." + question.getChoiceC());
                 holder.d.setText("D." + question.getChoiceD());
+                String id = holder.itemView.getContext().getSharedPreferences("userInfo", Context.MODE_PRIVATE).getString("id", null);
+                if(id != null) {
+                    List<Score> result = DataSupport.where("testId = ? and studentId = ?", question.getTestId(), id).find(Score.class);
+                    if(result != null && result.size() != 0) {
+                        holder.choiceGroup.setVisibility(View.GONE);
+                        holder.choiceA.setText("A." + question.getChoiceA());
+                        holder.choiceB.setText("B." + question.getChoiceB());
+                        holder.choiceC.setText("C." + question.getChoiceC());
+                        holder.choiceD.setText("D." + question.getChoiceD());
+                        List<String> scores =Arrays.asList(result.get(0).getEveryScore().split("/"));
+                        String score = scores.get(position);
+                        String first = score.substring(0,1);
+                        if(first.equals("1")){
+                        } else {
+                            String second = score.substring(1);
+                            if(second.equals("0")) {
+                                holder.holderMap.get(question.getAnswer()).setTextColor(Color.parseColor("#BDBDBD"));
+                            } else {
+                                holder.holderMap.get(second).setTextColor(Color.parseColor("#FF0000"));
+                            }
+                        }
+                    } else {
+                        holder.choiceLayout.setVisibility(View.GONE);
+                    }
+                }
                 holder.choiceGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
                     @Override
                     public void onCheckedChanged(RadioGroup group, int checkedId) {
@@ -114,22 +152,6 @@ public class SingleChoiceRecyclerAdapter extends RecyclerView.Adapter<SingleChoi
                         }
                     }
                 });
-                holder.choiceLayout.setVisibility(View.GONE);
-                break;
-        }
-        String answer = question.getAnswer();
-        switch (answer) {
-            case "A" :
-                holder.choiceA.setTextColor(Color.parseColor("#448AFF"));
-                break;
-            case "B":
-                holder.choiceB.setTextColor(Color.parseColor("#448AFF"));
-                break;
-            case "C":
-                holder.choiceC.setTextColor(Color.parseColor("#448AFF"));
-                break;
-            case "D":
-                holder.choiceD.setTextColor(Color.parseColor("#448AFF"));
                 break;
         }
     }
