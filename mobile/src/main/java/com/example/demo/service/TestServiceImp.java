@@ -9,6 +9,7 @@ import com.example.demo.dao.TestMapper;
 import com.example.demo.domain.Question;
 import com.example.demo.domain.Score;
 import com.example.demo.domain.Test;
+import com.example.demo.domain.TestToTeacher;
 @Service
 public class TestServiceImp implements TestService {
 	@Autowired
@@ -50,6 +51,5 @@ public class TestServiceImp implements TestService {
 		// TODO Auto-generated method stub
 		return testMapper.queryScore(studentId, testId);
 	}
-
 
 }

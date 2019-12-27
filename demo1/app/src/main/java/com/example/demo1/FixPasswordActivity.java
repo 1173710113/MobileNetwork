@@ -52,9 +52,6 @@ public class FixPasswordActivity extends AppCompatActivity implements View.OnCli
                     }
                 }
                 break;
-            case R.id.open_nav:
-                finish();
-                break;
         }
     }
 

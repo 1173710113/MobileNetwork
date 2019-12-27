@@ -24,4 +24,6 @@ public interface TestMapper {
 			@Param("score") String score);
 
 	public Score queryScore(@Param("studentId") String studentId, @Param("testId") String testId);
+	
+	public List<String> queryTestComplited(String testId);
 }

@@ -40,13 +40,11 @@
             android:label="" />
         <activity android:name=".AddTestActivity" />
         <activity android:name=".TestActivity" />
-        <activity android:name=".UserActivity" />
         <activity android:name=".RegistActivity" />
         <activity android:name=".CourseManageActivity" />
         <activity android:name=".AddUserActivity" />
         <activity android:name=".UserManageActivity" />
         <activity android:name=".AnalysisActivity" />
-        <activity android:name=".CallActivity" />
         <activity android:name=".LoginActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -55,15 +53,8 @@
             </intent-filter>
         </activity>
         <activity android:name=".FixPasswordActivity" />
-        <activity android:name=".CheckDiscussActivity" />
-        <activity android:name=".DiscussActivity" />
         <activity android:name=".DrawActivity" />
-        <activity android:name=".HomeWorkActivity" />
-        <activity android:name=".ClassActivity" />
         <activity android:name=".FileActivity" />
-        <activity
-            android:name=".MainActivity"
-            android:label="" />
     </application>
 
 </manifest>

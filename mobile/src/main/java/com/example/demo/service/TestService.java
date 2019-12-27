@@ -5,6 +5,7 @@ import java.util.List;
 import com.example.demo.domain.Question;
 import com.example.demo.domain.Score;
 import com.example.demo.domain.Test;
+import com.example.demo.domain.TestToTeacher;
 
 public interface TestService {
 	public void addTest(Test test, List<Question> questions);

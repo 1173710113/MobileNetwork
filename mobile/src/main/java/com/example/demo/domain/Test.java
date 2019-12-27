@@ -1,11 +1,11 @@
 package com.example.demo.domain;
 
 public class Test {
-	private String id;
-	private String name;
-	private String startTime;
-	private String endTime;
-	private String course_id;
+	protected String id;
+	protected String name;
+	protected String startTime;
+	protected String endTime;
+	protected String course_id;
 	
 	public String getCourse_id() {
 		return course_id;

@@ -55,9 +55,9 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         boolean isAutoLogin = pref.getBoolean("auto_login", false);
         if (isAutoLogin) {
             autoLogin.setChecked(true);
-            Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+            //Intent intent = new Intent(LoginActivity.this, MainActivity.class);
             ToastUtils.show("登入成功");
-            startActivity(intent);
+            //startActivity(intent);
             LoginActivity.this.finish();
         }
         loginBtn.setOnClickListener(this);
