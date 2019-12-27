@@ -94,21 +94,34 @@ public class TeacherTestActivity extends AppCompatActivity {
             @Override
             public void onResponse(Call call, Response response) throws IOException {
                 final String data = response.body().string();
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        List<Test> list = JSONUtil.JSONParseTest(data);
-                        Map<Test, Integer> map = new HashMap<>();
+                        final List<Test> list = JSONUtil.JSONParseTest(data);
+                        final Map<Test, Integer> map = new HashMap<>();
                         for(int i = 0; i < list.size(); i++) {
-                            map.put(list.get(i), 1);
+                            String url = "http://10.0.2.2:8081/mobile/test/getteststudent/" + list.get(i).getId();
+                            final int finalI = i;
+                            HttpUtil.sendHttpRequest(url, new Callback() {
+                                @Override
+                                public void onFailure(Call call, IOException e) {
+
+                                }
+
+                                @Override
+                                public void onResponse(Call call, Response response) throws IOException {
+                                    Integer count = Integer.parseInt(response.body().string());
+                                    map.put(list.get(finalI), count);
+                                }
+                            });
                         }
-                        testList.clear();
-                        mMap.clear();
-                        testList.addAll(list);
-                        mMap.putAll(map);
-                        adapter.notifyDataSetChanged();
-                    }
-                });
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                testList.clear();
+                                mMap.clear();
+                                testList.addAll(list);
+                                mMap.putAll(map);
+                                adapter.notifyDataSetChanged();
+                            }
+                        });
             }
         });
     }

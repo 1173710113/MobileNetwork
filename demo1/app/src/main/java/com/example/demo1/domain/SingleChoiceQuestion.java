@@ -1,5 +1,8 @@
 package com.example.demo1.domain;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 public class SingleChoiceQuestion {
     private String questionId;
     private String content;
@@ -21,6 +24,25 @@ public class SingleChoiceQuestion {
         this.answer = answer;
         this.testId = testId;
         this.score = score;
+    }
+
+    public SingleChoiceQuestion(Question question) {
+        this.questionId = question.getId();
+        this.answer = question.getAnswer();
+        this.testId = question.getTestId();
+        this.score = question.getScore();
+        String data = question.getContent();
+        try {
+            JSONObject object = new JSONObject(data);
+            System.out.println(data);
+            this.content = object.getString("content");
+            this.choiceA = object.getString("choiceA");
+            this.choiceB = object.getString("choiceB");
+            this.choiceC = object.getString("choiceC");
+            this.choiceD = object.getString("choiceD");
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
     }
 
     public String getQuestionId() {

@@ -1,6 +1,8 @@
 package com.example.demo1.domain;
 
-public class Test {
+import java.io.Serializable;
+
+public class Test implements Serializable {
 	protected String id;
 	protected String name;
 	protected String startTime;

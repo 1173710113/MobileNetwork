@@ -1,5 +1,7 @@
 package com.example.demo1.adapter;
 
+import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,8 +11,11 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.demo1.R;
+import com.example.demo1.TestDetailActivity;
 import com.example.demo1.domain.Test;
 import com.example.demo1.util.TimeUtil;
+import com.example.demo1.util.ValidateUtil;
+import com.hjq.toast.ToastUtils;
 
 import java.util.List;
 import java.util.Map;
@@ -49,24 +54,61 @@ public class TestRecyclerAdapter extends RecyclerView.Adapter<TestRecyclerAdapte
     }
 
     @Override
-    public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        Test test = mTestList.get(position);
+    public void onBindViewHolder(@NonNull final ViewHolder holder, int position) {
+        final Test test = mTestList.get(position);
         holder.titleText.setText(test.getName());
         holder.countText.setText(mMap.get(test).toString());
         String startDate = test.getStartTime();
+        final int state;
         if(TimeUtil.isAfter(startDate)) {
+            //未开始
             holder.signImage.setImageResource(R.color.primary_light);
             holder.timeText.setText(test.getStartTime());
+            state = 0;
         } else {
             String endDate = test.getEndTime();
             if(TimeUtil.isAfter(endDate)) {
+                //正在进行
                 holder.signImage.setImageResource(R.color.primary_dark);
                 holder.timeText.setText(test.getEndTime());
+                state = 1;
             } else {
                 holder.signImage.setImageResource(R.color.secondary_text);
                 holder.timeText.setText(test.getEndTime());
+                state = 2;
             }
         }
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String type = holder.itemView.getContext().getSharedPreferences("userInfo", Context.MODE_PRIVATE).getString("type", null);
+                switch (type) {
+                    case "教师":
+                        Intent intent = new Intent(holder.itemView.getContext(), TestDetailActivity.class);
+                        intent.putExtra("test", test);
+                        intent.putExtra("count", mMap.get(test).toString());
+                        holder.itemView.getContext().startActivity(intent);
+                        break;
+                    case  "学生":
+                        switch (state){
+                            case 0:
+                                ToastUtils.show("小测未开始");
+                                break;
+                            case 1:
+                                Intent intent1 = new Intent(holder.itemView.getContext(), TestDetailActivity.class);
+                                intent1.putExtra("test", test);
+                                intent1.putExtra("count", mMap.get(test).toString());
+                                holder.itemView.getContext().startActivity(intent1);
+                                break;
+                            case 2:
+                                ToastUtils.show("小测已结束");
+                                break;
+                        }
+                        break;
+                }
+
+            }
+        });
     }
 
     @Override

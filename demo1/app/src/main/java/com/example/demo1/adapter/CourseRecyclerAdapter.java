@@ -13,6 +13,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.demo1.DiscussionByCourseActivity;
 import com.example.demo1.R;
 import com.example.demo1.StudentHomeworkActivity;
+import com.example.demo1.TeacherTestActivity;
+import com.example.demo1.TestActivity;
 import com.example.demo1.domain.Course;
 import java.util.ArrayList;
 import java.util.List;
@@ -23,7 +25,7 @@ public class CourseRecyclerAdapter extends RecyclerView.Adapter<CourseRecyclerAd
 
     static class ViewHolder extends RecyclerView.ViewHolder{
         TextView nameText, teacherNameText, destinationText, realVolText, startDateText, endDateText;
-        ImageView homeworkImage, discussionImage, deleteImage;
+        ImageView testImage, homeworkImage, discussionImage, deleteImage;
 
         public ViewHolder(View view) {
             super(view);
@@ -33,6 +35,7 @@ public class CourseRecyclerAdapter extends RecyclerView.Adapter<CourseRecyclerAd
             realVolText = (TextView)view.findViewById(R.id.course_recycler_item_real_vol);
             startDateText = (TextView)view.findViewById(R.id.course_recycler_item_start_date);
             endDateText = (TextView)view.findViewById(R.id.course_recycler_item_end_date);
+            testImage = (ImageView)view.findViewById(R.id.course_recycler_item_test);
             homeworkImage = (ImageView)view.findViewById(R.id.course_recycler_item_homework);
             discussionImage = (ImageView)view.findViewById(R.id.course_recycler_item_discussion);
             deleteImage = (ImageView)view.findViewById(R.id.course_recycler_item_delete);
@@ -59,6 +62,14 @@ public class CourseRecyclerAdapter extends RecyclerView.Adapter<CourseRecyclerAd
         holder.realVolText.setText(Integer.toString(course.getRealVol()));
         holder.startDateText.setText(course.getStartTime());
         holder.endDateText.setText(course.getEndTime());
+        holder.testImage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(v.getContext(), TeacherTestActivity.class);
+                intent.putExtra("course", course);
+                v.getContext().startActivity(intent);
+            }
+        });
         holder.homeworkImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

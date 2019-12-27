@@ -21,7 +21,8 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme1"
         android:usesCleartextTraffic="true">
-        <activity android:name=".TestDetailActivity"></activity>
+        <activity android:name=".TestDetailActivity"
+            android:label=""></activity>
         <activity
             android:name=".TeacherTestActivity"
             android:label="" />

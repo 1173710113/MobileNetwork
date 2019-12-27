@@ -236,4 +236,25 @@ public class JSONUtil {
         }
         return testList;
     }
+
+    public static List<Question> JSOONParseQuestion(String data) {
+        List<Question> list = new ArrayList<>();
+        try {
+            JSONArray jsonArray = new JSONArray(data);
+            for(int i=0; i < jsonArray.length(); i++) {
+                JSONObject object = jsonArray.getJSONObject(i);
+                System.out.println(object.toString());
+                String id = object.getString("id");
+                String content = object.getString("content");
+                String answer = object.getString("answer");
+                String testId = object.getString("testId");
+                String score = object.getString("score");
+                Question question = new Question(id, content, answer, testId, score);
+                list.add(question);
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return list;
+    }
 }

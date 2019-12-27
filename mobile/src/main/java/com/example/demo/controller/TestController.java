@@ -36,7 +36,7 @@ public class TestController {
 		return service.getTestList(courseId);
 	}
 
-	@RequestMapping(value = "/getquestion/{testId}", method = RequestMethod.GET)
+	@RequestMapping("/getquestion/{testId}")
 	@ResponseBody
 	public List<Question> getQuestionList(@PathVariable("testId") String testId) {
 		return service.getQuestionList(testId);
@@ -45,7 +45,7 @@ public class TestController {
 	@RequestMapping(value = "/addscore", method = RequestMethod.POST)
 	@ResponseBody
 	public void addScore(@RequestBody Score score) {
-		service.addScore(score.getTestId(), score.getStudentId(), score.getScore(),score.getEveryScore());
+		service.addScore(score.getTestId(), score.getStudentId(), score.getScore(), score.getEveryScore());
 	}
 
 	@RequestMapping(value = "/queryscore/{testId}/{studentId}", method = RequestMethod.GET)
@@ -53,16 +53,17 @@ public class TestController {
 	public Score queryScore(@PathVariable("testId") String testId, @PathVariable("studentId") String studentId) {
 		return service.queryScore(testId, studentId);
 	}
-	@RequestMapping(value = "/gettest/{testId}", method = RequestMethod.GET)
+
+	@RequestMapping("/getteststudent/{testId}")
 	@ResponseBody
 	public int getStudentNumber(@PathVariable("testId") String testId) {
 		return service.getStudentList(testId).size();
 	}
-	@RequestMapping(value = "/gettest/{testId}/{studentId}", method = RequestMethod.GET)
+
+	@RequestMapping("/gettest/{testId}/{studentId}")
 	@ResponseBody
-	public boolean isJoinTest(@PathVariable("testId") String testId
-			,@PathVariable("testId") String studentId) {
-		if(service.queryScore(testId, studentId)==null) {
+	public boolean isJoinTest(@PathVariable("testId") String testId, @PathVariable("testId") String studentId) {
+		if (service.queryScore(testId, studentId) == null) {
 			return false;
 		}
 		return true;
