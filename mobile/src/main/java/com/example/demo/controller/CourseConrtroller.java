@@ -32,6 +32,11 @@ public class CourseConrtroller {
 	public void addCourse(@RequestBody Course course) {
 		courseService.addCourse(course);
 	}
+	
+	@RequestMapping("/delete/{courseId}") 
+	public void deleteCourse(@PathVariable("courseId")String courseId){
+		courseService.deleteCourse(courseId);
+	}
 
 	@GetMapping("/query/student/{studentId}")
 	@ResponseBody
@@ -55,7 +60,6 @@ public class CourseConrtroller {
 	@ResponseBody
 	public String drop(@PathVariable("studentId")String studentId, @PathVariable("courseId")String courseId) {
 		String data = courseService.dropCourse(studentId, courseId);
-		System.out.println(data);
 		return data;
 	}
 }

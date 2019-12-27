@@ -2,6 +2,8 @@ package com.example.demo1;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Bundle;
 import android.view.Menu;
@@ -15,31 +17,51 @@ import com.bigkoo.pickerview.builder.TimePickerBuilder;
 import com.bigkoo.pickerview.listener.OnTimeSelectListener;
 import com.bigkoo.pickerview.view.TimePickerView;
 import com.example.demo1.adapter.SingleChoiceAdapter;
+import com.example.demo1.adapter.SingleChoiceRecyclerAdapter;
 import com.example.demo1.dialog.AddQuestionDialog;
 import com.example.demo1.dialog.AddTestDialog;
 import com.example.demo1.dialog.CustomDialog;
+import com.example.demo1.domain.Course;
+import com.example.demo1.domain.Question;
+import com.example.demo1.domain.QuestionContentSingleChoice;
 import com.example.demo1.domain.SingleChoiceQuestion;
+import com.example.demo1.util.HttpUtil;
+import com.example.demo1.util.JSONUtil;
 import com.example.demo1.util.ValidateUtil;
 import com.hjq.toast.ToastUtils;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
+
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.OkHttpClient;
+import okhttp3.Response;
+
 public class AddTestActivity extends AppCompatActivity implements View.OnClickListener{
     private List<SingleChoiceQuestion> questionList = new ArrayList<>();
-    private ListView listView;
-    private ArrayAdapter<SingleChoiceQuestion> adapter;
+    private RecyclerView recyclerView;
+    private SingleChoiceRecyclerAdapter adapter;
     private TextView addText, postText;
+    private Course course;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_test2);
-        listView = (ListView)findViewById(R.id.add_question_list);
-        adapter = new SingleChoiceAdapter(AddTestActivity.this, R.layout.single_choice_item, questionList);
-        listView.setAdapter(adapter);
+        course = (Course)getIntent().getSerializableExtra("course");
+        recyclerView = (RecyclerView) findViewById(R.id.add_question_list);
+        LinearLayoutManager layoutManager = new LinearLayoutManager(this);
+        recyclerView.setLayoutManager(layoutManager);
+        adapter = new SingleChoiceRecyclerAdapter(questionList);
+        recyclerView.setAdapter(adapter);
+
         addText = (TextView)findViewById(R.id.add_question_add);
         postText = (TextView)findViewById(R.id.add_question_post);
         addText.setOnClickListener(this);
@@ -138,8 +160,28 @@ public class AddTestActivity extends AppCompatActivity implements View.OnClickLi
                                     ToastUtils.show("请填完");
                                     return;
                                 }
-                                ToastUtils.show("发布成功");
-                                dialog2.dismiss();
+                                JSONArray jsonArray = new JSONArray();
+                                for(int i = 0; i < questionList.size(); i++) {
+                                    QuestionContentSingleChoice content = new QuestionContentSingleChoice(questionList.get(i));
+                                    String contentStr = content.toString();
+                                    Question question = new Question(null, contentStr, questionList.get(i).getAnswer(),null, "4");
+                                    jsonArray.put(JSONUtil.QuestionParseJSON(question));
+                                }
+                                String url = "http://10.0.2.2:8081/mobile/test/addtest/" + name + "/" +  startDate + "/" + endDate + "/" + course.getId();
+
+                                HttpUtil.sendHttpRequest(url, jsonArray, new Callback() {
+                                    @Override
+                                    public void onFailure(Call call, IOException e) {
+                                        ToastUtils.show("发布失败");
+                                    }
+
+                                    @Override
+                                    public void onResponse(Call call, Response response) throws IOException {
+                                        ToastUtils.show("发布成功");
+                                        dialog2.dismiss();
+                                        AddTestActivity.this.finish();
+                                    }
+                                });
                             }
                         }).show();
                         dialog1.dismiss();

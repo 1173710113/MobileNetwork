@@ -17,9 +17,9 @@ import android.view.View;
 import com.bigkoo.pickerview.builder.TimePickerBuilder;
 import com.bigkoo.pickerview.listener.OnTimeSelectListener;
 import com.bigkoo.pickerview.view.TimePickerView;
-import com.example.demo1.adapter.CourseRecyclerAdapter;
 import com.example.demo1.adapter.TeacherCourseRecyclerAdapter;
 import com.example.demo1.dialog.AddCourseDialog;
+import com.example.demo1.dialog.CustomDialog;
 import com.example.demo1.domain.Course;
 import com.example.demo1.domain.TeacherCourse;
 import com.example.demo1.util.HttpUtil;
@@ -28,10 +28,7 @@ import com.example.demo1.util.ValidateUtil;
 import com.google.android.material.navigation.NavigationView;
 import com.hjq.toast.ToastUtils;
 
-import org.json.JSONArray;
-import org.json.JSONException;
 import org.json.JSONObject;
-import org.litepal.crud.DataSupport;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -58,6 +55,36 @@ public class TeacherMainActivity extends BaseActivity {
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(layoutManager);
         adapter = new TeacherCourseRecyclerAdapter(courseList);
+        adapter.setDeleteListener(new TeacherCourseRecyclerAdapter.IOnDeleteListener() {
+            @Override
+            public void onDelete(final String courseId) {
+                final CustomDialog dialog = new CustomDialog(TeacherMainActivity.this);
+                dialog.setTitle("提示").setContent("确认删除课程吗？").setCancelListener(new CustomDialog.IOnCancelListener() {
+                    @Override
+                    public void onCancel() {
+                        dialog.dismiss();
+                    }
+                }).setConfirmListener(new CustomDialog.IOnConfirmListener() {
+                    @Override
+                    public void onConfirm() {
+                        String url = "http://10.0.2.2:8081/mobile/course/delete/" +courseId;
+                        HttpUtil.sendHttpRequest(url, new Callback() {
+                            @Override
+                            public void onFailure(Call call, IOException e) {
+                                ToastUtils.show("删除失败");
+                            }
+
+                            @Override
+                            public void onResponse(Call call, Response response) throws IOException {
+                                ToastUtils.show("删除成功");
+                                queryCourse();
+                                dialog.dismiss();
+                            }
+                        });
+                    }
+                }).show();
+            }
+        });
         recyclerView.setAdapter(adapter);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.student_main_toolbar);

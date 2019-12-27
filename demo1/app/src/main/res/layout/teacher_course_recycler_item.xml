@@ -165,12 +165,13 @@
                     <ImageView
                         android:layout_width="15pt"
                         android:layout_height="15pt"
-                        android:src="@drawable/ic_assignment_black_18dp"/>
+                        android:src="@drawable/ic_assignment_black_18dp"
+                        android:id="@+id/teacher_course_recycler_item_test"/>
                     <ImageView
                         android:layout_width="15pt"
                         android:layout_height="15pt"
                         android:src="@drawable/ic_description_black_18dp"
-                        android:id="@+id/course_recycler_item_homework"/>
+                        android:id="@+id/teacher_course_recycler_item_homework"/>
                     <ImageView
                         android:layout_width="15pt"
                         android:layout_height="15pt"
@@ -184,7 +185,7 @@
                         android:layout_width="15pt"
                         android:layout_height="15pt"
                         android:src="@drawable/ic_delete_forever_black_18dp"
-                        android:id="@+id/course_recycler_item_delete"/>
+                        android:id="@+id/teacher_course_recycler_item_delete"/>
                 </LinearLayout>
             </LinearLayout>
         </LinearLayout>

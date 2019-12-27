@@ -9,9 +9,11 @@ import android.widget.TextView;
 
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.demo1.AddTestActivity;
 import com.example.demo1.DiscussionByCourseActivity;
 import com.example.demo1.R;
 import com.example.demo1.StudentHomeworkActivity;
+import com.example.demo1.TeacherHomeworkActivity;
 import com.example.demo1.domain.Course;
 import com.example.demo1.domain.TeacherCourse;
 import com.example.demo1.util.ValidateUtil;
@@ -21,11 +23,11 @@ import java.util.List;
 
 public class TeacherCourseRecyclerAdapter extends RecyclerView.Adapter<TeacherCourseRecyclerAdapter.ViewHolder> {
     private List<TeacherCourse> mTeacherCourseList = new ArrayList<>();
-    //private IOnDeleteListener onDeleteListener;
+    private IOnDeleteListener onDeleteListener;
 
     static class ViewHolder extends RecyclerView.ViewHolder{
         TextView nameText, codeText, teacherNameText, destinationText, realVolText, startDateText, endDateText;
-        ImageView homeworkImage, discussionImage, deleteImage;
+        ImageView testImage, homeworkImage, discussionImage, deleteImage;
 
         public ViewHolder(View view) {
             super(view);
@@ -36,9 +38,10 @@ public class TeacherCourseRecyclerAdapter extends RecyclerView.Adapter<TeacherCo
             realVolText = (TextView)view.findViewById(R.id.teacher_course_recycler_item_real_vol);
             startDateText = (TextView)view.findViewById(R.id.teacher_course_recycler_item_start_date);
             endDateText = (TextView)view.findViewById(R.id.teacher_course_recycler_item_end_date);
-            //homeworkImage = (ImageView)view.findViewById(R.id.course_recycler_item_homework);
+            testImage = (ImageView)view.findViewById(R.id.teacher_course_recycler_item_test);
+            homeworkImage = (ImageView)view.findViewById(R.id.teacher_course_recycler_item_homework);
             discussionImage = (ImageView)view.findViewById(R.id.teacher_course_recycler_item_discussion);
-            //deleteImage = (ImageView)view.findViewById(R.id.course_recycler_item_delete);
+            deleteImage = (ImageView)view.findViewById(R.id.teacher_course_recycler_item_delete);
         }
     }
 
@@ -57,26 +60,28 @@ public class TeacherCourseRecyclerAdapter extends RecyclerView.Adapter<TeacherCo
     public void onBindViewHolder(final ViewHolder holder, int position) {
         final TeacherCourse course = mTeacherCourseList.get(position);
         holder.nameText.setText(course.getName());
-        String code = course.getCode();
-        System.out.println(code);
-        if(ValidateUtil.isEmpty(code)) {
-            holder.codeText.setVisibility(View.GONE);
-        } else {
-            holder.codeText.setText(code);
-        }
+        holder.codeText.setText(course.getCode());
         holder.teacherNameText.setText(course.getTeacherName());
         holder.destinationText.setText(course.getDestination());
         holder.realVolText.setText(Integer.toString(course.getRealVol()));
         holder.startDateText.setText(course.getStartTime());
         holder.endDateText.setText(course.getEndTime());
-        /*holder.homeworkImage.setOnClickListener(new View.OnClickListener() {
+        holder.testImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(v.getContext(), StudentHomeworkActivity.class);
+                Intent intent = new Intent(v.getContext(), AddTestActivity.class);
                 intent.putExtra("course", course);
                 v.getContext().startActivity(intent);
             }
-        });*/
+        });
+        holder.homeworkImage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(v.getContext(), TeacherHomeworkActivity.class);
+                intent.putExtra("course", course);
+                v.getContext().startActivity(intent);
+            }
+        });
         holder.discussionImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -84,7 +89,7 @@ public class TeacherCourseRecyclerAdapter extends RecyclerView.Adapter<TeacherCo
                 intent.putExtra("course", course);
                 v.getContext().startActivity(intent);
             }
-        });/*
+        });
         holder.deleteImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -92,7 +97,7 @@ public class TeacherCourseRecyclerAdapter extends RecyclerView.Adapter<TeacherCo
                     onDeleteListener.onDelete(course.getId());
                 }
             }
-        });*/
+        });
     }
 
     @Override
@@ -100,12 +105,12 @@ public class TeacherCourseRecyclerAdapter extends RecyclerView.Adapter<TeacherCo
         return mTeacherCourseList.size();
     }
 
-    /*public void setDeleteListener(IOnDeleteListener onDeleteListener) {
+    public void setDeleteListener(IOnDeleteListener onDeleteListener) {
         this.onDeleteListener = onDeleteListener;
     }
 
     public interface IOnDeleteListener{
         void onDelete(final String courseId);
-    }*/
+    }
 
 }
