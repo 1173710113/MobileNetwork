@@ -53,5 +53,19 @@ public class TestController {
 	public Score queryScore(@PathVariable("testId") String testId, @PathVariable("studentId") String studentId) {
 		return service.queryScore(testId, studentId);
 	}
+	@RequestMapping(value = "/gettest/{testId}", method = RequestMethod.GET)
+	@ResponseBody
+	public int getStudentNumber(@PathVariable("testId") String testId) {
+		return service.getStudentList(testId).size();
+	}
+	@RequestMapping(value = "/gettest/{testId}/{studentId}", method = RequestMethod.GET)
+	@ResponseBody
+	public boolean isJoinTest(@PathVariable("testId") String testId
+			,@PathVariable("testId") String studentId) {
+		if(service.queryScore(testId, studentId)==null) {
+			return false;
+		}
+		return true;
+	}
 
 }

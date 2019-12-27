@@ -51,6 +51,11 @@ public class TestServiceImp implements TestService {
 		// TODO Auto-generated method stub
 		return testMapper.queryScore(studentId, testId);
 	}
-
+	@Override
+	public List<String> getStudentList(String testId) {
+		// TODO Auto-generated method stub
+		
+		return testMapper.getStudentList(testId);
+	}
 
 }

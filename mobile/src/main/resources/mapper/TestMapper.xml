@@ -56,7 +56,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		<result column="score" property="score"/>
 		<result column="every_score" property="everyScore"/>
 	</resultMap>
-
+	<select id="getStudentList" resultType="String">
+		SELECT student_id
+		FROM score_table
+		WHERE test_id = #{testId}
+	</select>
 	
 	<select id="queryTestComplited" resultType="String">
 	 SELECT student_id 
