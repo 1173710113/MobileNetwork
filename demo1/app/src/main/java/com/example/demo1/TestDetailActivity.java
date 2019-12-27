@@ -13,22 +13,25 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.TextView;
 
-import com.example.demo1.adapter.ReplyRecyclerAdapter;
 import com.example.demo1.adapter.SingleChoiceRecyclerAdapter;
+import com.example.demo1.dialog.CustomDialog;
 import com.example.demo1.domain.Question;
-import com.example.demo1.domain.Reply;
 import com.example.demo1.domain.SingleChoiceQuestion;
 import com.example.demo1.domain.Test;
 import com.example.demo1.util.HttpUtil;
 import com.example.demo1.util.JSONUtil;
 import com.example.demo1.util.MyNavView;
-import com.example.demo1.util.TimeUtil;
+import com.example.demo1.domain.Score;
 import com.example.demo1.util.ValidateUtil;
 import com.google.android.material.appbar.CollapsingToolbarLayout;
 import com.google.android.material.navigation.NavigationView;
+import com.hjq.toast.ToastUtils;
+
+import org.json.JSONObject;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import okhttp3.Call;
@@ -94,6 +97,48 @@ public class TestDetailActivity extends AppCompatActivity {
             case android.R.id.home:
                 mDrawerLayout.openDrawer(GravityCompat.START);
                 break;
+            case R.id.main_toolbar_add:
+                String type = getSharedPreferences("userInfo", MODE_PRIVATE).getString("type", null);
+                switch (type){
+                    case "学生":
+                        final CustomDialog dialog = new CustomDialog(TestDetailActivity.this);
+                        dialog.setTitle("提示").setContent("确认提交？").setCancelListener(new CustomDialog.IOnCancelListener() {
+                            @Override
+                            public void onCancel() {
+                                dialog.dismiss();
+                            }
+                        }).setConfirmListener(new CustomDialog.IOnConfirmListener() {
+                            @Override
+                            public void onConfirm() {
+                                String testId = test.getId();
+                                String studentId = getSharedPreferences("userInfo", MODE_PRIVATE).getString("id", null);
+                                String everyScore = adapter.getScore();
+                                List<String> scoreList = Arrays.asList(everyScore.split("/"));
+                                int scoreInt = 0;
+                                for(String s:scoreList) {
+                                    String c = s.substring(0,1);
+                                    scoreInt += Integer.parseInt(c);
+                                }
+                                String scoreStr = Integer.toString(scoreInt);
+                                Score score = new Score(null, testId, studentId, scoreStr, everyScore);
+                                JSONObject object = JSONUtil.ScoreParseJSON(score);
+                                String url = "http://10.0.2.2:8081/mobile/test/addscore";
+                                HttpUtil.sendHttpRequest(url, object, new Callback() {
+                                    @Override
+                                    public void onFailure(Call call, IOException e) {
+
+                                    }
+
+                                    @Override
+                                    public void onResponse(Call call, Response response) throws IOException {
+                                        ToastUtils.show("提交成功");
+                                        finish();
+                                    }
+                                });
+                            }
+                        }).show();
+                        System.out.println(adapter.getScore());
+                }
         }
         return true;
     }

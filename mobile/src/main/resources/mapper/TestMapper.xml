@@ -41,7 +41,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		<result column="score" property="score"/>
 	</resultMap>
 	<insert id="addScore">
-		INSERT INTO score_table(testId,studentId,score,every_score)
+		INSERT INTO score_table(test_id,student_id,score,every_score)
 		VALUES(#{test_id},#{student_id},#{score},#{everyScore});
 	</insert>
 	<select id="queryScore" resultMap="score">

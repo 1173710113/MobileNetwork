@@ -5,15 +5,14 @@ import com.example.demo1.domain.Discussion;
 import com.example.demo1.domain.Homework;
 import com.example.demo1.domain.Question;
 import com.example.demo1.domain.Reply;
+import com.example.demo1.domain.Score;
 import com.example.demo1.domain.TeacherCourse;
 import com.example.demo1.domain.Test;
-import com.example.demo1.domain.User;
 import com.example.demo1.domain.XFile;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.litepal.crud.DataSupport;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -256,5 +255,19 @@ public class JSONUtil {
             e.printStackTrace();
         }
         return list;
+    }
+
+    public static JSONObject ScoreParseJSON(Score score) {
+        JSONObject object = new JSONObject();
+        try {
+            object.put("id", score.getId());
+            object.put("testId", score.getTestId());
+            object.put("studentId", score.getStudentId());
+            object.put("score", score.getScore());
+            object.put("everyScore", score.getEveryScore());
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return object;
     }
 }

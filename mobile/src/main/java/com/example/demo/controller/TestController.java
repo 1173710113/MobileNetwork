@@ -42,7 +42,7 @@ public class TestController {
 		return service.getQuestionList(testId);
 	}
 
-	@RequestMapping(value = "/addscore", method = RequestMethod.POST)
+	@RequestMapping("/addscore")
 	@ResponseBody
 	public void addScore(@RequestBody Score score) {
 		service.addScore(score.getTestId(), score.getStudentId(), score.getScore(), score.getEveryScore());

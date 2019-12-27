@@ -20,11 +20,12 @@ public interface TestMapper {
 	public void addQuestion(Question question);
 
 	public List<Question> getQuestionList(@Param("testId") String testId);
-	
-	public Score queryScore(@Param("studentId") String studentId, @Param("testId") String testId);
-	public void addScore(@Param("testId")String testId,@Param("studentId")String studentId
-			,@Param("score")String score,@Param("everyScore") String everyScore);
-	public List<String> getStudentList(@Param("testId") String testId);
 
+	public Score queryScore(@Param("studentId") String studentId, @Param("testId") String testId);
+
+	public void addScore(@Param("test_id") String testId, @Param("student_id") String studentId,
+			@Param("score") String score, @Param("everyScore") String everyScore);
+
+	public List<String> getStudentList(@Param("testId") String testId);
 
 }

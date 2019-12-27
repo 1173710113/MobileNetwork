@@ -61,6 +61,7 @@ public class AddTestActivity extends AppCompatActivity implements View.OnClickLi
         recyclerView.setLayoutManager(layoutManager);
         adapter = new SingleChoiceRecyclerAdapter(questionList);
         recyclerView.setAdapter(adapter);
+        adapter.notifyDataSetChanged();
 
         addText = (TextView)findViewById(R.id.add_question_add);
         postText = (TextView)findViewById(R.id.add_question_post);
@@ -92,7 +93,7 @@ public class AddTestActivity extends AppCompatActivity implements View.OnClickLi
                             ToastUtils.show("请填完");
                             return;
                         }
-                        SingleChoiceQuestion question = new SingleChoiceQuestion("", content, choiceA, choiceB,choiceC,choiceD, answer, "", "");
+                        SingleChoiceQuestion question = new SingleChoiceQuestion("", content, choiceA, choiceB,choiceC,choiceD, answer, "", "1");
                         questionList.add(question);
                         adapter.notifyDataSetChanged();
                         ToastUtils.show("添加成功");
