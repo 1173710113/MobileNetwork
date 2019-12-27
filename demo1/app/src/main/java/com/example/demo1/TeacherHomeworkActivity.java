@@ -3,6 +3,8 @@ package com.example.demo1;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.view.GravityCompat;
+import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -21,8 +23,10 @@ import com.example.demo1.domain.Course;
 import com.example.demo1.domain.Homework;
 import com.example.demo1.util.HttpUtil;
 import com.example.demo1.util.JSONUtil;
+import com.example.demo1.util.MyNavView;
 import com.example.demo1.util.TimeUtil;
 import com.example.demo1.util.ValidateUtil;
+import com.google.android.material.navigation.NavigationView;
 import com.hjq.toast.ToastUtils;
 
 import org.json.JSONArray;
@@ -40,6 +44,7 @@ import okhttp3.Response;
 
 public class TeacherHomeworkActivity extends AppCompatActivity {
 
+    private DrawerLayout mDrawerLayout;
     private RecyclerView recyclerView;
     private HomeworkRecyclerAdapter adapter;
     private List<Homework> homeworkList = new ArrayList<>();
@@ -48,20 +53,25 @@ public class TeacherHomeworkActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_student_homework);
+        setContentView(R.layout.custom_layout_1);
         course = (Course) getIntent().getSerializableExtra("course");
 
-        recyclerView = (RecyclerView) findViewById(R.id.student_homework_list);
+        recyclerView = (RecyclerView) findViewById(R.id.custom_layout_1_recycler_list);
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(layoutManager);
         adapter = new HomeworkRecyclerAdapter(homeworkList);
         recyclerView.setAdapter(adapter);
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.homework_toolbar);
+        mDrawerLayout = (DrawerLayout) findViewById(R.id.custom_layout_1_drawer);
+        NavigationView navView = (NavigationView) findViewById(R.id.custom_layout_1_nav);
+        MyNavView.initNavView(TeacherHomeworkActivity.this, TeacherHomeworkActivity.this, navView);
+
+        Toolbar toolbar = (Toolbar) findViewById(R.id.custom_layout_1_toolbar);
         setSupportActionBar(toolbar);
         ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
             actionBar.setDisplayHomeAsUpEnabled(true);
+            actionBar.setHomeAsUpIndicator(R.drawable.ic_menu_white_18dp);
         }
 
         queryHomework();
@@ -75,7 +85,7 @@ public class TeacherHomeworkActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
-                finish();
+                mDrawerLayout.openDrawer(GravityCompat.START);
                 break;
             case R.id.main_toolbar_add:
                 //初始化dialog

@@ -22,6 +22,7 @@ import com.example.demo1.domain.Course;
 import com.example.demo1.domain.Discussion;
 import com.example.demo1.util.HttpUtil;
 import com.example.demo1.util.JSONUtil;
+import com.example.demo1.util.MyNavView;
 import com.example.demo1.util.TimeUtil;
 import com.example.demo1.util.ValidateUtil;
 import com.google.android.material.navigation.NavigationView;
@@ -51,53 +52,27 @@ public class DiscussionByCourseActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_discussion_by_course);
+        setContentView(R.layout.custom_layout_1);
 
         course = (Course)getIntent().getSerializableExtra("course");
 
-        recyclerView = (RecyclerView)findViewById(R.id.discussion_by_course_recycler_view);
+        recyclerView = (RecyclerView)findViewById(R.id.custom_layout_1_recycler_list);
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(layoutManager);
         adapter = new DiscussionRecyclerAdapter(discussionList);
         recyclerView.setAdapter(adapter);
 
-        Toolbar toolbar = (Toolbar)findViewById(R.id.discussion_by_course_toolbar);
+        Toolbar toolbar = (Toolbar)findViewById(R.id.custom_layout_1_toolbar);
         setSupportActionBar(toolbar);
-        mDrawerLayout = (DrawerLayout)findViewById(R.id.discussion_by_course_drawer);
-        NavigationView navView = (NavigationView)findViewById(R.id.discussion_by_course_nav);
+        mDrawerLayout = (DrawerLayout)findViewById(R.id.custom_layout_1_drawer);
+        NavigationView navView = (NavigationView)findViewById(R.id.custom_layout_1_nav);
+        MyNavView.initNavView(DiscussionByCourseActivity.this, DiscussionByCourseActivity.this, navView);
+
         ActionBar actionBar = getSupportActionBar();
         if(actionBar != null) {
             actionBar.setDisplayHomeAsUpEnabled(true);
             actionBar.setHomeAsUpIndicator(R.drawable.ic_menu_white_18dp);
         }
-        navView.setCheckedItem(R.id.student_main_nav_info);
-        navView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
-            @Override
-            public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
-                switch (menuItem.getItemId()) {
-                    case R.id.student_main_nav_exit:
-                        final CustomDialog dialog = new CustomDialog(DiscussionByCourseActivity.this);
-                        dialog.setTitle("提示").setContent("确认退出？").setCancelListener(new CustomDialog.IOnCancelListener() {
-                            @Override
-                            public void onCancel() {
-                                dialog.dismiss();
-                            }
-                        }).setConfirmListener(new CustomDialog.IOnConfirmListener() {
-                            @Override
-                            public void onConfirm() {
-                                SharedPreferences pref = getSharedPreferences("userInfo", MODE_PRIVATE);
-                                pref.edit().clear().apply();
-                                dialog.dismiss();
-                                Intent intent = new Intent(DiscussionByCourseActivity.this, LoginActivity.class);
-                                startActivity(intent);
-                                ToastUtils.show("已退出");
-                                DiscussionByCourseActivity.this.finish();
-                            }
-                        }).show();
-                }
-                return true;
-            }
-        });
         queryDiscussion();
     }
 

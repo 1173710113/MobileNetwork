@@ -19,6 +19,7 @@ import com.example.demo1.dialog.EnrollDialog;
 import com.example.demo1.domain.Course;
 import com.example.demo1.util.HttpUtil;
 import com.example.demo1.util.JSONUtil;
+import com.example.demo1.util.MyNavView;
 import com.example.demo1.util.ValidateUtil;
 import com.google.android.material.navigation.NavigationView;
 import com.hjq.toast.ToastUtils;
@@ -46,9 +47,9 @@ public class StudentMainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.student_main_drawer);
+        setContentView(R.layout.custom_layout_1);
 
-        recyclerView = (RecyclerView) findViewById(R.id.student_main_recycler_list);
+        recyclerView = (RecyclerView) findViewById(R.id.custom_layout_1_recycler_list);
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(layoutManager);
         adapter = new CourseRecyclerAdapter(courseList);
@@ -99,23 +100,19 @@ public class StudentMainActivity extends AppCompatActivity {
         });
         recyclerView.setAdapter(adapter);
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.student_main_toolbar);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.custom_layout_1_toolbar);
         setSupportActionBar(toolbar);
-        mDrawerLayout = (DrawerLayout) findViewById(R.id.student_main_drawer);
-        NavigationView navView = (NavigationView) findViewById(R.id.student_main_nav);
+
+        mDrawerLayout = (DrawerLayout) findViewById(R.id.custom_layout_1_drawer);
+
+       NavigationView navView = (NavigationView) findViewById(R.id.custom_layout_1_nav);
+        MyNavView.initNavView(StudentMainActivity.this, StudentMainActivity.this, navView);
+
         ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
             actionBar.setDisplayHomeAsUpEnabled(true);
             actionBar.setHomeAsUpIndicator(R.drawable.ic_menu_white_18dp);
         }
-        navView.setCheckedItem(R.id.student_main_nav_info);
-        navView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
-            @Override
-            public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
-
-                return true;
-            }
-        });
         queryCourse();
     }
 
