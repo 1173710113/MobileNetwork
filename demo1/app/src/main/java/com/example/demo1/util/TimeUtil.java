@@ -1,5 +1,6 @@
 package com.example.demo1.util;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.TimeZone;
@@ -29,4 +30,23 @@ public class TimeUtil {
         df.setTimeZone(TimeZone.getTimeZone("Asia/Shanghai"));//设置时区为上海
         return df.format(date);
     }
+
+    /**
+     * 判断时间是否晚于当前时间
+     * @param dateStr
+     * @return true如果时间晚于当前时间
+     */
+    public static boolean isAfter(String dateStr) {
+        SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        df.setTimeZone(TimeZone.getTimeZone("Asia/Shanghai"));//设置时区为上海
+        try {
+            Date date = df.parse(dateStr);
+            Date now = new Date();
+            return date.after(now);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return true;
+    }
+
 }

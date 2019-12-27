@@ -11,6 +11,9 @@ import org.springframework.stereotype.Service;
 
 import com.example.demo.dao.CourseMapper;
 import com.example.demo.domain.Course;
+import com.example.demo.domain.TeacherCourse;
+import com.example.demo.util.CodeUtil;
+import com.example.demo.util.ValidateUtil;
 
 /**
  * @author msi-user
@@ -24,8 +27,12 @@ public class CourseServiceImp implements CourseService {
 
 	@Override
 	public void addCourse(Course course) {
-		courseMapper.addCourse(course.getName(), course.getTeacherId(), course.getMaxVol(), course.getDestination(),
-				course.getStartTime(), course.getEndTime());
+		String code = CodeUtil.createData();
+		String result = courseMapper.queryCode(code);
+		if(ValidateUtil.isEmpty(result)) {
+			courseMapper.addCourse(course);
+			courseMapper.addCode(course.getId(), code, course.getStartTime());
+		}
 	}
 
 	@Override
@@ -42,16 +49,56 @@ public class CourseServiceImp implements CourseService {
 	}
 
 	@Override
-	public List<Course> queryCourseByTeacherId(String teacherId) {
+	public List<TeacherCourse> queryCourseByTeacherId(String teacherId) {
 		List<Course> courseList = new ArrayList<>();
+		List<TeacherCourse> teacherCourseList = new ArrayList<>();
 		courseList.addAll(courseMapper.queryCourseByTeacherId(teacherId));
-		return courseList;
+		for(int i = 0; i< courseList.size(); i++) {
+			TeacherCourse course = new TeacherCourse(courseList.get(i));
+			String code = courseMapper.queryCodeByCourse(courseList.get(i).getId());
+			if(code == null) {
+				code = "";
+			}
+			course.setCode(code);
+			teacherCourseList.add(course);
+		}
+		return teacherCourseList;
 	}
 
 	@Override
 	public List<String> getCourseStudent(String courseId) {
 		
 		return courseMapper.getStudentByCourse(courseId);
+	}
+
+	@Override
+	public String enroll(String code, String studentId) {
+		String course = courseMapper.queryCode(code);
+		if(ValidateUtil.isEmpty(course)) {
+			return "fail";
+		}
+		int real = courseMapper.queryCourseRealVol(course);
+		int max = courseMapper.queryCourseMaxVol(course);
+		if(real >= max) {
+			return "fail";
+		}
+		courseMapper.enroll(studentId, course);
+		courseMapper.updateCourseCountPlus(course);
+		return "success";
+	}
+
+	@Override
+	public String dropCourse(String studentId, String courseId) {
+		String tempCourse = courseMapper.isStudentInCourse(studentId, courseId);
+		if(ValidateUtil.isEmpty(tempCourse)) {
+			return "fail";
+		}
+		if(courseMapper.queryCourseRealVol(courseId) < 1) {
+			return "fail";
+		}
+		courseMapper.dropCourse(studentId, courseId);
+		courseMapper.updateCourseCountMinus(courseId);
+		return "success";
 	}
 
 }

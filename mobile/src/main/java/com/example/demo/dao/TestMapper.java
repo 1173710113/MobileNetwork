@@ -12,15 +12,19 @@ import com.example.demo.domain.User;
 
 @Mapper
 public interface TestMapper {
-	public void addTest(@Param("name") String name,
-			@Param("startTime") String startTime, @Param("endTime") String endTime,@Param("courseId") String courseId);
-	public List<Test> getTestList(@Param("courseId")String courseId);
-	public void addQuestion(@Param("content") String content,@Param("answer") String answer
-			,@Param("testId") String testId,@Param("score") String score);
+
+	public void addTest(Test test);
+
+	public List<Test> getTestList(@Param("courseId") String courseId);
+
+	public void addQuestion(Question question);
+
 	public List<Question> getQuestionList(@Param("testId") String testId);
+
+	public void addScore(@Param("testId") String testId, @Param("studentId") String studentId,
+			@Param("score") String score);
+
+	public Score queryScore(@Param("studentId") String studentId, @Param("testId") String testId);
 	
-	public void addScore(@Param("testId")String testId,@Param("studentId")String studentId
-			,@Param("score")String score,@Param("everyScore") String everyScore);
-	public Score queryScore(@Param("studentId")String studentId,@Param("testId")String testId);
-	public List<String> getStudentList(@Param("testId") String testId);
+
 }

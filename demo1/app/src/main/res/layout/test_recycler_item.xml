@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="5dp"
+    android:clickable="true"
+    android:elevation="5dp"
+    android:foreground="?attr/selectableItemBackground"
+    android:stateListAnimator="@drawable/lift_on_touch"
+    app:cardCornerRadius="4dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:padding="5dp">
+
+        <de.hdodenhof.circleimageview.CircleImageView xmlns:app="http://schemas.android.com/apk/res-auto"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_centerInParent="true"
+            android:layout_gravity="center"
+            android:padding="5dp"
+            android:src="@drawable/ic_assignment_white_18dp"
+            app:civ_border_color="@color/primary"
+            app:civ_border_width="5dp"
+            app:civ_circle_background_color="@color/primary" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/test_recycler_item_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="第一次测试"
+                android:textColor="@color/primary_text"
+                android:textSize="20sp" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="2019-15-16 15:00:00"
+                android:id="@+id/test_recycler_item_time"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_gravity="right">
+                <TextView
+                    android:id="@+id/test_recycler_item_count"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:text="15"
+                    android:gravity="center"
+                    android:textColor="@color/primary_text" />
+                <de.hdodenhof.circleimageview.CircleImageView
+                    android:id="@+id/test_recycler_item_sign"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_centerInParent="true"
+                    android:layout_gravity="right"
+                    android:padding="5dp"
+                    android:src="@color/primary" />
+            </LinearLayout>
+        </LinearLayout>
+
+    </LinearLayout>
+</androidx.cardview.widget.CardView>

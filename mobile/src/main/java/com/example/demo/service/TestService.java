@@ -5,11 +5,11 @@ import java.util.List;
 import com.example.demo.domain.Question;
 import com.example.demo.domain.Score;
 import com.example.demo.domain.Test;
+import com.example.demo.domain.TestToTeacher;
 
 public interface TestService {
-	public void addTest(String name,String startTime,String endTime,String courseId);
+	public void addTest(Test test, List<Question> questions);
 	public List<Test> getTestList(String courseId);
-	public void addQuestion(String content,String answer,String testId,String score);
 	public List<Question> getQuestionList(String testId);
 	public void addScore(String testId,String studentId,String score,String everyScore);
 	public Score queryScore(String testId,String studentId);

@@ -10,7 +10,7 @@ public class ValidateUtil {
      * @return
      */
     public static boolean isEmpty(String str) {
-        if(str.equals("") || str == null) {
+        if(str == null || str.equals("")) {
             return true;
         }
         return false;

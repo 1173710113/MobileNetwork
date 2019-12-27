@@ -4,9 +4,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.example.demo.dao.TestMapper">
-	<insert id="addTest">
+	<insert id="addTest" useGeneratedKeys="true" keyProperty="id">
 		INSERT INTO test_table(start_time,end_time,name,course_id)
-		VALUES(#{startTime},#{endTime},#{name},#{courseId});
+		VALUES(#{startTime},#{endTime},#{name},#{course_id});
 	</insert>
 	
 	<select id="getTestList" resultMap="test">
@@ -25,7 +25,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	
 	<insert id="addQuestion">
 		INSERT INTO question_table(content,answer,test_id,score)
-		VALUES(#{content},#{answer},#{test_id},#{score});
+		VALUES(#{content},#{answer},#{testId},#{score});
 	</insert>
 	<select id="getQuestionList" resultMap="question">
 		SELECT *
@@ -56,10 +56,12 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		<result column="score" property="score"/>
 		<result column="every_score" property="everyScore"/>
 	</resultMap>
-	<select id="getStudentList" resultType="String">
-		SELECT student_id
-		FROM score_table
-		WHERE test_id = #{testId}
-	</select>
+
 	
+	<select id="queryTestComplited" resultType="String">
+	 SELECT student_id 
+	 FROM score_table
+	 WHERE test_id=#{testId}
+	</select>
+
 </mapper>

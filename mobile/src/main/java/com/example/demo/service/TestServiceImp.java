@@ -4,21 +4,27 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import com.example.demo.dao.TestMapper;
-import com.example.demo.dao.UserMapper;
 import com.example.demo.domain.Question;
 import com.example.demo.domain.Score;
 import com.example.demo.domain.Test;
+import com.example.demo.domain.TestToTeacher;
 @Service
 public class TestServiceImp implements TestService {
 	@Autowired
 	private TestMapper testMapper;
+	
 	@Override
-	public void addTest(String name, String startTime, String endTime,String courseId) {
-		// TODO Auto-generated method stub
-		testMapper.addTest(name, startTime, endTime, courseId);
+	public void addTest(Test test, List<Question> questionList) {
+		testMapper.addTest(test);
+		String id = test.getId();
+		for(int i = 0; i < questionList.size(); i++) {
+			Question question = questionList.get(i);
+			question.setTestId(id);
+			testMapper.addQuestion(question);
+		}
+		
 		
 	}
 
@@ -26,12 +32,6 @@ public class TestServiceImp implements TestService {
 	public List<Test> getTestList(String courseId) {
 		// TODO Auto-generated method stub
 		return testMapper.getTestList(courseId);
-	}
-
-	@Override
-	public void addQuestion(String content, String answer, String testId, String score) {
-		// TODO Auto-generated method stub
-		testMapper.addQuestion(content, answer, testId, score);
 	}
 
 	@Override
@@ -50,13 +50,6 @@ public class TestServiceImp implements TestService {
 	public Score queryScore(String testId, String studentId) {
 		// TODO Auto-generated method stub
 		return testMapper.queryScore(studentId, testId);
-	}
-
-	@Override
-	public List<String> getStudentList(String testId) {
-		// TODO Auto-generated method stub
-		
-		return testMapper.getStudentList(testId);
 	}
 
 
