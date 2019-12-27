@@ -21,11 +21,14 @@
         android:orientation="horizontal">
         <de.hdodenhof.circleimageview.CircleImageView
             xmlns:app="http://schemas.android.com/apk/res-auto"
-            android:layout_width="70dp"
-            android:layout_height="70dp"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
             android:layout_centerInParent="true"
-            android:src="@drawable/girl"
-            android:layout_gravity="center"/>
+            android:src="@drawable/ic_description_white_18dp"
+            android:layout_gravity="center"
+            app:civ_border_width="5dp"
+            app:civ_border_color="@color/primary"
+            app:civ_circle_background_color="@color/primary"/>
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -39,7 +42,7 @@
                 android:textSize="20sp"
                 android:id="@+id/homework_recycler_item_title"
                 android:textColor="@color/primary_text"/>
-            <LinearLayout
+            <!--<LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal">
@@ -49,7 +52,7 @@
                     android:text="王中介"
                     android:id="@+id/homework_recycler_item_poster_name"
                     android:textColor="@color/secondary_text"/>
-            </LinearLayout>
+            </LinearLayout>-->
         </LinearLayout>
     </LinearLayout>
         <View

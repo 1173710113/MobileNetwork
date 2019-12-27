@@ -26,9 +26,8 @@ public class HomeworkRecyclerAdapter extends RecyclerView.Adapter<HomeworkRecycl
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             titleText = (TextView)itemView.findViewById(R.id.homework_recycler_item_title);
-            posterNameText = (TextView)itemView.findViewById(R.id.homework_recycler_item_poster_name);
+            //posterNameText = (TextView)itemView.findViewById(R.id.homework_recycler_item_poster_name);
             contentText = (TextView)itemView.findViewById(R.id.homework_recycler_item_content);
-            posterNameText = (TextView)itemView.findViewById(R.id.homework_recycler_item_poster_name);
             deadlineText = (TextView)itemView.findViewById(R.id.homework_recycler_item_deadline);
         }
     }
@@ -49,7 +48,7 @@ public class HomeworkRecyclerAdapter extends RecyclerView.Adapter<HomeworkRecycl
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         Homework homework = mHomeworkList.get(position);
         holder.titleText.setText(homework.getTitle());
-        holder.posterNameText.setText(homework.getPosterName());
+        //holder.posterNameText.setText(homework.getPosterName());
         holder.contentText.setText(homework.getContent());
         String deadline = homework.getDeadline();
         holder.deadlineText.setText(deadline);

@@ -41,7 +41,6 @@
         <activity android:name=".AddTestActivity" />
         <activity android:name=".TestActivity" />
         <activity android:name=".RegistActivity" />
-        <activity android:name=".CourseManageActivity" />
         <activity android:name=".AddUserActivity" />
         <activity android:name=".UserManageActivity" />
         <activity android:name=".AnalysisActivity" />
