@@ -6,6 +6,7 @@ import com.example.demo1.domain.Homework;
 import com.example.demo1.domain.Question;
 import com.example.demo1.domain.Reply;
 import com.example.demo1.domain.TeacherCourse;
+import com.example.demo1.domain.Test;
 import com.example.demo1.domain.User;
 import com.example.demo1.domain.XFile;
 
@@ -182,7 +183,6 @@ public class JSONUtil {
             JSONArray jsonArray = new JSONArray(data);
             for (int i = 0; i < jsonArray.length(); i++) {
                 JSONObject object = jsonArray.getJSONObject(i);
-                System.out.println(object.toString());
                 String id = object.getString("id");
                 String name = object.getString("name");
                 String teacherId = object.getString("teacherId");
@@ -214,5 +214,26 @@ public class JSONUtil {
             e.printStackTrace();
         }
         return object;
+    }
+
+    public static List<Test> JSONParseTest(String data) {
+        List<Test> testList = new ArrayList<>();
+        try {
+            JSONArray jsonArray = new JSONArray(data);
+            for (int i = 0; i < jsonArray.length(); i++) {
+                JSONObject object = jsonArray.getJSONObject(i);
+                String id = object.getString("id");
+                String name = object.getString("name");
+                String startTime = object.getString("startTime");
+                String endTime = object.getString("endTime");
+                String course_id = object.getString("course_id");
+                Test test = new Test(id, name, startTime,   endTime, course_id);
+                testList.add(test);
+            }
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return testList;
     }
 }

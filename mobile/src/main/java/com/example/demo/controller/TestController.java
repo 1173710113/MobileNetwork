@@ -30,13 +30,13 @@ public class TestController {
 		service.addTest(test, list);
 	}
 
-	@RequestMapping(value = "/gettest/{courseId}", method = RequestMethod.GET)
+	@RequestMapping("/gettest/{courseId}")
 	@ResponseBody
 	public List<Test> getTestList(@PathVariable("courseId") String courseId) {
 		return service.getTestList(courseId);
 	}
 
-	@RequestMapping(value = "/gettest/{testId}", method = RequestMethod.GET)
+	@RequestMapping(value = "/getquestion/{testId}", method = RequestMethod.GET)
 	@ResponseBody
 	public List<Question> getQuestionList(@PathVariable("testId") String testId) {
 		return service.getQuestionList(testId);

@@ -9,14 +9,11 @@ import android.widget.TextView;
 
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.demo1.AddTestActivity;
 import com.example.demo1.DiscussionByCourseActivity;
 import com.example.demo1.R;
-import com.example.demo1.StudentHomeworkActivity;
 import com.example.demo1.TeacherHomeworkActivity;
-import com.example.demo1.domain.Course;
+import com.example.demo1.TeacherTestActivity;
 import com.example.demo1.domain.TeacherCourse;
-import com.example.demo1.util.ValidateUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -69,7 +66,7 @@ public class TeacherCourseRecyclerAdapter extends RecyclerView.Adapter<TeacherCo
         holder.testImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(v.getContext(), AddTestActivity.class);
+                Intent intent = new Intent(v.getContext(), TeacherTestActivity.class);
                 intent.putExtra("course", course);
                 v.getContext().startActivity(intent);
             }
