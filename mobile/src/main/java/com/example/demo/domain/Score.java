@@ -5,12 +5,21 @@ public class Score {
 	private String testId;
 	private String studentId;
 	private String score;
-	public Score(String id, String testId, String studentId, String score) {
+	private String everyScore;
+	
+	public String getEveryScore() {
+		return everyScore;
+	}
+	public void setEveryScore(String everyScore) {
+		this.everyScore = everyScore;
+	}
+	public Score(String id, String testId, String studentId, String score, String everyScore) {
 		super();
 		this.id = id;
 		this.testId = testId;
 		this.studentId = studentId;
 		this.score = score;
+		this.everyScore = everyScore;
 	}
 	public String getId() {
 		return id;

@@ -11,7 +11,7 @@ public interface TestService {
 	public List<Test> getTestList(String courseId);
 	public void addQuestion(String content,String answer,String testId,String score);
 	public List<Question> getQuestionList(String testId);
-	public void addScore(String testId,String studentId,String score);
+	public void addScore(String testId,String studentId,String score,String everyScore);
 	public Score queryScore(String testId,String studentId);
-	
+	public List<String> getStudentList(String testId);
 }

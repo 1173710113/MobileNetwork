@@ -41,8 +41,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		<result column="score" property="score"/>
 	</resultMap>
 	<insert id="addScore">
-		INSERT INTO score_table(testId,studentId,score)
-		VALUES(#{test_id},#{student_id},#{score});
+		INSERT INTO score_table(testId,studentId,score,every_score)
+		VALUES(#{test_id},#{student_id},#{score},#{everyScore});
 	</insert>
 	<select id="queryScore" resultMap="score">
 		SELECT *
@@ -54,5 +54,12 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		<result column="student_id" property="studentId"/>
 		<result column="test_id" property="testId"/>
 		<result column="score" property="score"/>
+		<result column="every_score" property="everyScore"/>
 	</resultMap>
+	<select id="getStudentList" resultType="String">
+		SELECT student_id
+		FROM score_table
+		WHERE test_id = #{testId}
+	</select>
+	
 </mapper>

@@ -41,15 +41,22 @@ public class TestServiceImp implements TestService {
 	}
 
 	@Override
-	public void addScore(String testId, String studentId, String score) {
+	public void addScore(String testId, String studentId, String score,String everyScore) {
 		// TODO Auto-generated method stub
-		testMapper.addScore(testId, studentId, score);
+		testMapper.addScore(testId, studentId, score,everyScore);
 	}
 
 	@Override
 	public Score queryScore(String testId, String studentId) {
 		// TODO Auto-generated method stub
 		return testMapper.queryScore(studentId, testId);
+	}
+
+	@Override
+	public List<String> getStudentList(String testId) {
+		// TODO Auto-generated method stub
+		
+		return testMapper.getStudentList(testId);
 	}
 
 
