@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.example.demo.domain.User;
@@ -31,10 +32,11 @@ public class UserController {
 	@Autowired
 	private CourseService courseService;
 
-	@RequestMapping("/login/{account}/{password}")
+	@RequestMapping("/login")
 	@ResponseBody
-	public User login(@PathVariable("account") String account, @PathVariable("password") String password) {
-		System.out.println(account);
+	public User login(@RequestParam(value="account",required=true) String account,
+		    @RequestParam(value="password",required=true) String password) {
+		
 		User us = userService.login(account, password);
 		return us;
 	}
@@ -42,7 +44,7 @@ public class UserController {
 	@RequestMapping(value = "/add", method = RequestMethod.POST)
 	@ResponseBody
 	public String add(@RequestBody User user){
-		System.out.println(user.toString());
+		
 		try {
 			userService.register(user.getId(), user.getPassword(), user.getType(), user.getName(), user.getSex());
 		} catch (SQLIntegrityConstraintViolationException e) {
@@ -51,9 +53,9 @@ public class UserController {
 		return "success";
 	}
 
-	@RequestMapping("/updatepassword/{newPassword}")
-	public void updatePasssword(@PathVariable("newPassword") String newPassword) {
-		userService.updateUserPassword(newPassword);
+	@RequestMapping("/updatepassword")
+	public void updatePasssword(@RequestParam(value="password",required=true) String password) {
+		userService.updateUserPassword(password);
 
 	}
 
