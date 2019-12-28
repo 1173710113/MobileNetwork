@@ -31,9 +31,10 @@ public class UserController {
 	@Autowired
 	private CourseService courseService;
 
-	@RequestMapping(value = "/login/{account}/{password}", method = RequestMethod.GET)
+	@RequestMapping("/login/{account}/{password}")
 	@ResponseBody
 	public User login(@PathVariable("account") String account, @PathVariable("password") String password) {
+		System.out.println(account);
 		User us = userService.login(account, password);
 		return us;
 	}

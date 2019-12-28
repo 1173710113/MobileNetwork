@@ -5,6 +5,8 @@ import javax.crypto.Cipher;
 import javax.crypto.spec.SecretKeySpec;
 public class AES {
 
+    public static String sKey = "FGouo3XN11s9b/f6";
+
     public static String Encrypt(String sSrc, String sKey) throws Exception {
         if (sKey == null) {
             System.out.print("Key为空null");
@@ -59,4 +61,5 @@ public class AES {
             return null;
         }
     }
+
 }

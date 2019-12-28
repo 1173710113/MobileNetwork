@@ -4,57 +4,97 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".RegistActivity"
-    android:gravity="center"
-    >
+    android:layout_margin="10dp"
+    android:orientation="vertical"
+    android:padding="5dp"
+    tools:context=".RegistActivity">
 
     <LinearLayout
-        android:layout_width="300dp"
-        android:layout_height="500dp"
+        android:layout_width="280dp"
+        android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:gravity="center"
-        >
-        <EditText
+        android:layout_marginTop="80dp"
+        android:layout_marginLeft="30dp">
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="UserID"
-            android:layout_marginBottom="8pt"
-            android:id="@+id/user_id"/>
-        <EditText
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="Password"
-            android:layout_marginBottom="8pt"
-            android:id="@+id/user_password"/>
+            android:orientation="vertical"
+            android:padding="5dp"
+            android:layout_margin="5dp">
+            <com.rengwuxian.materialedittext.MaterialEditText
+                android:id="@+id/user_id"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="用户名"
+                android:lines="1"
+                app:met_autoValidate="true"
+                app:met_clearButton="true"
+                app:met_errorColor="@color/accent"
+                app:met_floatingLabel="highlight"
+                app:met_floatingLabelText="用户名"
+                app:met_iconLeft="@drawable/ic_person_outline_white_24dp"
+                app:met_maxCharacters="20"
+                app:met_minCharacters="6" />
+
+            <com.rengwuxian.materialedittext.MaterialEditText
+                android:id="@+id/user_name"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="姓名"
+                android:lines="1"
+                app:met_autoValidate="true"
+                app:met_clearButton="true"
+                app:met_errorColor="@color/accent"
+                app:met_floatingLabel="highlight"
+                app:met_floatingLabelText="姓名"
+                app:met_iconLeft="@drawable/ic_person_outline_white_24dp"
+                app:met_maxCharacters="16"
+                app:met_minCharacters="6" />
+
+            <com.rengwuxian.materialedittext.MaterialEditText
+                android:id="@+id/user_password"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="密码"
+                android:lines="1"
+                android:password="true"
+                app:met_autoValidate="true"
+                app:met_clearButton="true"
+                app:met_errorColor="@color/accent"
+                app:met_floatingLabel="highlight"
+                app:met_floatingLabelText="密码"
+                app:met_iconLeft="@drawable/ic_https_white_24dp"
+                app:met_maxCharacters="16"
+                app:met_minCharacters="6" />
+        </LinearLayout>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="280dp"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_gravity="center"
+        android:padding="5dp">
+
         <Spinner
-            android:entries="@array/type"
-            android:layout_width="match_parent"
+            android:layout_width="80dp"
             android:layout_height="wrap_content"
-            android:id="@+id/user_type"
-            android:layout_marginBottom="8pt"
-            ></Spinner>
-        <EditText
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="Name"
-            android:layout_marginBottom="8pt"
-            android:id="@+id/user_name"/>
-        <Spinner
             android:entries="@array/sex"
-            android:layout_width="match_parent"
+            android:id="@+id/user_sex"/>
+
+        <Spinner
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:id="@+id/user_sex"
-            android:layout_marginBottom="8pt"
-            ></Spinner>
+            android:layout_weight="1"
+            android:entries="@array/type"
+            android:id="@+id/user_type"/>
 
         <Button
-            android:id="@+id/button_regist"
-            android:layout_width="match_parent"
+            android:layout_width="80dp"
             android:layout_height="wrap_content"
-            android:onClick="Regist"
-            android:text="完成" />
-
-
+            android:text="注册"
+            android:onClick="Regist"/>
     </LinearLayout>
+
 
 </LinearLayout>

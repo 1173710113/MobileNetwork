@@ -8,6 +8,11 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.Spinner;
 
+import com.example.demo1.util.AES;
+import com.example.demo1.util.HttpUtil;
+import com.hjq.toast.ToastUtils;
+import com.rengwuxian.materialedittext.MaterialEditText;
+
 import org.json.JSONObject;
 
 import java.io.IOException;
@@ -29,43 +34,45 @@ public class RegistActivity extends AppCompatActivity {
     }
 
     public void Regist(View view) {
-        final String id = ((EditText) findViewById(R.id.user_id)).getText().toString();
-        final String password = ((EditText) findViewById(R.id.user_password)).getText().toString();
-        final String name = ((EditText) findViewById(R.id.user_name)).getText().toString();
-        final String type = ((Spinner) findViewById(R.id.user_type)).getSelectedItem().toString();
-        final String sex = ((Spinner) findViewById(R.id.user_sex)).getSelectedItem().toString();
+        MaterialEditText idEdit = (MaterialEditText)findViewById(R.id.user_id);
+        MaterialEditText passwordEdit = (MaterialEditText)findViewById(R.id.user_password);
+        MaterialEditText nameEdit = (MaterialEditText)findViewById(R.id.user_name);
+        String id = idEdit.getText().toString();
+        String password = passwordEdit.getText().toString();
+        String name = nameEdit.getText().toString();
+        Spinner sexSpinner = (Spinner)findViewById(R.id.user_sex);
+        Spinner typeSpiner = (Spinner)findViewById(R.id.user_type);
+        String sex = (String)sexSpinner.getSelectedItem();
+        String type = (String)typeSpiner.getSelectedItem();
+        if(!idEdit.isCharactersCountValid() || !passwordEdit.isCharactersCountValid() || !nameEdit.isCharactersCountValid()) {
+            ToastUtils.show("请正确输入");
+            return;
+        }
         try {
             JSONObject obj = new JSONObject();
-            obj.put("id", id);
-            obj.put("password", password);
+            obj.put("id", AES.Encrypt(id, AES.sKey));
+            obj.put("password", AES.Encrypt(password, AES.sKey));
             obj.put("type", type);
-            obj.put("name", name);
+            obj.put("name", AES.Encrypt(name, AES.sKey));
             obj.put("sex", sex);
             obj.put("iconpath", "123457");
-            OkHttpClient client = new OkHttpClient();
-            MediaType mtype = MediaType.parse("application/json;charset=utf-8");
-            RequestBody requestBody = RequestBody.create(mtype, "" + obj.toString());
-            System.out.println(obj.toString());
-            Request request = new Request.Builder()
-                    .url("http://10.0.2.2:8081/mobile/user/add")
-                    .post(requestBody)
-                    .build();
-            client.newCall(request).enqueue(new Callback() {
+            String url = "http://10.0.2.2:8081/mobile/user/add";
+            HttpUtil.sendHttpRequest(url, obj, new Callback() {
                 @Override
                 public void onFailure(Call call, IOException e) {
-
+                    ToastUtils.show("注册失败");
                 }
 
                 @Override
                 public void onResponse(Call call, Response response) throws IOException {
-
+                    ToastUtils.show("注册成功");
+                    Intent intent = new Intent(RegistActivity.this, LoginActivity.class);
+                    startActivity(intent);
+                    finish();
                 }
             });
         } catch (Exception e) {
             e.printStackTrace();
-        } finally {
-            Intent intent = new Intent(RegistActivity.this, LoginActivity.class);
-            startActivity(intent);
         }
 
 

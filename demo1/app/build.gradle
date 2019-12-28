@@ -59,5 +59,6 @@ dependencies {
     implementation 'com.android.support:recyclerview-v7:29.1.1'
     implementation "com.daimajia.swipelayout:library:1.2.0@aar"
     implementation 'com.android.support:support-v4:29.+'
+    implementation 'com.rengwuxian.materialedittext:library:2.1.4'
 
 }
