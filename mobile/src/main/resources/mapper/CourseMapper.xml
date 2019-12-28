@@ -7,7 +7,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	<insert id="addCourse" useGeneratedKeys="true" keyProperty="id">
 		INSERT INTO course_table
 		(name, teacher, max_vol,
-		destination, start_time, end_time)
+		destination,
+		start_time, end_time)
 		VALUES(#{name},#{teacherId},#{maxVol},#{destination},#{startTime},#{endTime})
 	</insert>
 	<delete id="deleteCourse">
@@ -38,14 +39,16 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		c.name as name,
 		u.id as teacher_id,
 		u.name as teacher_name,
-		c.max_vol as max_vol,
+		c.max_vol as
+		max_vol,
 		c.destination as destination,
 		c.start_time as
 		start_time,
 		c.end_time as end_time,
 		c.real_vol as real_vol
 		FROM
-		user_table u,course_table c
+		user_table
+		u,course_table c
 		WHERE c.teacher=#{teacher_id} and
 		u.id=#{teacher_id}
 	</select>
@@ -74,7 +77,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		enroll_table
 		WHERE code=#{code}
 	</select>
-	
+
 	<select id="queryCodeByCourse" resultType="String">
 		SELECT code
 		FROM
@@ -116,21 +119,24 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		course_table
 		WHERE id=#{course_id}
 	</select>
-	
+
 	<select id="isStudentInCourse" resultType="String">
 		SELECT course
-		FROM course_student
+		FROM
+		course_student
 		WHERE course=#{course_id} and student=#{student_id}
 	</select>
-	
+
 	<delete id="dropCourse">
 		DELETE FROM course_student
-		WHERE student=#{student_id} and course=#{course_id}
+		WHERE student=#{student_id}
+		and course=#{course_id}
 	</delete>
-	
+
 	<insert id="addCode">
 		INSERT INTO enroll_table
-		VALUES(#{code}, #{course_id}, #{due_time})
+		VALUES(#{code}, #{course_id},
+		#{due_time})
 	</insert>
 
 </mapper>

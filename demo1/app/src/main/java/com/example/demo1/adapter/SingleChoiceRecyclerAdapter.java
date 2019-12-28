@@ -85,7 +85,7 @@ public class SingleChoiceRecyclerAdapter extends RecyclerView.Adapter<SingleChoi
                 holder.choiceD.setText("D." + question.getChoiceD());
                 holder.choiceGroup.setVisibility(View.GONE);
                 String answer = question.getAnswer();
-                holder.holderMap.get(answer).setTextColor(Color.parseColor("448AFF"));
+                holder.holderMap.get(answer).setTextColor(Color.parseColor("#448AFF"));
                 break;
             case "学生":
                 holder.a.setText("A." + question.getChoiceA());

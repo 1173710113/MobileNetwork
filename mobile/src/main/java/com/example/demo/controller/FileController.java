@@ -50,8 +50,9 @@ public class FileController {
 			file.transferTo(dir);
 			long fileSize = dir.length();
 			String postTime = TimeUtil.getTime();
-			fileService.addFile(realPath + "\\" + fileName, fileName, fileSize, posterId, courseId, postTime);
-			return "success";
+			XFile temp = new XFile(null, realPath, fileName, fileSize, posterId, null, courseId, postTime);
+			fileService.addFile(temp);
+			return temp.getFileId();
 		} catch (IllegalStateException | IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

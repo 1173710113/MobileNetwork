@@ -8,6 +8,7 @@ import com.example.demo1.domain.Reply;
 import com.example.demo1.domain.Score;
 import com.example.demo1.domain.TeacherCourse;
 import com.example.demo1.domain.Test;
+import com.example.demo1.domain.User;
 import com.example.demo1.domain.XFile;
 
 import org.json.JSONArray;
@@ -125,6 +126,7 @@ public class JSONUtil {
 
     public static XFile JSONParseXFile(JSONObject object) {
         try {
+            String fileId = object.getString("fileId");
             String filePath = object.getString("filePath");
             String fileName = object.getString("fileName");
             long fileSize = object.getLong("fileSize");
@@ -132,7 +134,7 @@ public class JSONUtil {
             String posterName = object.getString("posterName");
             String courseId = object.getString("courseId");
             String postTime = object.getString("postTime");
-            XFile file = new XFile(filePath, fileName, fileSize, posterId, posterName, courseId, postTime);
+            XFile file = new XFile(fileId, filePath, fileName, fileSize, posterId, posterName, courseId, postTime);
             return file;
         } catch (JSONException e) {
             e.printStackTrace();
@@ -284,5 +286,35 @@ public class JSONUtil {
             e.printStackTrace();
         }
         return null;
+    }
+
+    public static JSONObject UserParseJSON(User user) {
+        JSONObject object = new JSONObject();
+        try {
+            object.put("id", user.getId());
+            object.put("password", user.getPassword());
+            object.put("type", user.getType());
+            object.put("name", user.getName());
+            object.put("sex", user.getSex());
+            object.put("iconPath", user.getIconPath());
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return object;
+    }
+
+    public static List<XFile> JSONParseFileList(String data) {
+        List<XFile> list = new ArrayList<>();
+        try {
+            JSONArray jsonArray = new JSONArray(data);
+            for (int i = 0; i <jsonArray.length(); i++) {
+                JSONObject object = jsonArray.getJSONObject(i);
+                XFile file = JSONParseXFile(object);
+                list.add(file);
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return list;
     }
 }

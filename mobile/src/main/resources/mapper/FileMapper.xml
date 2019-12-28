@@ -5,9 +5,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
 <mapper namespace="com.example.demo.dao.FileMapper">
 
-<insert id="addFile">
-	INSERT INTO file_table
-	VALUES(#{path}, #{file_name}, #{size}, #{poster_id}, #{course_id}, #{post_time}) 
+<insert id="addFile" useGeneratedKeys="true" keyProperty="fileId">
+	INSERT INTO file_table(path, name, size, user, course, time)
+	VALUES(#{filePath}, #{fileName}, #{fileSize}, #{posterId}, #{courseId}, #{postTime}) 
 </insert>
 <delete id="deleteFile">
 	DELETE FROM file_table
@@ -15,6 +15,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 </delete>
 <select id="queryFileByCourse" resultMap="file">
 	SELECT 
+	f.id as id,
 	f.path as path,
 	f.name as name,
 	f.size as size,
@@ -26,7 +27,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	WHERE f.course=#{course_id} and u.id=f.user
 </select>
 <resultMap id="file" type="XFile">
-	<id column="path" property="filePath"/>
+	<id column="id" property="fileId"/>
+	<result column="path" property="filePath"/>
 	<result column="name" property="fileName"/>
 	<result column="size" property="fileSize"/>
 	<result column="poster_id" property="posterId"/>

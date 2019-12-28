@@ -57,7 +57,8 @@
         </activity>
         <activity android:name=".FixPasswordActivity" />
         <activity android:name=".DrawActivity" />
-        <activity android:name=".FileActivity" />
+        <activity android:name=".FileActivity"
+            android:label=""/>
     </application>
 
 </manifest>

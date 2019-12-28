@@ -23,9 +23,9 @@ public class FileServiceImp implements FileService {
 	FileMapper fileMapper;
 
 	@Override
-	public void addFile(String path, String fileName, long fileSize, String posterId, String courseId,
-			String postTime) {
-		fileMapper.addFile(path, fileName, fileSize, posterId, courseId, postTime);
+	public String addFile(XFile file) {
+		fileMapper.addFile(file);
+		return file.getFileId();
 
 	}
 

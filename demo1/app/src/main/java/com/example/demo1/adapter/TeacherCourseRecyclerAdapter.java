@@ -10,6 +10,7 @@ import android.widget.TextView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.demo1.DiscussionByCourseActivity;
+import com.example.demo1.FileActivity;
 import com.example.demo1.R;
 import com.example.demo1.TeacherHomeworkActivity;
 import com.example.demo1.TeacherTestActivity;
@@ -24,7 +25,7 @@ public class TeacherCourseRecyclerAdapter extends RecyclerView.Adapter<TeacherCo
 
     static class ViewHolder extends RecyclerView.ViewHolder{
         TextView nameText, codeText, teacherNameText, destinationText, realVolText, startDateText, endDateText;
-        ImageView testImage, homeworkImage, discussionImage, deleteImage;
+        ImageView testImage, homeworkImage, discussionImage, fileImage, deleteImage;
 
         public ViewHolder(View view) {
             super(view);
@@ -38,6 +39,7 @@ public class TeacherCourseRecyclerAdapter extends RecyclerView.Adapter<TeacherCo
             testImage = (ImageView)view.findViewById(R.id.teacher_course_recycler_item_test);
             homeworkImage = (ImageView)view.findViewById(R.id.teacher_course_recycler_item_homework);
             discussionImage = (ImageView)view.findViewById(R.id.teacher_course_recycler_item_discussion);
+            fileImage = (ImageView)view.findViewById(R.id.teacher_course_recycler_item_file);
             deleteImage = (ImageView)view.findViewById(R.id.teacher_course_recycler_item_delete);
         }
     }
@@ -83,6 +85,14 @@ public class TeacherCourseRecyclerAdapter extends RecyclerView.Adapter<TeacherCo
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(v.getContext(), DiscussionByCourseActivity.class);
+                intent.putExtra("course", course);
+                v.getContext().startActivity(intent);
+            }
+        });
+        holder.fileImage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(v.getContext(), FileActivity.class);
                 intent.putExtra("course", course);
                 v.getContext().startActivity(intent);
             }

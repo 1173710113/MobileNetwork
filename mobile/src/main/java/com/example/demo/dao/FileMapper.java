@@ -17,19 +17,8 @@ import com.example.demo.domain.XFile;
 @Mapper
 public interface FileMapper {
 
-	/**
-	 * 
-	 * @param path
-	 * @param fileName
-	 * @param fileSize
-	 * @param posterId
-	 * @param posterName
-	 * @param courseId
-	 * @param postTime
-	 */
-	public void addFile(@Param("path") String path, @Param("file_name") String fileName, @Param("size") long fileSize,
-			@Param("poster_id") String posterId, @Param("course_id") String courseId,
-			@Param("post_time") String postTime);
+	
+	public void addFile(XFile file);
 
 	/**
 	 * 

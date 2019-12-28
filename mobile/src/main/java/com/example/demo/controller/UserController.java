@@ -31,11 +31,10 @@ public class UserController {
 	@Autowired
 	private CourseService courseService;
 
-	@RequestMapping("/login/{account}/{password}")
+	@RequestMapping("/login")
 	@ResponseBody
-	public User login(@PathVariable("account") String account, @PathVariable("password") String password) {
-		System.out.println(account);
-		User us = userService.login(account, password);
+	public User login(@RequestBody User user) {
+		User us = userService.login(user.getId(), user.getPassword());
 		return us;
 	}
 

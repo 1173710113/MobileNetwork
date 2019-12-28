@@ -1,11 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    app:cardCornerRadius="4dp"
+    android:elevation="5dp"
+    android:foreground="?attr/selectableItemBackground"
+    android:clickable="true"
+    android:stateListAnimator="@drawable/lift_on_touch"
+    android:padding="5dp"
+    android:layout_margin="5dp">
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="horizontal"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:gravity="center"
-    android:padding="3dp"
-    android:background="@color/white">
+    android:padding="5dp">
 
     <ImageView
         android:layout_width="90px"
@@ -18,13 +28,31 @@
         android:layout_height="wrap_content"
         android:orientation="vertical"
         android:paddingLeft="2dp">
-        <TextView
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="软件与过程1.ppt"
-            android:textColor="@color/black"
-            android:textSize="15sp"
-            android:id="@+id/file_name"/>
+            android:orientation="horizontal">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="软件与过程1.ppt"
+                android:textColor="@color/black"
+                android:textSize="15sp"
+                android:id="@+id/file_name"/>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="right">
+                <de.hdodenhof.circleimageview.CircleImageView
+                    android:id="@+id/file_item_sign"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:layout_centerInParent="true"
+                    android:layout_gravity="right"
+                    android:padding="5dp"
+                    android:src="@color/primary" />
+            </LinearLayout>
+        </LinearLayout>
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -40,12 +68,6 @@
                 android:layout_marginLeft="4dp"
                 android:layout_marginRight="4dp"
                 android:text="来自"/>
-             <TextView
-                 android:layout_width="wrap_content"
-                 android:layout_height="wrap_content"
-                 android:text="1173710113"
-                 android:textColor="#0080ff"
-                 android:id="@+id/file_uploader_id"/>
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -54,16 +76,14 @@
                 android:layout_marginLeft="2dp"
                 android:id="@+id/file_uploader_name"/>
             <TextView
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:gravity="right"
                 android:layout_marginLeft="4dp"
                 android:text="14.0MB"
                 android:id="@+id/file_length"/>
-            <ImageView
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:src="@drawable/sign_check"/>
         </LinearLayout>
     </LinearLayout>
 
 </LinearLayout>
+</androidx.cardview.widget.CardView>

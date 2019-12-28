@@ -1,7 +1,13 @@
 package com.example.demo1;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.core.view.GravityCompat;
+import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
@@ -18,8 +24,9 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.Toast;
 
-import com.example.demo1.adapter.FileItemAdapter;
+import com.example.demo1.adapter.FileRecyclerAdapter;
 import com.example.demo1.domain.Course;
+import com.example.demo1.domain.LocalFile;
 import com.example.demo1.domain.XFile;
 import com.example.demo1.listener.ProgressRequestListener;
 import com.example.demo1.listener.UIProgressRequestListener;
@@ -28,8 +35,12 @@ import com.example.demo1.util.FileProgressUtil;
 import com.example.demo1.util.FileUtil;
 import com.example.demo1.util.HttpUtil;
 import com.example.demo1.util.JSONUtil;
+import com.example.demo1.util.MyNavView;
 import com.example.demo1.util.PermissionUtil;
 import com.example.demo1.util.UIUpdateUtilImp;
+import com.example.demo1.util.ValidateUtil;
+import com.google.android.material.navigation.NavigationView;
+import com.hjq.toast.ToastUtils;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -54,34 +65,56 @@ import static com.example.demo1.util.FileUtil.getRealPathFromURI;
 public class FileActivity extends AppCompatActivity {
     private String path, uploadfile;
     private List<XFile> fileList = new ArrayList<>();
-    private List<XFile> fileList2 = new ArrayList<>();
     private Course course;
-    private ListView listView;
+    private RecyclerView recyclerView;
+    private FileRecyclerAdapter adapter;
     private String TAG = "FileUpload";
-    private UIUpdateUtilImp uiUpdateList;
+    private DrawerLayout mDrawerLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_file);
+        setContentView(R.layout.custom_layout_1);
+
+        androidx.appcompat.widget.Toolbar toolbar = (Toolbar) findViewById(R.id.custom_layout_1_toolbar);
+        setSupportActionBar(toolbar);
+        mDrawerLayout = (DrawerLayout) findViewById(R.id.custom_layout_1_drawer);
+        NavigationView navView = (NavigationView) findViewById(R.id.custom_layout_1_nav);
+        MyNavView.initNavView(FileActivity.this, FileActivity.this, navView);
+
+        ActionBar actionBar = getSupportActionBar();
+        if (actionBar != null) {
+            actionBar.setDisplayHomeAsUpEnabled(true);
+            actionBar.setHomeAsUpIndicator(R.drawable.ic_menu_white_18dp);
+        }
+
         course = (Course) getIntent().getSerializableExtra("course");
-        listView = (ListView) findViewById(R.id.list_view);
-        final FileItemAdapter adapter = new FileItemAdapter(
-                FileActivity.this, R.layout.file_item, fileList2
-        );
-        listView.setAdapter(adapter);
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        recyclerView = (RecyclerView) findViewById(R.id.custom_layout_1_recycler_list);
+        LinearLayoutManager layoutManager = new LinearLayoutManager(this);
+        recyclerView.setLayoutManager(layoutManager);
+        adapter = new FileRecyclerAdapter(fileList);
+        recyclerView.setAdapter(adapter);
+        adapter.setOnDownLoadListener(new FileRecyclerAdapter.IOnDownLoadListener() {
             @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                XFile file = fileList2.get(position);
-                String fileName = file.getFileName();
-                String url = "http://10.0.2.2:8081/mobile/file/download/" + fileName + "/" + course.getId();
+            public void onDownload(final XFile targetFile) {
+                String fileName = targetFile.getFileName();
+                String courseId = course.getId();
+                String url = "http://10.0.2.2:8081/mobile/file/download/" + fileName + "/" + courseId;
                 //请求之前获得文件读写权限
                 PermissionUtil.getReadWriteExternalPermission(FileActivity.this);
                 DownloadUtil.get().download(url, Environment.getExternalStorageDirectory().getAbsolutePath(), fileName, new DownloadUtil.OnDownloadListener() {
                     @Override
-                    public void onDownloadSuccess(File file) {
+                    public void onDownloadSuccess(final File file) {
                         Log.d("File", "文件下载完成:" + file.getAbsolutePath());
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                LocalFile localFile = new LocalFile(targetFile.getFileId(), file.getAbsolutePath(), targetFile.getFileName());
+                                localFile.save();
+                                ToastUtils.show("文件下载完成");
+                                adapter.notifyDataSetChanged();
+                            }
+                        });
                     }
 
                     @Override
@@ -96,28 +129,23 @@ public class FileActivity extends AppCompatActivity {
                 });
             }
         });
-        uiUpdateList = new UIUpdateUtilImp() {
-            @Override
-            public void onUIUpdate() {
-                fileList2.clear();
-                fileList2.addAll(fileList);
-                adapter.notifyDataSetChanged();
-            }
-        };
-        Log.e(TAG, "Create");
-        initFileList();
+        queryFile();
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.filemanage, menu);
+        getMenuInflater().inflate(R.menu.main_toolbar, menu);
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()) {
-            case R.id.add_item:
+            case android.R.id.home:
+                mDrawerLayout.openDrawer(GravityCompat.START);
+                break;
+            case R.id.main_toolbar_add:
+                PermissionUtil.getReadWriteExternalPermission(FileActivity.this);
                 Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
                 intent.setType("*/*");
                 intent.addCategory(Intent.CATEGORY_OPENABLE);
@@ -131,14 +159,17 @@ public class FileActivity extends AppCompatActivity {
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+
+        File file = null;
+        super.onActivityResult(requestCode, resultCode, data);
+        if (data == null) {
+         return;
+        }
         final ProgressDialog progressDialog = new ProgressDialog(FileActivity.this);
         progressDialog.setTitle("文件");
         progressDialog.setMessage("正在上传");
         progressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
         progressDialog.show();
-
-        File file = null;
-        super.onActivityResult(requestCode, resultCode, data);
         Log.w("File", "返回的数据：" + data);
         if (resultCode == Activity.RESULT_OK) {
             Uri uri = data.getData();
@@ -189,7 +220,7 @@ public class FileActivity extends AppCompatActivity {
                     } else {
                         progressDialog.setProgress(100);
                         progressDialog.dismiss();
-                        Toast.makeText(FileActivity.this, path + "上传成功", Toast.LENGTH_SHORT).show();
+                        //Toast.makeText(FileActivity.this, path + "上传成功", Toast.LENGTH_SHORT).show();
                     }
                 }
             };
@@ -203,6 +234,7 @@ public class FileActivity extends AppCompatActivity {
             String url = "http://10.0.2.2:8081/mobile/file/upload";
             final Request request = new Request.Builder().url(url).post(FileProgressUtil.addProgressRequestBody(requestBody, uiProgressRequestListener)).build();
             OkHttpClient client = new OkHttpClient();
+            final File finalFile = file;
             client.newCall(request).enqueue(new Callback() {
                 @Override
                 public void onFailure(Call call, IOException e) {
@@ -211,40 +243,56 @@ public class FileActivity extends AppCompatActivity {
 
                 @Override
                 public void onResponse(Call call, Response response) throws IOException {
-                    Log.e(TAG, response.body().string());
-                    initFileList();
+                    final String data = response.body().string();
+                    Log.e(TAG, data);
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            LocalFile localFile = new LocalFile(data, path, finalFile.getName());;
+                            localFile.save();
+                            ToastUtils.show("文件下载完成");
+                            adapter.notifyDataSetChanged();
+                        }
+                    });
+                    queryFile();
                 }
             });
         }
 
     }
 
-    private void initFileList() {
+    private void queryFile() {
         String url = "http://10.0.2.2:8081/mobile/file/query/" + course.getId();
         HttpUtil.sendHttpRequest(url, new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
-
+                ToastUtils.show("请检查网络");
             }
 
             @Override
             public void onResponse(Call call, Response response) throws IOException {
                 Log.e(TAG, "初始化文件列表");
-                fileList.clear();
-                String data = response.body().string();
-                try {
-                    JSONArray jsonArray = new JSONArray(data);
-                    for (int i = 0; i < jsonArray.length(); i++) {
-                        JSONObject object = jsonArray.getJSONObject(i);
-                        XFile file = JSONUtil.JSONParseXFile(object);
-                        fileList.add(file);
-                    }
-                    uiUpdateList.onUpdate();
-                } catch (JSONException e) {
-                    e.printStackTrace();
+                if (response.code() == 200) {
+                    String data = response.body().string();
+                    final List<XFile> list = JSONUtil.JSONParseFileList(data);
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            fileList.clear();
+                            fileList.addAll(list);
+                            adapter.notifyDataSetChanged();
+                        }
+                    });
+                } else {
+                    ToastUtils.show("请求失败");
                 }
             }
         });
+    }
+
+    public void onResume() {
+        super.onResume();
+        queryFile();
     }
 
 }

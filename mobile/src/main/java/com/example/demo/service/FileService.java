@@ -12,15 +12,11 @@ import com.example.demo.domain.XFile;
 public interface FileService {
 
 	/**
-	 * 
-	 * @param path
-	 * @param fileName
-	 * @param fileSize
-	 * @param posterId
-	 * @param courseId
-	 * @param postTime
+	 * 添加一个文件并返回文件的id
+	 * @param file
+	 * @return
 	 */
-	public void addFile(String path, String fileName, long fileSize, String posterId, String courseId, String postTime);
+	public String addFile(XFile file);
 
 	/**
 	 * 

@@ -36,6 +36,7 @@ import java.util.List;
 
 import okhttp3.Call;
 import okhttp3.Callback;
+import okhttp3.OkHttpClient;
 import okhttp3.Response;
 
 public class StudentMainActivity extends AppCompatActivity {
@@ -184,6 +185,8 @@ public class StudentMainActivity extends AppCompatActivity {
             return;
         }
         String url = "http://10.0.2.2:8081/mobile/course/query/student/" + id;
+        OkHttpClient client = new OkHttpClient();
+
         HttpUtil.sendHttpRequest(url, new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {

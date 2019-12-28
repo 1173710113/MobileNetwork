@@ -12,8 +12,10 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 
+import com.example.demo1.domain.User;
 import com.example.demo1.util.AES;
 import com.example.demo1.util.HttpUtil;
+import com.example.demo1.util.JSONUtil;
 import com.hjq.toast.ToastUtils;
 
 import org.json.JSONException;
@@ -97,19 +99,27 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     }
 
     public void login() throws Exception {
+        //String id = AES.Encrypt(idText.getText().toString(),AES.sKey);
+        //String password = AES.Encrypt(passwordText.getText().toString(), AES.sKey);
         String id = idText.getText().toString();
         String password = passwordText.getText().toString();
-        String url = "http://10.0.2.2:8081/mobile/user/login/" + AES.Encrypt(id, AES.sKey) + "/" + AES.Encrypt(password, AES.sKey);
-        HttpUtil.sendHttpRequest(url, new Callback() {
+        System.out.println(id);
+        System.out.println(password);
+        System.out.println("456");
+        User user = new User(id, password, null, null, null, null);
+        JSONObject object = JSONUtil.UserParseJSON(user);
+        String url = "http://10.0.2.2:8081/mobile/user/login";
+        HttpUtil.sendHttpRequest(url, object, new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
 
             }
 
             @Override
-            public void onResponse(Call call, Response response) throws IOException  {
+            public void onResponse(Call call, Response response) throws IOException {
                 if (response.code() == 200) {
                     String data = response.body().string();
+                    System.out.println(data);
                     writeUserInfo(data);
                     Log.d("LoginActivity", "LoginUser:" + data);
                     ToastUtils.show("登入成功");
@@ -128,7 +138,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 }
             }
         });
-
     }
 
     /**

@@ -19,10 +19,6 @@ import java.io.IOException;
 
 import okhttp3.Call;
 import okhttp3.Callback;
-import okhttp3.MediaType;
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.RequestBody;
 import okhttp3.Response;
 
 public class RegistActivity extends AppCompatActivity {
@@ -50,8 +46,8 @@ public class RegistActivity extends AppCompatActivity {
         }
         try {
             JSONObject obj = new JSONObject();
-            obj.put("id", AES.Encrypt(id, AES.sKey));
-            obj.put("password", AES.Encrypt(password, AES.sKey));
+            obj.put("id", id);
+            obj.put("password", password);
             obj.put("type", type);
             obj.put("name", AES.Encrypt(name, AES.sKey));
             obj.put("sex", sex);

@@ -78,7 +78,13 @@ public class TestRecyclerAdapter extends RecyclerView.Adapter<TestRecyclerAdapte
                 }
                 break;
             case "教师":
-                holder.countText.setText(mMap.get(test).toString());
+                Integer count = mMap.get(test);
+                if(count == null)
+                {
+                    holder.countText.setText("0");
+                } else {
+                    holder.countText.setText(count.toString());
+                }
                 break;
         }
         String startDate = test.getStartTime();
@@ -119,7 +125,14 @@ public class TestRecyclerAdapter extends RecyclerView.Adapter<TestRecyclerAdapte
                             case 1:
                                 Intent intent1 = new Intent(holder.itemView.getContext(), TestDetailActivity.class);
                                 intent1.putExtra("test", test);
-                                intent1.putExtra("count", mMap.get(test).toString());
+                                String count;
+                                Integer temp = mMap.get(test);
+                                if(temp == null) {
+                                    count = "0";
+                                } else {
+                                    count = temp.toString();
+                                }
+                                intent1.putExtra("count", count);
                                 holder.itemView.getContext().startActivity(intent1);
                                 break;
                             case 2:
