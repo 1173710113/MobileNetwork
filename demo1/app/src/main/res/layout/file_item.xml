@@ -11,79 +11,94 @@
     android:stateListAnimator="@drawable/lift_on_touch"
     android:padding="5dp"
     android:layout_margin="5dp">
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="horizontal"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:padding="5dp">
-
-    <ImageView
-        android:layout_width="90px"
-        android:layout_height="90px"
-        android:id="@+id/file_icon"
-        android:src="@drawable/file_word"
-        />
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:orientation="vertical"
-        android:paddingLeft="2dp">
-        <LinearLayout
+        android:padding="5dp"
+        >
+        <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+            android:orientation="horizontal"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="软件与过程1.ppt"
-                android:textColor="@color/black"
-                android:textSize="15sp"
-                android:id="@+id/file_name"/>
+            android:layout_height="match_parent"
+            >
+
+            <ImageView
+                android:layout_width="90px"
+                android:layout_height="90px"
+                android:id="@+id/file_icon"
+                android:layout_gravity="center"
+                android:src="@drawable/file_word"
+                />
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:gravity="right">
-                <de.hdodenhof.circleimageview.CircleImageView
-                    android:id="@+id/file_item_sign"
-                    android:layout_width="20dp"
-                    android:layout_height="20dp"
-                    android:layout_centerInParent="true"
-                    android:layout_gravity="right"
-                    android:padding="5dp"
-                    android:src="@color/primary" />
+                android:orientation="vertical"
+                android:paddingLeft="2dp">
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="软件与过程1.ppt"
+                        android:textColor="@color/black"
+                        android:textSize="20sp"
+                        android:id="@+id/file_name"/>
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="right">
+                        <de.hdodenhof.circleimageview.CircleImageView
+                            android:id="@+id/file_item_sign"
+                            android:layout_width="20dp"
+                            android:layout_height="20dp"
+                            android:layout_centerInParent="true"
+                            android:layout_gravity="right"
+                            android:padding="5dp"
+                            android:src="@color/primary" />
+                    </LinearLayout>
+                </LinearLayout>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="12.11"
+                        android:id="@+id/file_upload_date"/>
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="4dp"
+                        android:layout_marginRight="4dp"
+                        android:text="来自"/>
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="滕文杰"
+                        android:textColor="@color/black"
+                        android:layout_marginLeft="2dp"
+                        android:id="@+id/file_uploader_name"/>
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="right"
+                        android:layout_marginLeft="4dp"
+                        android:text="14.0MB"
+                        android:id="@+id/file_length"/>
+                </LinearLayout>
             </LinearLayout>
+
         </LinearLayout>
-        <LinearLayout
+        <ProgressBar
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="12.11"
-                android:id="@+id/file_upload_date"/>
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="4dp"
-                android:layout_marginRight="4dp"
-                android:text="来自"/>
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="滕文杰"
-                android:textColor="@color/black"
-                android:layout_marginLeft="2dp"
-                android:id="@+id/file_uploader_name"/>
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="right"
-                android:layout_marginLeft="4dp"
-                android:text="14.0MB"
-                android:id="@+id/file_length"/>
-        </LinearLayout>
+            style="@style/Widget.AppCompat.ProgressBar.Horizontal"
+            android:max="100"
+            android:id="@+id/file_progress"/>
     </LinearLayout>
 
-</LinearLayout>
 </androidx.cardview.widget.CardView>

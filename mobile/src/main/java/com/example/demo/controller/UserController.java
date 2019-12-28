@@ -36,13 +36,14 @@ public class UserController {
 	@ResponseBody
 	public User login(@RequestBody User user) {
 		User us = userService.login(user.getId(), user.getPassword());
+		System.out.println("userlogin");
 		return us;
 	}
 
 	@RequestMapping(value = "/add", method = RequestMethod.POST)
 	@ResponseBody
-	public String add(@RequestBody User user){
-		
+	public String add(@RequestBody User user) {
+
 		try {
 			userService.register(user.getId(), user.getPassword(), user.getType(), user.getName(), user.getSex());
 		} catch (SQLIntegrityConstraintViolationException e) {
@@ -52,7 +53,7 @@ public class UserController {
 	}
 
 	@RequestMapping("/updatepassword")
-	public void updatePasssword(@RequestParam(value="password",required=true) String password) {
+	public void updatePasssword(@RequestParam(value = "password", required = true) String password) {
 		userService.updateUserPassword(password);
 
 	}
@@ -65,5 +66,5 @@ public class UserController {
 		String student = studnets.get(n);
 		return userService.getUserById(student);
 	}
-	
+
 }

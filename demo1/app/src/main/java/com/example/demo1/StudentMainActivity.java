@@ -41,6 +41,8 @@ import okhttp3.Response;
 
 public class StudentMainActivity extends AppCompatActivity {
     private DrawerLayout mDrawerLayout;
+    //private static String myip = "172.20.10.2";
+    private static String myip="10.0.2.2";
     private List<Course> courseList = new ArrayList<>();
     private RecyclerView recyclerView;
     private CourseRecyclerAdapter adapter;
@@ -71,7 +73,7 @@ public class StudentMainActivity extends AppCompatActivity {
                             ToastUtils.show("退选失败");
                             return;
                         }
-                        String url = "http://10.0.2.2:8081/mobile/course/drop/" + studentId + "/" + courseId;
+                        String url = "http://"+ myip+ ":8081/mobile/course/drop/" + studentId + "/" + courseId;
                         HttpUtil.sendHttpRequest(url, new Callback() {
                             @Override
                             public void onFailure(Call call, IOException e) {
@@ -148,7 +150,7 @@ public class StudentMainActivity extends AppCompatActivity {
                             return;
                         }
                         String studentId = getSharedPreferences("userInfo", MODE_PRIVATE).getString("id", "ERROR");
-                        String url = "http://10.0.2.2:8081/mobile/course/enroll/" + code + "/" + studentId;
+                        String url = "http://" + myip+":8081/mobile/course/enroll/" + code + "/" + studentId;
                         HttpUtil.sendHttpRequest(url, new Callback() {
                             @Override
                             public void onFailure(Call call, IOException e) {
@@ -184,7 +186,7 @@ public class StudentMainActivity extends AppCompatActivity {
         if (id == null) {
             return;
         }
-        String url = "http://10.0.2.2:8081/mobile/course/query/student/" + id;
+        String url = "http://" + myip +":8081/mobile/course/query/student/" + id;
         OkHttpClient client = new OkHttpClient();
 
         HttpUtil.sendHttpRequest(url, new Callback() {

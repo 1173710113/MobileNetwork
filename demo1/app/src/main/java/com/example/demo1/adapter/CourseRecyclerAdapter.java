@@ -1,7 +1,6 @@
 package com.example.demo1.adapter;
 
 import android.content.Intent;
-import android.provider.ContactsContract;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,12 +9,14 @@ import android.widget.TextView;
 
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.demo1.DiscussionByCourseActivity;
+import com.example.demo1.AnalysisActivity;
+import com.example.demo1.DiscussionActivity;
+import com.example.demo1.FileActivity;
 import com.example.demo1.R;
 import com.example.demo1.StudentHomeworkActivity;
-import com.example.demo1.TeacherTestActivity;
 import com.example.demo1.TestActivity;
 import com.example.demo1.domain.Course;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -25,7 +26,7 @@ public class CourseRecyclerAdapter extends RecyclerView.Adapter<CourseRecyclerAd
 
     static class ViewHolder extends RecyclerView.ViewHolder{
         TextView nameText, teacherNameText, destinationText, realVolText, startDateText, endDateText;
-        ImageView testImage, homeworkImage, discussionImage, deleteImage;
+        ImageView analysisImage, testImage, homeworkImage, discussionImage, fileImage, deleteImage;
 
         public ViewHolder(View view) {
             super(view);
@@ -35,9 +36,11 @@ public class CourseRecyclerAdapter extends RecyclerView.Adapter<CourseRecyclerAd
             realVolText = (TextView)view.findViewById(R.id.course_recycler_item_real_vol);
             startDateText = (TextView)view.findViewById(R.id.course_recycler_item_start_date);
             endDateText = (TextView)view.findViewById(R.id.course_recycler_item_end_date);
+            analysisImage = (ImageView)view.findViewById(R.id.course_recycler_item_analysis);
             testImage = (ImageView)view.findViewById(R.id.course_recycler_item_test);
             homeworkImage = (ImageView)view.findViewById(R.id.course_recycler_item_homework);
             discussionImage = (ImageView)view.findViewById(R.id.course_recycler_item_discussion);
+            fileImage = (ImageView)view.findViewById(R.id.course_recycler_item_file);
             deleteImage = (ImageView)view.findViewById(R.id.course_recycler_item_delete);
         }
     }
@@ -62,10 +65,18 @@ public class CourseRecyclerAdapter extends RecyclerView.Adapter<CourseRecyclerAd
         holder.realVolText.setText(Integer.toString(course.getRealVol()));
         holder.startDateText.setText(course.getStartTime());
         holder.endDateText.setText(course.getEndTime());
+        holder.analysisImage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(v.getContext(), AnalysisActivity.class);
+                intent.putExtra("course", course);
+                v.getContext().startActivity(intent);
+            }
+        });
         holder.testImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(v.getContext(), TeacherTestActivity.class);
+                Intent intent = new Intent(v.getContext(), TestActivity.class);
                 intent.putExtra("course", course);
                 v.getContext().startActivity(intent);
             }
@@ -81,7 +92,15 @@ public class CourseRecyclerAdapter extends RecyclerView.Adapter<CourseRecyclerAd
         holder.discussionImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(v.getContext(), DiscussionByCourseActivity.class);
+                Intent intent = new Intent(v.getContext(), DiscussionActivity.class);
+                intent.putExtra("course", course);
+                v.getContext().startActivity(intent);
+            }
+        });
+        holder.fileImage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(v.getContext(), FileActivity.class);
                 intent.putExtra("course", course);
                 v.getContext().startActivity(intent);
             }

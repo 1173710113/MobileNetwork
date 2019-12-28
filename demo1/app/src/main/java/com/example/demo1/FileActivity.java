@@ -82,7 +82,7 @@ public class FileActivity extends AppCompatActivity {
         NavigationView navView = (NavigationView) findViewById(R.id.custom_layout_1_nav);
         MyNavView.initNavView(FileActivity.this, FileActivity.this, navView);
 
-        ActionBar actionBar = getSupportActionBar();
+        final ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
             actionBar.setDisplayHomeAsUpEnabled(true);
             actionBar.setHomeAsUpIndicator(R.drawable.ic_menu_white_18dp);
@@ -96,7 +96,7 @@ public class FileActivity extends AppCompatActivity {
         recyclerView.setAdapter(adapter);
         adapter.setOnDownLoadListener(new FileRecyclerAdapter.IOnDownLoadListener() {
             @Override
-            public void onDownload(final XFile targetFile) {
+            public void onDownload(final XFile targetFile, final int position) {
                 String fileName = targetFile.getFileName();
                 String courseId = course.getId();
                 String url = "http://10.0.2.2:8081/mobile/file/download/" + fileName + "/" + courseId;
@@ -112,14 +112,21 @@ public class FileActivity extends AppCompatActivity {
                                 LocalFile localFile = new LocalFile(targetFile.getFileId(), file.getAbsolutePath(), targetFile.getFileName());
                                 localFile.save();
                                 ToastUtils.show("文件下载完成");
-                                adapter.notifyDataSetChanged();
+                                adapter.notifyItemChanged(position);
                             }
                         });
                     }
 
                     @Override
-                    public void onDownloading(int progress) {
+                    public void onDownloading(final int progress) {
                         Log.d("File", "文件正在下载：" + progress);
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                adapter.setChange(position, progress);
+                            }
+                        });
+
                     }
 
                     @Override
@@ -250,7 +257,7 @@ public class FileActivity extends AppCompatActivity {
                         public void run() {
                             LocalFile localFile = new LocalFile(data, path, finalFile.getName());;
                             localFile.save();
-                            ToastUtils.show("文件下载完成");
+                            ToastUtils.show("文件上传完成");
                             adapter.notifyDataSetChanged();
                         }
                     });

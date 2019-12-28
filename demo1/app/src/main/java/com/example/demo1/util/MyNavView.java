@@ -4,12 +4,13 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.view.LayoutInflater;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 
-import com.example.demo1.DiscussionByCourseActivity;
+import com.example.demo1.DiscussionActivity;
 import com.example.demo1.LoginActivity;
 import com.example.demo1.R;
 import com.example.demo1.dialog.CustomDialog;
@@ -21,6 +22,11 @@ import static android.content.Context.MODE_PRIVATE;
 public class MyNavView {
 
     public static void initNavView(final Activity activity, final Context context, NavigationView navigationView) {
+        View headerLayout = (View)navigationView.inflateHeaderView(R.layout.main_nav_header);
+        TextView headerName= (TextView) headerLayout.findViewById(R.id.main_nav_header_name);
+        TextView headerId = (TextView)headerLayout.findViewById(R.id.main_nav_header_id);
+        headerName.setText(context.getSharedPreferences("userInfo", MODE_PRIVATE).getString("name", "ERROR"));
+        headerId.setText(context.getSharedPreferences("userInfo",MODE_PRIVATE).getString("id", "ERROR"));
         navigationView.setCheckedItem(R.id.student_main_nav_info);
         navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
@@ -47,7 +53,7 @@ public class MyNavView {
                         }).show();
                         break;
                     case R.id.student_main_nav_talk:
-                        Intent intent = new Intent(context, DiscussionByCourseActivity.class);
+                        Intent intent = new Intent(context, DiscussionActivity.class);
                         context.startActivity(intent);
                 }
                 return true;

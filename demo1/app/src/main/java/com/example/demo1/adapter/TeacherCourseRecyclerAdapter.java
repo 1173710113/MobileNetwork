@@ -9,11 +9,11 @@ import android.widget.TextView;
 
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.demo1.DiscussionByCourseActivity;
+import com.example.demo1.DiscussionActivity;
 import com.example.demo1.FileActivity;
 import com.example.demo1.R;
 import com.example.demo1.TeacherHomeworkActivity;
-import com.example.demo1.TeacherTestActivity;
+import com.example.demo1.TestActivity;
 import com.example.demo1.domain.TeacherCourse;
 
 import java.util.ArrayList;
@@ -68,7 +68,7 @@ public class TeacherCourseRecyclerAdapter extends RecyclerView.Adapter<TeacherCo
         holder.testImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(v.getContext(), TeacherTestActivity.class);
+                Intent intent = new Intent(v.getContext(), TestActivity.class);
                 intent.putExtra("course", course);
                 v.getContext().startActivity(intent);
             }
@@ -84,7 +84,7 @@ public class TeacherCourseRecyclerAdapter extends RecyclerView.Adapter<TeacherCo
         holder.discussionImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(v.getContext(), DiscussionByCourseActivity.class);
+                Intent intent = new Intent(v.getContext(), DiscussionActivity.class);
                 intent.putExtra("course", course);
                 v.getContext().startActivity(intent);
             }

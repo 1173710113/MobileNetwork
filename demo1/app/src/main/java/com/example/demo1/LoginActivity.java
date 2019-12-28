@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -12,6 +13,13 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 
+import com.example.demo1.domain.Course;
+import com.example.demo1.domain.Discussion;
+import com.example.demo1.domain.LocalFile;
+import com.example.demo1.domain.Reply;
+import com.example.demo1.domain.Score;
+import com.example.demo1.domain.SingleChoiceQuestion;
+import com.example.demo1.domain.Test;
 import com.example.demo1.domain.User;
 import com.example.demo1.util.AES;
 import com.example.demo1.util.HttpUtil;
@@ -20,6 +28,7 @@ import com.hjq.toast.ToastUtils;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.litepal.crud.DataSupport;
 
 import java.io.IOException;
 
@@ -29,6 +38,8 @@ import okhttp3.Response;
 
 
 public class LoginActivity extends AppCompatActivity implements View.OnClickListener {
+    //private static String myip = "172.20.10.2";
+    private static String myip="10.0.2.2";
     private SharedPreferences pref;
     private SharedPreferences.Editor editor;
     private EditText idText, passwordText;
@@ -108,7 +119,8 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         System.out.println("456");
         User user = new User(id, password, null, null, null, null);
         JSONObject object = JSONUtil.UserParseJSON(user);
-        String url = "http://10.0.2.2:8081/mobile/user/login";
+        String url = "http://" + myip + ":8081/mobile/user/login";
+        System.out.println(url);
         HttpUtil.sendHttpRequest(url, object, new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
@@ -149,6 +161,17 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         try {
             JSONObject object = new JSONObject(data);
             String id = object.getString("id");
+            String pre = getSharedPreferences("userInfo", MODE_PRIVATE).getString("id", null);
+            if(pre == null || !id.equals(pre)) {
+                DataSupport.deleteAll(Course.class);
+                DataSupport.deleteAll(Discussion.class);
+                DataSupport.deleteAll(Reply.class);
+                DataSupport.deleteAll(SingleChoiceQuestion.class);
+                DataSupport.deleteAll(Test.class);
+                DataSupport.deleteAll(Score.class);
+                DataSupport.deleteAll(LocalFile.class);
+                Log.e("User", "新用户");
+            }
             String password = object.getString("password");
             String name = object.getString("name");
             String type = object.getString("type");

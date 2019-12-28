@@ -146,7 +146,8 @@
                     <ImageView
                         android:layout_width="15pt"
                         android:layout_height="15pt"
-                        android:src="@drawable/ic_assessment_black_18dp"/>
+                        android:src="@drawable/ic_assessment_black_18dp"
+                        android:id="@+id/course_recycler_item_analysis"/>
                     <ImageView
                         android:layout_width="15pt"
                         android:layout_height="15pt"
@@ -165,7 +166,8 @@
                     <ImageView
                         android:layout_width="15pt"
                         android:layout_height="15pt"
-                        android:src="@drawable/ic_folder_open_black_18dp"/>
+                        android:src="@drawable/ic_folder_open_black_18dp"
+                        android:id="@+id/course_recycler_item_file"/>
                     <ImageView
                         android:layout_width="15pt"
                         android:layout_height="15pt"

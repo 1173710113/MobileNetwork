@@ -111,7 +111,7 @@
         android:layout_height="match_parent"
         android:id="@+id/test_detail_nav"
         android:layout_gravity="start"
-        app:menu="@menu/student_main_nav_menu"
+        app:menu="@menu/main_nav_menu"
         app:headerLayout="@layout/main_nav_header"
         />
 

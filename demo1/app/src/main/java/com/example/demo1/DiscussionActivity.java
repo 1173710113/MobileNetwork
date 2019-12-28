@@ -1,6 +1,5 @@
 package com.example.demo1;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -9,15 +8,12 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 
 import com.example.demo1.adapter.DiscussionRecyclerAdapter;
 import com.example.demo1.dialog.AddDiscussionDialog;
-import com.example.demo1.dialog.CustomDialog;
 import com.example.demo1.domain.Course;
 import com.example.demo1.domain.Discussion;
 import com.example.demo1.util.HttpUtil;
@@ -41,7 +37,7 @@ import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.Response;
 
-public class DiscussionByCourseActivity extends AppCompatActivity {
+public class DiscussionActivity extends AppCompatActivity {
 
     private DrawerLayout mDrawerLayout;
     private List<Discussion> discussionList = new ArrayList<>();
@@ -66,7 +62,7 @@ public class DiscussionByCourseActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         mDrawerLayout = (DrawerLayout) findViewById(R.id.custom_layout_1_drawer);
         NavigationView navView = (NavigationView) findViewById(R.id.custom_layout_1_nav);
-        MyNavView.initNavView(DiscussionByCourseActivity.this, DiscussionByCourseActivity.this, navView);
+        MyNavView.initNavView(DiscussionActivity.this, DiscussionActivity.this, navView);
 
         ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
@@ -90,7 +86,7 @@ public class DiscussionByCourseActivity extends AppCompatActivity {
                 if(course == null) {
                     return true;
                 }
-                AddDiscussionDialog dialog = new AddDiscussionDialog(DiscussionByCourseActivity.this);
+                AddDiscussionDialog dialog = new AddDiscussionDialog(DiscussionActivity.this);
                 dialog.setCancelListener(new AddDiscussionDialog.IOnCancelListener() {
                     @Override
                     public void onCancel(AddDiscussionDialog dialog) {
