@@ -55,5 +55,13 @@ public class UserServiceImp implements UserService{
 		// TODO Auto-generated method stub
 		return mapper.getUserById(userId);
 	}
+	
+	public void updateUserName(String name, String id) {
+		mapper.updateUserName(name, id);
+	}
+	
+	public void updateUserPass(String id, String pass) {
+		mapper.updateUserPass(id, pass);
+	}
 
 }

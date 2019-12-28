@@ -35,14 +35,15 @@ import com.example.demo.util.TimeUtil;
 public class FileController {
 	@Autowired
 	FileService fileService;
+
 	@RequestMapping("/upload")
 	@ResponseBody
-	public String upload(MultipartFile file, String posterId, String courseId, HttpServletRequest request){
+	public String upload(MultipartFile file, String posterId, String courseId, HttpServletRequest request) {
 		String fileName = file.getOriginalFilename();
 		String realPath = request.getSession().getServletContext().getRealPath("/upload/" + courseId);
 		File targetFile = new File(realPath);
-		//create folder if the directory is not exist
-		if(!targetFile.exists() && !targetFile.isDirectory()) {
+		// create folder if the directory is not exist
+		if (!targetFile.exists() && !targetFile.isDirectory()) {
 			targetFile.mkdirs();
 		}
 		File dir = new File(targetFile, fileName);
@@ -59,11 +60,12 @@ public class FileController {
 		}
 		return "fail";
 	}
-	
+
 	@RequestMapping("/download/{fileName}/{courseId}")
 	@ResponseBody
-	public String download(@PathVariable("fileName")String fileName, @PathVariable("courseId")String courseId, HttpServletRequest request, HttpServletResponse response) throws Exception{
-		String realPath = request.getSession().getServletContext().getRealPath("upload/"+courseId);
+	public String download(@PathVariable("fileName") String fileName, @PathVariable("courseId") String courseId,
+			HttpServletRequest request, HttpServletResponse response) throws Exception {
+		String realPath = request.getSession().getServletContext().getRealPath("upload/" + courseId);
 		File file = new File(realPath, fileName);
 		FileInputStream stream = new FileInputStream(file);
 		String extendFileName = fileName.substring(fileName.lastIndexOf("."));
@@ -74,7 +76,7 @@ public class FileController {
 		FileCopyUtils.copy(stream, out);
 		return "success";
 	}
-	
+
 	@RequestMapping("/query/{courseId}")
 	@ResponseBody
 	public List<XFile> queryFileByCourse(@PathVariable("courseId") String courseId) {

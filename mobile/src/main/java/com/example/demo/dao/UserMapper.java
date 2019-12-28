@@ -68,4 +68,8 @@ public interface UserMapper {
 	public void updateUserPassword(@Param("password") String password);
 	
 	public User getUserById(@Param("account")String account);
+	
+	public void updateUserName(String name, String id);
+	
+	public void updateUserPass(String id, String pass);
 }

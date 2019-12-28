@@ -31,5 +31,17 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		VALUES(#{id},#{password},#{type},#{name},#{sex},#{icon_path});
 	</insert>
 	
+	<update id="updateUserName">
+		UPDATE user_table
+		SET name=#{name}
+		WHERE id=#{id}
+	</update>
+	
+	<update id="updateUserPass">
+		UPDATE user_table
+		SET password=#{pass}
+		WHERE id=#{id}
+	</update>
+	
 	
 </mapper>

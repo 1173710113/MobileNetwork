@@ -8,6 +8,7 @@ import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.TouchDelegate;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -24,6 +25,7 @@ import com.example.demo1.domain.User;
 import com.example.demo1.util.AES;
 import com.example.demo1.util.HttpUtil;
 import com.example.demo1.util.JSONUtil;
+import com.example.demo1.util.ValidateUtil;
 import com.hjq.toast.ToastUtils;
 
 import org.json.JSONException;
@@ -57,6 +59,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         autoLogin = (CheckBox) findViewById(R.id.auto_login);
         loginBtn = (Button) findViewById(R.id.button_login);
         registerBtn = (Button) findViewById(R.id.button_register);
+
         pref = getSharedPreferences("userInfo", MODE_PRIVATE);
         editor = pref.edit();
         boolean isRemember = pref.getBoolean("remember_password", false);
@@ -67,10 +70,27 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         }
         boolean isAutoLogin = pref.getBoolean("auto_login", false);
         if (isAutoLogin) {
+            idText.setText(pref.getString("id", ""));
+            passwordText.setText(pref.getString("password", ""));
+            rememberPass.setChecked(true);
             autoLogin.setChecked(true);
-            //Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+            String type = pref.getString("type", null);
+            switch (type) {
+                case "教师 ":
+                    Intent intent =  new Intent(LoginActivity.this, TeacherMainActivity.class);
+                    startActivity(intent);
+                    break;
+                case "学生":
+                    Intent intent2 = new Intent(LoginActivity.this, StudentMainActivity.class);
+                    startActivity(intent2);
+                    break;
+                default:
+                    ToastUtils.show("出错了");
+                    pref.edit().clear();
+                    pref.edit().apply();
+                    return;
+            }
             ToastUtils.show("登入成功");
-            //startActivity(intent);
             LoginActivity.this.finish();
         }
         loginBtn.setOnClickListener(this);
@@ -131,16 +151,19 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             public void onResponse(Call call, Response response) throws IOException {
                 if (response.code() == 200) {
                     String data = response.body().string();
-                    System.out.println(data);
+                    if(ValidateUtil.isEmpty(data)) {
+                        ToastUtils.show("登入失败 ");
+                        return;
+                    }
                     writeUserInfo(data);
                     Log.d("LoginActivity", "LoginUser:" + data);
                     ToastUtils.show("登入成功");
                     String type = getSharedPreferences("userInfo", MODE_PRIVATE).getString("type", null);
-                    if(type.equals("教师")) {
+                    if(type != null && type.equals("教师")) {
                         Intent intent = new Intent(LoginActivity.this, TeacherMainActivity.class);
                         startActivity(intent);
                         LoginActivity.this.finish();
-                    } else {
+                    } else if(type != null && type.equals("学生")){
                         Intent intent = new Intent(LoginActivity.this, StudentMainActivity.class);
                         startActivity(intent);
                         LoginActivity.this.finish();

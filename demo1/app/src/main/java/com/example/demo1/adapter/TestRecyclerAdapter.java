@@ -114,7 +114,12 @@ public class TestRecyclerAdapter extends RecyclerView.Adapter<TestRecyclerAdapte
                     case "教师":
                         Intent intent = new Intent(holder.itemView.getContext(), TestDetailActivity.class);
                         intent.putExtra("test", test);
-                        intent.putExtra("count", mMap.get(test).toString());
+                        Integer count1 = mMap.get(test);
+                        if(count1 != null) {
+                            intent.putExtra("count", mMap.get(test).toString());
+                        } else {
+                            intent.putExtra("count", "0");
+                        }
                         holder.itemView.getContext().startActivity(intent);
                         break;
                     case  "学生":

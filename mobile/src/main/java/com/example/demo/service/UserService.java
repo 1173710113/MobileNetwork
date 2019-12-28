@@ -61,4 +61,8 @@ public interface UserService {
 	public String deleteUser(String id);
 	
 	public User getUserById(String userId);
+	
+	public void updateUserName(String name, String id);
+	
+	public void updateUserPass(String id, String pass);
 }

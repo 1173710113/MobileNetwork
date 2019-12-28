@@ -226,4 +226,10 @@ public class TeacherMainActivity extends BaseActivity {
             }
         });
     }
+
+    public void onResume(){
+        super.onResume();
+        mDrawerLayout.closeDrawers();
+        queryCourse();
+    }
 }

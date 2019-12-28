@@ -66,5 +66,14 @@ public class UserController {
 		String student = studnets.get(n);
 		return userService.getUserById(student);
 	}
-
+	
+	@RequestMapping("/updatename")
+	public void updateUserName(String name, String id) {
+		userService.updateUserName(name, id);
+	}
+	
+	@RequestMapping("update/pass")
+	public void updateUserPass(String id, String pass) {
+		userService.updateUserPass(id, pass);
+	}
 }

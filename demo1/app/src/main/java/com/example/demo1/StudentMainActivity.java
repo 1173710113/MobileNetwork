@@ -109,7 +109,7 @@ public class StudentMainActivity extends AppCompatActivity {
         mDrawerLayout = (DrawerLayout) findViewById(R.id.custom_layout_1_drawer);
 
        NavigationView navView = (NavigationView) findViewById(R.id.custom_layout_1_nav);
-        MyNavView.initNavView(StudentMainActivity.this, StudentMainActivity.this, navView);
+       MyNavView.initNavView(StudentMainActivity.this, StudentMainActivity.this, navView);
 
         ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {

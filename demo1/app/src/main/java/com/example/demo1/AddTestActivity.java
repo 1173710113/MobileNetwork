@@ -1,7 +1,10 @@
 package com.example.demo1;
 
-import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.core.view.GravityCompat;
+import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -9,14 +12,11 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.ArrayAdapter;
-import android.widget.ListView;
 import android.widget.TextView;
 
 import com.bigkoo.pickerview.builder.TimePickerBuilder;
 import com.bigkoo.pickerview.listener.OnTimeSelectListener;
 import com.bigkoo.pickerview.view.TimePickerView;
-import com.example.demo1.adapter.SingleChoiceAdapter;
 import com.example.demo1.adapter.SingleChoiceRecyclerAdapter;
 import com.example.demo1.dialog.AddQuestionDialog;
 import com.example.demo1.dialog.AddTestDialog;
@@ -27,11 +27,13 @@ import com.example.demo1.domain.QuestionContentSingleChoice;
 import com.example.demo1.domain.SingleChoiceQuestion;
 import com.example.demo1.util.HttpUtil;
 import com.example.demo1.util.JSONUtil;
+import com.example.demo1.util.MyNavView;
 import com.example.demo1.util.ValidateUtil;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.navigation.NavigationView;
 import com.hjq.toast.ToastUtils;
 
 import org.json.JSONArray;
-import org.json.JSONObject;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -41,67 +43,44 @@ import java.util.List;
 
 import okhttp3.Call;
 import okhttp3.Callback;
-import okhttp3.OkHttpClient;
 import okhttp3.Response;
 
-public class AddTestActivity extends AppCompatActivity implements View.OnClickListener{
+public class AddTestActivity extends AppCompatActivity {
     private List<SingleChoiceQuestion> questionList = new ArrayList<>();
     private RecyclerView recyclerView;
     private SingleChoiceRecyclerAdapter adapter;
-    private TextView addText, postText;
     private Course course;
+    private DrawerLayout mDrawerLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_add_test2);
-        course = (Course)getIntent().getSerializableExtra("course");
-        recyclerView = (RecyclerView) findViewById(R.id.add_question_list);
+        setContentView(R.layout.custom_layout_1);
+
+        course = (Course) getIntent().getSerializableExtra("course");
+        recyclerView = (RecyclerView) findViewById(R.id.custom_layout_1_recycler_list);
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(layoutManager);
         adapter = new SingleChoiceRecyclerAdapter(questionList);
         recyclerView.setAdapter(adapter);
         adapter.notifyDataSetChanged();
 
-        addText = (TextView)findViewById(R.id.add_question_add);
-        postText = (TextView)findViewById(R.id.add_question_post);
-        addText.setOnClickListener(this);
-        postText.setOnClickListener(this);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.custom_layout_1_toolbar);
+        setSupportActionBar(toolbar);
+        mDrawerLayout = (DrawerLayout) findViewById(R.id.custom_layout_1_drawer);
+        NavigationView navView = (NavigationView) findViewById(R.id.custom_layout_1_nav);
+        MyNavView.initNavView(AddTestActivity.this, AddTestActivity.this, navView);
 
-    }
+        ActionBar actionBar = getSupportActionBar();
+        if (actionBar != null) {
+            actionBar.setDisplayHomeAsUpEnabled(true);
+            actionBar.setHomeAsUpIndicator(R.drawable.ic_menu_white_18dp);
+        }
 
-    @Override
-    public void onClick(View v){
-        switch (v.getId()) {
-            case R.id.add_question_add:
-                final AddQuestionDialog dialog = new AddQuestionDialog(AddTestActivity.this);
-                dialog.setOnCancelListener(new AddQuestionDialog.IOnCancelListener() {
-                    @Override
-                    public void onCancel() {
-                        dialog.dismiss();
-                    }
-                }).setOnConfirmListener(new AddQuestionDialog.IOnConfirmListener() {
-                    @Override
-                    public void onConfirm() {
-                        String content = dialog.getContent();
-                        String choiceA = dialog.getChoiceA();
-                        String choiceB = dialog.getChoiceB();
-                        String choiceC = dialog.getChoiceC();
-                        String choiceD = dialog.getChoiceD();
-                        String answer = dialog.getAnswer();
-                        if(ValidateUtil.isEmptys(Arrays.asList(content, choiceA, choiceB,choiceC, choiceD))) {
-                            ToastUtils.show("请填完");
-                            return;
-                        }
-                        SingleChoiceQuestion question = new SingleChoiceQuestion("", content, choiceA, choiceB,choiceC,choiceD, answer, "", "1");
-                        questionList.add(question);
-                        adapter.notifyDataSetChanged();
-                        ToastUtils.show("添加成功");
-                        dialog.dismiss();
-                    }
-                }).show();
-                break;
-            case R.id.add_question_post:
+        FloatingActionButton fab = (FloatingActionButton)findViewById(R.id.custom_layout_1_fab);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
                 final CustomDialog dialog1 = new CustomDialog(AddTestActivity.this);
                 dialog1.setTitle("提示").setContent("确定完成小测创建?").setCancelListener(new CustomDialog.IOnCancelListener() {
                     @Override
@@ -157,18 +136,18 @@ public class AddTestActivity extends AppCompatActivity implements View.OnClickLi
                                 String name = dialog2.getName();
                                 String startDate = dialog2.getStartDate();
                                 String endDate = dialog2.getEndDate();
-                                if(ValidateUtil.isEmptys(Arrays.asList(name, startDate, endDate))) {
+                                if (ValidateUtil.isEmptys(Arrays.asList(name, startDate, endDate))) {
                                     ToastUtils.show("请填完");
                                     return;
                                 }
                                 JSONArray jsonArray = new JSONArray();
-                                for(int i = 0; i < questionList.size(); i++) {
+                                for (int i = 0; i < questionList.size(); i++) {
                                     QuestionContentSingleChoice content = new QuestionContentSingleChoice(questionList.get(i));
                                     String contentStr = content.toString();
-                                    Question question = new Question(null, contentStr, questionList.get(i).getAnswer(),null, "4");
+                                    Question question = new Question(null, contentStr, questionList.get(i).getAnswer(), null, "4");
                                     jsonArray.put(JSONUtil.QuestionParseJSON(question));
                                 }
-                                String url = "http://10.0.2.2:8081/mobile/test/addtest/" + name + "/" +  startDate + "/" + endDate + "/" + course.getId();
+                                String url = "http://10.0.2.2:8081/mobile/test/addtest/" + name + "/" + startDate + "/" + endDate + "/" + course.getId();
 
                                 HttpUtil.sendHttpRequest(url, jsonArray, new Callback() {
                                     @Override
@@ -188,7 +167,50 @@ public class AddTestActivity extends AppCompatActivity implements View.OnClickLi
                         dialog1.dismiss();
                     }
                 }).show();
+            }
+        });
+
+    }
+
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.main_toolbar, menu);
+        return true;
+    }
+
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                mDrawerLayout.openDrawer(GravityCompat.START);
+                break;
+            case R.id.main_toolbar_add:
+                final AddQuestionDialog dialog = new AddQuestionDialog(AddTestActivity.this);
+                dialog.setOnCancelListener(new AddQuestionDialog.IOnCancelListener() {
+                    @Override
+                    public void onCancel() {
+                        dialog.dismiss();
+                    }
+                }).setOnConfirmListener(new AddQuestionDialog.IOnConfirmListener() {
+                    @Override
+                    public void onConfirm() {
+                        String content = dialog.getContent();
+                        String choiceA = dialog.getChoiceA();
+                        String choiceB = dialog.getChoiceB();
+                        String choiceC = dialog.getChoiceC();
+                        String choiceD = dialog.getChoiceD();
+                        String answer = dialog.getAnswer();
+                        if (ValidateUtil.isEmptys(Arrays.asList(content, choiceA, choiceB, choiceC, choiceD))) {
+                            ToastUtils.show("请填完");
+                            return;
+                        }
+                        SingleChoiceQuestion question = new SingleChoiceQuestion("", content, choiceA, choiceB, choiceC, choiceD, answer, "", "1");
+                        questionList.add(question);
+                        adapter.notifyDataSetChanged();
+                        ToastUtils.show("添加成功");
+                        dialog.dismiss();
+                    }
+                }).show();
                 break;
         }
+        return true;
     }
 }
