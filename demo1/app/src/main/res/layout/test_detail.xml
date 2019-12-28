@@ -112,7 +112,6 @@
         android:id="@+id/test_detail_nav"
         android:layout_gravity="start"
         app:menu="@menu/main_nav_menu"
-        app:headerLayout="@layout/main_nav_header"
         />
 
 </androidx.drawerlayout.widget.DrawerLayout>

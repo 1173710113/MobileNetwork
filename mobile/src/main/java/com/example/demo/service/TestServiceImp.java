@@ -1,5 +1,6 @@
 package com.example.demo.service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -56,6 +57,13 @@ public class TestServiceImp implements TestService {
 		// TODO Auto-generated method stub
 		
 		return testMapper.getStudentList(testId);
+	}
+	
+	public List<String> studentQueryScore(String courseId, String studentId) {
+		List<String> list = new ArrayList<>();
+		list.addAll(testMapper.studentQueryScore(courseId, studentId));
+		System.out.println(list.toString());
+		return list;
 	}
 
 }

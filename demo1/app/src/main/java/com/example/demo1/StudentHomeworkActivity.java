@@ -11,6 +11,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.TextView;
 
 import com.example.demo1.adapter.HomeworkRecyclerAdapter;
 import com.example.demo1.domain.Course;
@@ -57,8 +59,22 @@ public class StudentHomeworkActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.custom_layout_1_toolbar);
         setSupportActionBar(toolbar);
         mDrawerLayout = (DrawerLayout) findViewById(R.id.custom_layout_1_drawer);
-        NavigationView navView = (NavigationView) findViewById(R.id.custom_layout_1_nav);
-        MyNavView.initNavView(StudentHomeworkActivity.this, StudentHomeworkActivity.this, navView);
+        final NavigationView navView = (NavigationView) findViewById(R.id.custom_layout_1_nav);
+        //MyNavView.initNavView(StudentHomeworkActivity.this, StudentHomeworkActivity.this, navView);
+        //MyNavView.initNavView(AddTestActivity.this, AddTestActivity.this, navView);
+        MyNavView myNavView = new MyNavView(StudentHomeworkActivity.this, StudentHomeworkActivity.this, navView).setNameChangeListener(new MyNavView.NameChangeListener() {
+            @Override
+            public void onNameChange(final String name) {
+                View view = navView.getHeaderView(0);
+                final TextView nameText = view.findViewById(R.id.main_nav_header_name);
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        nameText.setText(name);
+                    }
+                });
+            }
+        });
 
         ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
@@ -117,5 +133,11 @@ public class StudentHomeworkActivity extends AppCompatActivity {
                 });
             }
         });
+    }
+
+    public void onResume(){
+        super.onResume();
+        queryHomework();
+        mDrawerLayout.closeDrawers();
     }
 }

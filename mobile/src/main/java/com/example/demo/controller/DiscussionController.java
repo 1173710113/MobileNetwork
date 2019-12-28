@@ -58,4 +58,10 @@ public class DiscussionController {
 		System.out.println(discussionId);
 		return replyList;
 	}
+	
+	@RequestMapping("/query/id/{id}")
+	@ResponseBody
+	public Discussion queryDiscussionById(@PathVariable("id")String id) {
+		return discussionService.queryDiscussionById(id);
+	}
 }

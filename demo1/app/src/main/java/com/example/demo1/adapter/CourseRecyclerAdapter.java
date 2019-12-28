@@ -1,6 +1,8 @@
 package com.example.demo1.adapter;
 
+import android.content.Context;
 import android.content.Intent;
+import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,9 +18,24 @@ import com.example.demo1.R;
 import com.example.demo1.StudentHomeworkActivity;
 import com.example.demo1.TestActivity;
 import com.example.demo1.domain.Course;
+import com.hjq.toast.ToastUtils;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+
+import java.io.IOException;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
+
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.MultipartBody;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.RequestBody;
+import okhttp3.Response;
 
 public class CourseRecyclerAdapter extends RecyclerView.Adapter<CourseRecyclerAdapter.ViewHolder> {
     private List<Course> mCourseList = new ArrayList<>();
@@ -67,10 +84,49 @@ public class CourseRecyclerAdapter extends RecyclerView.Adapter<CourseRecyclerAd
         holder.endDateText.setText(course.getEndTime());
         holder.analysisImage.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(v.getContext(), AnalysisActivity.class);
-                intent.putExtra("course", course);
-                v.getContext().startActivity(intent);
+            public void onClick(final View v) {
+                String studentId = holder.itemView.getContext().getSharedPreferences("userInfo", Context.MODE_PRIVATE).getString("id", null);
+                if(studentId == null) {
+                    ToastUtils.show("出错了");
+                    return;
+                }
+                RequestBody requestBody = new MultipartBody.Builder()
+                        .setType(MultipartBody.FORM)
+                        .addFormDataPart("courseId", course.getId())
+                        .addFormDataPart("studentId", studentId)
+                        .build();
+                String url = "http://10.0.2.2:8081/mobile/test/student/score";
+                Request request = new Request.Builder().url(url).post(requestBody).build();
+                OkHttpClient client = new OkHttpClient.Builder()
+                        .connectTimeout(100, TimeUnit.MILLISECONDS)
+                        .build();
+                client.newCall(request).enqueue(new Callback() {
+                    @Override
+                    public void onFailure(Call call, IOException e) {
+
+                    }
+
+                    @Override
+                    public void onResponse(Call call, Response response) throws IOException {
+                        String data = response.body().string();
+                        try {
+                            ArrayList<String> scores = new ArrayList<>();
+                            JSONArray jsonArray = new JSONArray(data);
+                            for(int i=0; i < jsonArray.length(); i++) {
+                                String temp = jsonArray.getString(i);
+                                scores.add(temp);
+                            }
+                            Intent intent = new Intent(v.getContext(), AnalysisActivity.class);
+                            intent.putExtra("course", course);
+                            Bundle bundle = new Bundle();
+                            bundle.putStringArrayList("score", scores);
+                            intent.putExtras(bundle);
+                            v.getContext().startActivity(intent);
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                });
             }
         });
         holder.testImage.setOnClickListener(new View.OnClickListener() {

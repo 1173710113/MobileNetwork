@@ -35,7 +35,8 @@
             android:layout_gravity="bottom|end"
             android:layout_margin="16dp"
             android:src="@drawable/ic_done_white_18dp"
-            android:id="@+id/custom_layout_1_fab"/>
+            android:id="@+id/custom_layout_1_fab"
+            android:visibility="gone"/>
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
     <com.google.android.material.navigation.NavigationView

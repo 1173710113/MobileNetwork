@@ -2,7 +2,6 @@ package com.example.demo1.util;
 
 import android.app.Activity;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.util.Log;
@@ -22,9 +21,6 @@ import com.example.demo1.dialog.EnrollDialog;
 import com.google.android.material.navigation.NavigationView;
 import com.hjq.toast.ToastUtils;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import java.io.IOException;
 import java.util.concurrent.TimeUnit;
 
@@ -39,8 +35,9 @@ import okhttp3.Response;
 import static android.content.Context.MODE_PRIVATE;
 
 public class MyNavView {
+    private NameChangeListener nameChangeListener;
 
-    public static void initNavView(final Activity activity, final Context context, final NavigationView navigationView) {
+    public MyNavView(final Activity activity, final Context context, final NavigationView navigationView) {
         View headerLayout = (View)navigationView.inflateHeaderView(R.layout.main_nav_header);
         TextView headerName= (TextView) headerLayout.findViewById(R.id.main_nav_header_name);
         TextView headerId = (TextView)headerLayout.findViewById(R.id.main_nav_header_id);
@@ -139,6 +136,9 @@ public class MyNavView {
                                             editor.putString("name", name);
                                             editor.apply();
                                             dialog1.dismiss();
+                                            if(nameChangeListener != null) {
+                                                nameChangeListener.onNameChange(name);
+                                            }
                                             ToastUtils.show("修改成功");
                                     }
                                 });
@@ -202,6 +202,15 @@ public class MyNavView {
                 return true;
             }
         });
+    }
+
+    public MyNavView setNameChangeListener(NameChangeListener nameChangeListener) {
+        this.nameChangeListener = nameChangeListener;
+        return this;
+    }
+
+    public interface NameChangeListener{
+        void onNameChange(String name);
     }
 
 }

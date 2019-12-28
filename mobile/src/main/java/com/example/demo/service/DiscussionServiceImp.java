@@ -72,5 +72,9 @@ public class DiscussionServiceImp implements DiscussionService {
 		list = replyMapper.queryReplyByDiscussion(discussionId);
 		return list;
 	}
+	
+	public Discussion queryDiscussionById(String id) {
+		return discussionMapper.queryDiscussionById(id);
+	}
 
 }

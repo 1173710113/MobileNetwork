@@ -21,6 +21,7 @@ import com.example.demo1.util.JSONUtil;
 import com.example.demo1.util.TimeUtil;
 import com.example.demo1.util.ValidateUtil;
 import com.google.android.material.appbar.CollapsingToolbarLayout;
+import com.google.gson.JsonObject;
 import com.hjq.toast.ToastUtils;
 
 import org.json.JSONArray;
@@ -48,19 +49,19 @@ public class DiscussionDetailActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.discussion_detail);
-        discussion = (Discussion)getIntent().getSerializableExtra("discussion");
-        CollapsingToolbarLayout collapsingToolbarLayout = (CollapsingToolbarLayout)findViewById(R.id.discussion_detail_collapse_toolbar);
+        discussion = (Discussion) getIntent().getSerializableExtra("discussion");
+        CollapsingToolbarLayout collapsingToolbarLayout = (CollapsingToolbarLayout) findViewById(R.id.discussion_detail_collapse_toolbar);
 
-        titleText = (TextView)findViewById(R.id.discussion_detail_title);
-        posterNameText = (TextView)findViewById(R.id.discussion_detail_poster_name);
-        contentText = (TextView)findViewById(R.id.discussion_detail_content);
-        postDateText = (TextView)findViewById(R.id.discussion_detail_post_date);
-        countText = (TextView)findViewById(R.id.discussion_detail_count);
+        titleText = (TextView) findViewById(R.id.discussion_detail_title);
+        posterNameText = (TextView) findViewById(R.id.discussion_detail_poster_name);
+        contentText = (TextView) findViewById(R.id.discussion_detail_content);
+        postDateText = (TextView) findViewById(R.id.discussion_detail_post_date);
+        countText = (TextView) findViewById(R.id.discussion_detail_count);
 
         titleText.setText(discussion.getTitle());
         posterNameText.setText(discussion.getPosterName());
         String content = discussion.getContent();
-        if(ValidateUtil.isEmpty(content)) {
+        if (ValidateUtil.isEmpty(content)) {
             contentText.setVisibility(View.GONE);
         } else {
             contentText.setText(discussion.getContent());
@@ -68,15 +69,15 @@ public class DiscussionDetailActivity extends BaseActivity {
         postDateText.setText(discussion.getPostTime());
         countText.setText(Integer.toString(discussion.getReplyCount()));
 
-        Toolbar toolbar = (Toolbar)findViewById(R.id.discussion_detail_toolbar);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.discussion_detail_toolbar);
         setSupportActionBar(toolbar);
         ActionBar actionBar = getSupportActionBar();
-        if(actionBar != null) {
+        if (actionBar != null) {
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
 
 
-        recyclerView = (RecyclerView)findViewById(R.id.discussion_detail_recycler_list);
+        recyclerView = (RecyclerView) findViewById(R.id.discussion_detail_recycler_list);
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(layoutManager);
         adapter = new ReplyRecyclerAdapter(replyList);
@@ -89,7 +90,7 @@ public class DiscussionDetailActivity extends BaseActivity {
         return true;
     }
 
-    public boolean onOptionsItemSelected(MenuItem item){
+    public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
                 finish();
@@ -105,16 +106,16 @@ public class DiscussionDetailActivity extends BaseActivity {
                     @Override
                     public void onConfirm(final AddReplyDialog dialog) {
                         String content = dialog.getContent();
-                        if(content == null || content.equals("")) {
+                        if (content == null || content.equals("")) {
                             ToastUtils.show("内容不能为空");
                             return;
                         }
                         String replyDiscussion = discussion.getId();
                         String time = TimeUtil.getTime();
-                        SharedPreferences pref = getSharedPreferences("userInfo",MODE_PRIVATE);
+                        SharedPreferences pref = getSharedPreferences("userInfo", MODE_PRIVATE);
                         String posterId = pref.getString("id", "ERROR");
                         Reply reply = new Reply("", replyDiscussion, posterId, "", time, content);
-                        JSONObject object = JSONUtil.replyParseJSON(reply);
+                        final JSONObject object = JSONUtil.replyParseJSON(reply);
                         String url = "http://10.0.2.2:8081/mobile/discussion/addreply";
                         HttpUtil.sendHttpRequest(url, object, new Callback() {
                             @Override
@@ -124,13 +125,43 @@ public class DiscussionDetailActivity extends BaseActivity {
 
                             @Override
                             public void onResponse(Call call, Response response) throws IOException {
-                                runOnUiThread(new Runnable() {
+                                queryReply();
+                                ToastUtils.show("添加成功");
+                                String url = "http://10.0.2.2:8081/mobile/discussion/query/id/" + discussion.getId();
+                                HttpUtil.sendHttpRequest(url, new Callback() {
                                     @Override
-                                    public void run() {
-                                        queryReply();
+                                    public void onFailure(Call call, IOException e) {
+
+                                    }
+
+                                    @Override
+                                    public void onResponse(Call call, Response response) throws IOException {
+                                        String data = response.body().string();
+                                        if (!ValidateUtil.isEmpty(data)) {
+                                            try {
+                                                JSONObject object1 = new JSONObject(data);
+                                                final Discussion newDiscussion = JSONUtil.JSONParseDiscussion(object1);
+                                                runOnUiThread(new Runnable() {
+                                                    @Override
+                                                    public void run() {
+                                                        titleText.setText(newDiscussion.getTitle());
+                                                        posterNameText.setText(newDiscussion.getPosterName());
+                                                        String content = newDiscussion.getContent();
+                                                        if (ValidateUtil.isEmpty(content)) {
+                                                            contentText.setVisibility(View.GONE);
+                                                        } else {
+                                                            contentText.setText(newDiscussion.getContent());
+                                                        }
+                                                        postDateText.setText(newDiscussion.getPostTime());
+                                                        countText.setText(Integer.toString(newDiscussion.getReplyCount()));
+                                                    }
+                                                });
+                                            } catch (JSONException e) {
+                                                e.printStackTrace();
+                                            }
+                                        }
                                     }
                                 });
-                                ToastUtils.show("添加成功");
                             }
                         });
                         dialog.dismiss();
@@ -141,7 +172,7 @@ public class DiscussionDetailActivity extends BaseActivity {
         return true;
     }
 
-    private void queryReply(){
+    private void queryReply() {
         String url = "http://10.0.2.2:8081/mobile/discussion/queryreply/" + discussion.getId();
         HttpUtil.sendHttpRequest(url, new Callback() {
             @Override
@@ -159,7 +190,7 @@ public class DiscussionDetailActivity extends BaseActivity {
             @Override
             public void onResponse(Call call, Response response) throws IOException {
                 final String data = response.body().string();
-                if(ValidateUtil.isEmpty(data)) {
+                if (ValidateUtil.isEmpty(data)) {
                     return;
                 }
                 runOnUiThread(new Runnable() {
@@ -169,7 +200,7 @@ public class DiscussionDetailActivity extends BaseActivity {
                             DataSupport.deleteAll(Reply.class, "replyDiscussion = ?", discussion.getId());
                             JSONArray jsonArray = new JSONArray(data);
                             List<Reply> list = new ArrayList<>();
-                            for(int i = 0; i < jsonArray.length(); i++) {
+                            for (int i = 0; i < jsonArray.length(); i++) {
                                 JSONObject object = jsonArray.getJSONObject(i);
                                 Reply reply = JSONUtil.JSONParseReply(object);
                                 reply.save();

@@ -6,9 +6,9 @@
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" /> <!-- 往sdcard中写入数据的权限 -->
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" /> <!-- 在sdcard中创建/删除文件的权限 -->
-    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE"/>
-    <uses-permission android:name="android.permission.INTERNET"/>
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
     <application
         android:name="org.litepal.LitePalApplication"
@@ -27,35 +27,44 @@
         <activity
             android:name=".TestActivity"
             android:label=""
-            android:launchMode="singleTop"/>
+            android:launchMode="singleTop" />
         <activity
             android:name=".TeacherHomeworkActivity"
             android:label=""
-            android:launchMode="singleTop"/>
+            android:launchMode="singleTop" />
         <activity
             android:name=".TeacherMainActivity"
             android:label=""
-            android:launchMode="singleTop"/>
-        <activity android:name=".StudentHomeworkActivity"
-            android:launchMode="singleTop"/>
+            android:launchMode="singleTop" />
+        <activity
+            android:name=".StudentHomeworkActivity"
+            android:launchMode="singleTop" />
         <activity
             android:name=".DiscussionDetailActivity"
             android:label="" />
         <activity
             android:name=".DiscussionActivity"
             android:label=""
-            android:launchMode="singleTop"/>
+            android:launchMode="singleTop" />
         <activity
             android:name=".StudentMainActivity"
             android:label=""
-            android:launchMode="singleTop"/>
-        <activity android:name=".AddTestActivity"
-            android:launchMode="singleTop"/>
-        <activity android:name=".RegistActivity"
-            android:launchMode="singleTop"/>
-        <activity android:name=".AnalysisActivity"
-            android:launchMode="singleTop"/>
-        <activity android:name=".LoginActivity"
+            android:launchMode="singleTop" />
+        <activity
+            android:name=".AddTestActivity"
+            android:label=""
+            android:launchMode="singleTop" />
+        <activity
+            android:name=".RegistActivity"
+            android:label=""
+            android:launchMode="singleTop" />
+        <activity
+            android:name=".AnalysisActivity"
+            android:label=""
+            android:launchMode="singleTop" />
+        <activity
+            android:name=".LoginActivity"
+            android:label=""
             android:launchMode="singleTop">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -63,12 +72,13 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".DrawActivity"
-            android:launchMode="singleTop"/>
+        <activity
+            android:name=".DrawActivity"
+            android:launchMode="singleTop" />
         <activity
             android:name=".FileActivity"
             android:label=""
-            android:launchMode="singleTop"/>
+            android:launchMode="singleTop" />
 
         <provider
             android:name=".util.MyFileProvider"

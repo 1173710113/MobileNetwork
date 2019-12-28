@@ -13,6 +13,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.TextView;
 
 import com.bigkoo.pickerview.builder.TimePickerBuilder;
 import com.bigkoo.pickerview.listener.OnTimeSelectListener;
@@ -63,8 +64,22 @@ public class TeacherHomeworkActivity extends AppCompatActivity {
         recyclerView.setAdapter(adapter);
 
         mDrawerLayout = (DrawerLayout) findViewById(R.id.custom_layout_1_drawer);
-        NavigationView navView = (NavigationView) findViewById(R.id.custom_layout_1_nav);
-        MyNavView.initNavView(TeacherHomeworkActivity.this, TeacherHomeworkActivity.this, navView);
+        final NavigationView navView = (NavigationView) findViewById(R.id.custom_layout_1_nav);
+        //MyNavView.initNavView(TeacherHomeworkActivity.this, TeacherHomeworkActivity.this, navView);
+        //MyNavView.initNavView(AddTestActivity.this, AddTestActivity.this, navView);
+        MyNavView myNavView = new MyNavView(TeacherHomeworkActivity.this, TeacherHomeworkActivity.this, navView).setNameChangeListener(new MyNavView.NameChangeListener() {
+            @Override
+            public void onNameChange(final String name) {
+                View view = navView.getHeaderView(0);
+                final TextView nameText = view.findViewById(R.id.main_nav_header_name);
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        nameText.setText(name);
+                    }
+                });
+            }
+        });
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.custom_layout_1_toolbar);
         setSupportActionBar(toolbar);
@@ -186,5 +201,10 @@ public class TeacherHomeworkActivity extends AppCompatActivity {
         });
     }
 
+    public void onResume(){
+        super.onResume();
+        queryHomework();
+        mDrawerLayout.closeDrawers();
+    }
 
 }

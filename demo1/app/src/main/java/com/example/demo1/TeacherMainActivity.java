@@ -13,6 +13,7 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.TextView;
 
 import com.bigkoo.pickerview.builder.TimePickerBuilder;
 import com.bigkoo.pickerview.listener.OnTimeSelectListener;
@@ -91,8 +92,22 @@ public class TeacherMainActivity extends BaseActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.custom_layout_1_toolbar);
         setSupportActionBar(toolbar);
         mDrawerLayout = (DrawerLayout) findViewById(R.id.custom_layout_1_drawer);
-        NavigationView navView = (NavigationView) findViewById(R.id.custom_layout_1_nav);
-        MyNavView.initNavView(TeacherMainActivity.this, TeacherMainActivity.this, navView);
+        final NavigationView navView = (NavigationView) findViewById(R.id.custom_layout_1_nav);
+        //MyNavView.initNavView(TeacherMainActivity.this, TeacherMainActivity.this, navView);
+        //MyNavView.initNavView(AddTestActivity.this, AddTestActivity.this, navView);
+        MyNavView myNavView = new MyNavView(TeacherMainActivity.this, TeacherMainActivity.this, navView).setNameChangeListener(new MyNavView.NameChangeListener() {
+            @Override
+            public void onNameChange(final String name) {
+                View view = navView.getHeaderView(0);
+                final TextView nameText = view.findViewById(R.id.main_nav_header_name);
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        nameText.setText(name);
+                    }
+                });
+            }
+        });
 
         ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {

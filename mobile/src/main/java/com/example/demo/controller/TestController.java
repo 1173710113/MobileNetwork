@@ -68,5 +68,11 @@ public class TestController {
 		}
 		return "true";
 	}
+	
+	@RequestMapping("/student/score")
+	@ResponseBody
+	public List<String> studentQueryScore(String courseId, String studentId) {
+		return service.studentQueryScore(courseId, studentId);
+	}
 
 }

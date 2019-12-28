@@ -8,6 +8,7 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -52,6 +53,7 @@ public class AddTestActivity extends AppCompatActivity {
     private Course course;
     private DrawerLayout mDrawerLayout;
 
+    @SuppressLint("RestrictedApi")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -68,8 +70,21 @@ public class AddTestActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.custom_layout_1_toolbar);
         setSupportActionBar(toolbar);
         mDrawerLayout = (DrawerLayout) findViewById(R.id.custom_layout_1_drawer);
-        NavigationView navView = (NavigationView) findViewById(R.id.custom_layout_1_nav);
-        MyNavView.initNavView(AddTestActivity.this, AddTestActivity.this, navView);
+        final NavigationView navView = (NavigationView) findViewById(R.id.custom_layout_1_nav);
+        //MyNavView.initNavView(AddTestActivity.this, AddTestActivity.this, navView);
+        MyNavView myNavView = new MyNavView(AddTestActivity.this, AddTestActivity.this, navView).setNameChangeListener(new MyNavView.NameChangeListener() {
+            @Override
+            public void onNameChange(final String name) {
+                View view = navView.getHeaderView(0);
+                final TextView nameText = view.findViewById(R.id.main_nav_header_name);
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        nameText.setText(name);
+                    }
+                });
+            }
+        });
 
         ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
@@ -78,6 +93,7 @@ public class AddTestActivity extends AppCompatActivity {
         }
 
         FloatingActionButton fab = (FloatingActionButton)findViewById(R.id.custom_layout_1_fab);
+        fab.setVisibility(View.VISIBLE);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -212,5 +228,10 @@ public class AddTestActivity extends AppCompatActivity {
                 break;
         }
         return true;
+    }
+
+    public void onResume(){
+        super.onResume();
+        mDrawerLayout.closeDrawers();
     }
 }

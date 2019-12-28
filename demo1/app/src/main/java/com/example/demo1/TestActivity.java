@@ -12,6 +12,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.TextView;
 
 import com.example.demo1.adapter.TestRecyclerAdapter;
 import com.example.demo1.domain.Course;
@@ -58,8 +60,22 @@ public class TestActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.custom_layout_1_toolbar);
         setSupportActionBar(toolbar);
         mDrawerLayout = (DrawerLayout) findViewById(R.id.custom_layout_1_drawer);
-        NavigationView navView = (NavigationView) findViewById(R.id.custom_layout_1_nav);
-        MyNavView.initNavView(TestActivity.this, TestActivity.this, navView);
+        final NavigationView navView = (NavigationView) findViewById(R.id.custom_layout_1_nav);
+        //MyNavView.initNavView(TestActivity.this, TestActivity.this, navView);
+        //MyNavView.initNavView(AddTestActivity.this, AddTestActivity.this, navView);
+        MyNavView myNavView = new MyNavView(TestActivity.this, TestActivity.this, navView).setNameChangeListener(new MyNavView.NameChangeListener() {
+            @Override
+            public void onNameChange(final String name) {
+                View view = navView.getHeaderView(0);
+                final TextView nameText = view.findViewById(R.id.main_nav_header_name);
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        nameText.setText(name);
+                    }
+                });
+            }
+        });
 
         ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
@@ -80,9 +96,12 @@ public class TestActivity extends AppCompatActivity {
                 mDrawerLayout.openDrawer(GravityCompat.START);
                 break;
             case R.id.main_toolbar_add:
-                Intent intent = new Intent(TestActivity.this, AddTestActivity.class);
-                intent.putExtra("course", course);
-                startActivity(intent);
+                String type = getSharedPreferences("userInfo", MODE_PRIVATE).getString("type", null);
+                if(type != null && type.equals("教师")){
+                    Intent intent = new Intent(TestActivity.this, AddTestActivity.class);
+                    intent.putExtra("course", course);
+                    startActivity(intent);
+                }
         }
         return true;
     }
@@ -168,5 +187,11 @@ public class TestActivity extends AppCompatActivity {
                 });
             }
         });
+    }
+
+    public void onResume(){
+        super.onResume();
+        queryTest();
+        mDrawerLayout.closeDrawers();
     }
 }

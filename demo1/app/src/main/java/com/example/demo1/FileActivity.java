@@ -20,9 +20,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ListView;
-import android.widget.Toast;
+import android.widget.TextView;
 
 import com.example.demo1.adapter.FileRecyclerAdapter;
 import com.example.demo1.domain.Course;
@@ -37,14 +35,8 @@ import com.example.demo1.util.HttpUtil;
 import com.example.demo1.util.JSONUtil;
 import com.example.demo1.util.MyNavView;
 import com.example.demo1.util.PermissionUtil;
-import com.example.demo1.util.UIUpdateUtilImp;
-import com.example.demo1.util.ValidateUtil;
 import com.google.android.material.navigation.NavigationView;
 import com.hjq.toast.ToastUtils;
-
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.io.File;
 import java.io.IOException;
@@ -79,8 +71,22 @@ public class FileActivity extends AppCompatActivity {
         androidx.appcompat.widget.Toolbar toolbar = (Toolbar) findViewById(R.id.custom_layout_1_toolbar);
         setSupportActionBar(toolbar);
         mDrawerLayout = (DrawerLayout) findViewById(R.id.custom_layout_1_drawer);
-        NavigationView navView = (NavigationView) findViewById(R.id.custom_layout_1_nav);
-        MyNavView.initNavView(FileActivity.this, FileActivity.this, navView);
+        final NavigationView navView = (NavigationView) findViewById(R.id.custom_layout_1_nav);
+        //MyNavView.initNavView(FileActivity.this, FileActivity.this, navView);
+        //MyNavView.initNavView(AddTestActivity.this, AddTestActivity.this, navView);
+        MyNavView myNavView = new MyNavView(FileActivity.this, FileActivity.this, navView).setNameChangeListener(new MyNavView.NameChangeListener() {
+            @Override
+            public void onNameChange(final String name) {
+                View view = navView.getHeaderView(0);
+                final TextView nameText = view.findViewById(R.id.main_nav_header_name);
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        nameText.setText(name);
+                    }
+                });
+            }
+        });
 
         final ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
@@ -300,6 +306,7 @@ public class FileActivity extends AppCompatActivity {
     public void onResume() {
         super.onResume();
         queryFile();
+        mDrawerLayout.closeDrawers();
     }
 
 }

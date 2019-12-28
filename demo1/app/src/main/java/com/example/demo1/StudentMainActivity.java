@@ -12,6 +12,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.TextView;
 
 import com.example.demo1.adapter.CourseRecyclerAdapter;
 import com.example.demo1.dialog.CustomDialog;
@@ -108,8 +110,22 @@ public class StudentMainActivity extends AppCompatActivity {
 
         mDrawerLayout = (DrawerLayout) findViewById(R.id.custom_layout_1_drawer);
 
-       NavigationView navView = (NavigationView) findViewById(R.id.custom_layout_1_nav);
-       MyNavView.initNavView(StudentMainActivity.this, StudentMainActivity.this, navView);
+       final NavigationView navView = (NavigationView) findViewById(R.id.custom_layout_1_nav);
+       //MyNavView.initNavView(StudentMainActivity.this, StudentMainActivity.this, navView);
+        //MyNavView.initNavView(AddTestActivity.this, AddTestActivity.this, navView);
+        MyNavView myNavView = new MyNavView(StudentMainActivity.this, StudentMainActivity.this, navView).setNameChangeListener(new MyNavView.NameChangeListener() {
+            @Override
+            public void onNameChange(final String name) {
+                View view = navView.getHeaderView(0);
+                final TextView nameText = view.findViewById(R.id.main_nav_header_name);
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        nameText.setText(name);
+                    }
+                });
+            }
+        });
 
         ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {

@@ -12,6 +12,7 @@ import android.content.Context;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.TextView;
 
 import com.example.demo1.adapter.SingleChoiceRecyclerAdapter;
@@ -77,8 +78,22 @@ public class TestDetailActivity extends AppCompatActivity {
 
         mDrawerLayout = (DrawerLayout) findViewById(R.id.test_detail_drawer);
 
-        NavigationView navView = (NavigationView) findViewById(R.id.test_detail_nav);
-        MyNavView.initNavView(TestDetailActivity.this, TestDetailActivity.this, navView);
+        final NavigationView navView = (NavigationView) findViewById(R.id.test_detail_nav);
+        //MyNavView.initNavView(TestDetailActivity.this, TestDetailActivity.this, navView);
+        //MyNavView.initNavView(AddTestActivity.this, AddTestActivity.this, navView);
+        MyNavView myNavView = new MyNavView(TestDetailActivity.this, TestDetailActivity.this, navView).setNameChangeListener(new MyNavView.NameChangeListener() {
+            @Override
+            public void onNameChange(final String name) {
+                View view = navView.getHeaderView(0);
+                final TextView nameText = view.findViewById(R.id.main_nav_header_name);
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        nameText.setText(name);
+                    }
+                });
+            }
+        });
 
         recyclerView = (RecyclerView) findViewById(R.id.test_detail_recycler_list);
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
@@ -192,5 +207,11 @@ public class TestDetailActivity extends AppCompatActivity {
                 });
             }
         });
+    }
+
+    public void onResume(){
+        super.onResume();
+        queryQuestion();
+        mDrawerLayout.closeDrawers();
     }
 }

@@ -63,4 +63,6 @@ public interface DiscussionService {
 	 * @return
 	 */
 	public List<Reply> queryReplyByDiscussion(String discussionId);
+	
+	public Discussion queryDiscussionById(String id);
 }

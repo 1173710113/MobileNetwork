@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.TextView;
 
 
 import androidx.appcompat.app.ActionBar;
@@ -34,16 +35,16 @@ public class AnalysisActivity extends BaseActivity {
     private LineChartView lineChart;
     private DrawerLayout mDrawerLayout;
 
-    String[] date = {"10-22", "11-22", "12-22", "1-22", "6-22", "5-23", "5-22", "6-22", "5-23", "5-22"};//X轴的标注
-    int[] score = {50, 42, 90, 33, 10, 74, 22, 18, 79, 20};//图表的数据点
     private List<PointValue> mPointValues = new ArrayList<PointValue>();
     private List<AxisValue> mAxisXValues = new ArrayList<AxisValue>();
+    private ArrayList<String> scores;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_analysis);
         lineChart = (LineChartView) findViewById(R.id.line_chart);
+        scores = getIntent().getStringArrayListExtra("score");
         getAxisXLables();//获取x轴的标注
         getAxisPoints();//获取坐标点
         initLineChart();//初始化
@@ -51,8 +52,22 @@ public class AnalysisActivity extends BaseActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.analysis_toolbar);
         setSupportActionBar(toolbar);
         mDrawerLayout = (DrawerLayout) findViewById(R.id.analysis_drawer);
-        NavigationView navView = (NavigationView) findViewById(R.id.analysis_nav);
-        MyNavView.initNavView(AnalysisActivity.this, AnalysisActivity.this, navView);
+        final NavigationView navView = (NavigationView) findViewById(R.id.analysis_nav);
+        //MyNavView.initNavView(AnalysisActivity.this, AnalysisActivity.this, navView);
+        //MyNavView.initNavView(AddTestActivity.this, AddTestActivity.this, navView);
+        MyNavView myNavView = new MyNavView(AnalysisActivity.this, AnalysisActivity.this, navView).setNameChangeListener(new MyNavView.NameChangeListener() {
+            @Override
+            public void onNameChange(final String name) {
+                View view = navView.getHeaderView(0);
+                final TextView nameText = view.findViewById(R.id.main_nav_header_name);
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        nameText.setText(name);
+                    }
+                });
+            }
+        });
 
         ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
@@ -79,8 +94,8 @@ public class AnalysisActivity extends BaseActivity {
      * 设置X 轴的显示
      */
     private void getAxisXLables() {
-        for (int i = 0; i < date.length; i++) {
-            mAxisXValues.add(new AxisValue(i).setLabel(date[i]));
+        for (int i = 0; i < scores.size(); i++) {
+            mAxisXValues.add(new AxisValue(i).setLabel(Integer.toString(i+1)));
         }
     }
 
@@ -88,8 +103,8 @@ public class AnalysisActivity extends BaseActivity {
      * 图表的每个点的显示
      */
     private void getAxisPoints() {
-        for (int i = 0; i < score.length; i++) {
-            mPointValues.add(new PointValue(i, score[i]));
+        for (int i = 0; i < scores.size(); i++) {
+            mPointValues.add(new PointValue(i, Float.parseFloat(scores.get(i))));
         }
     }
 

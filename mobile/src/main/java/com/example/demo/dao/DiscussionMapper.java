@@ -79,4 +79,6 @@ public interface DiscussionMapper {
 	 */
 	public List<Discussion> queryDiscussionByPoster(@Param("poster_id")String posterId);
 	
+	
+	public Discussion queryDiscussionById(String id);
 }
