@@ -64,7 +64,8 @@ public class MyNavView {
                                 Intent intent = new Intent(context, LoginActivity.class);
                                 context.startActivity(intent);
                                 ToastUtils.show("已退出");
-                                activity.finish();
+                                ActivityCollector.finishAll();
+
                             }
                         }).show();
                         break;

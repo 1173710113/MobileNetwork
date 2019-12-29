@@ -25,6 +25,7 @@ import com.example.demo1.util.MyNavView;
 import com.example.demo1.util.TimeUtil;
 import com.example.demo1.util.ValidateUtil;
 import com.google.android.material.appbar.CollapsingToolbarLayout;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
 import com.hjq.toast.ToastUtils;
 
@@ -55,6 +56,15 @@ public class DiscussionDetailActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.discussion_detail);
+
+        //设置fba
+        FloatingActionButton fab = (FloatingActionButton)findViewById(R.id.discussion_detail_fab);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                queryReply();
+            }
+        });
 
         //下拉刷新
         swipeRefreshLayout = (SwipeRefreshLayout)findViewById(R.id.discussion_detail_refresh);

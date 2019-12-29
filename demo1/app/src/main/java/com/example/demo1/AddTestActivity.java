@@ -92,7 +92,6 @@ public class AddTestActivity extends BaseActivity {
         }
 
         FloatingActionButton fab = (FloatingActionButton)findViewById(R.id.custom_layout_1_fab);
-        fab.setVisibility(View.VISIBLE);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

@@ -38,10 +38,12 @@
             android:launchMode="singleTop" />
         <activity
             android:name=".StudentHomeworkActivity"
-            android:launchMode="singleTop" />
+            android:launchMode="singleTop"
+            android:label=""/>
         <activity
             android:name=".DiscussionDetailActivity"
-            android:label="" />
+            android:label=""
+            android:launchMode="singleTop"/>
         <activity
             android:name=".DiscussionActivity"
             android:label=""
@@ -74,7 +76,8 @@
         </activity>
         <activity
             android:name=".DrawActivity"
-            android:launchMode="singleTop" />
+            android:launchMode="singleTop"
+            android:label=""/>
         <activity
             android:name=".FileActivity"
             android:label=""

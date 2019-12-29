@@ -35,6 +35,7 @@ import com.example.demo1.util.HttpUtil;
 import com.example.demo1.util.JSONUtil;
 import com.example.demo1.util.MyNavView;
 import com.example.demo1.util.PermissionUtil;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
 import com.hjq.toast.ToastUtils;
 
@@ -75,6 +76,16 @@ public class FileActivity extends BaseActivity {
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
+                queryFile();
+            }
+        });
+
+        //设置fba
+        FloatingActionButton fab = (FloatingActionButton)findViewById(R.id.custom_layout_1_fab);
+        fab.setImageResource(R.drawable.ic_refresh_white_24dp);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
                 queryFile();
             }
         });

@@ -23,6 +23,7 @@ import com.example.demo1.util.JSONUtil;
 import com.example.demo1.util.MyNavView;
 import com.example.demo1.util.TimeUtil;
 import com.example.demo1.util.ValidateUtil;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
 import com.hjq.toast.ToastUtils;
 
@@ -70,6 +71,16 @@ public class DiscussionActivity extends BaseActivity {
         recyclerView.setLayoutManager(layoutManager);
         adapter = new DiscussionRecyclerAdapter(discussionList);
         recyclerView.setAdapter(adapter);
+
+        //设置fba
+        FloatingActionButton fab = (FloatingActionButton)findViewById(R.id.custom_layout_1_fab);
+        fab.setImageResource(R.drawable.ic_refresh_white_24dp);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                queryDiscussion();
+            }
+        });
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.custom_layout_1_toolbar);
         setSupportActionBar(toolbar);
