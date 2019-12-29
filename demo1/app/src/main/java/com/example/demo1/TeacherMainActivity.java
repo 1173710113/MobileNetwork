@@ -1,13 +1,12 @@
 package com.example.demo1;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import android.os.Bundle;
 import android.view.Menu;
@@ -48,11 +47,23 @@ public class TeacherMainActivity extends BaseActivity {
     private List<TeacherCourse> courseList = new ArrayList<>();
     private RecyclerView recyclerView;
     private TeacherCourseRecyclerAdapter adapter;
+    private SwipeRefreshLayout swipeRefreshLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.custom_layout_1);
+
+        //下拉刷新
+        swipeRefreshLayout = (SwipeRefreshLayout)findViewById(R.id.custom_layout_1_refresh);
+        swipeRefreshLayout.setColorSchemeColors(getResources().getColor(R.color.primary));
+        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                queryCourse();
+            }
+        });
+
         recyclerView = (RecyclerView) findViewById(R.id.custom_layout_1_recycler_list);
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(layoutManager);
@@ -221,7 +232,8 @@ public class TeacherMainActivity extends BaseActivity {
         HttpUtil.sendHttpRequest(url, new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
-
+                swipeRefreshLayout.setRefreshing(false);
+                ToastUtils.show("刷新失败");
             }
 
             @Override
@@ -236,6 +248,7 @@ public class TeacherMainActivity extends BaseActivity {
                        courseList.clear();
                        courseList.addAll(JSONUtil.JSONParseTeacherCourse(data));
                        adapter.notifyDataSetChanged();
+                       swipeRefreshLayout.setRefreshing(false);
                     }
                 });
             }

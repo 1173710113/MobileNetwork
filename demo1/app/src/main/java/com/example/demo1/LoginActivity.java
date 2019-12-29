@@ -1,14 +1,10 @@
 package com.example.demo1;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.TouchDelegate;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -22,7 +18,6 @@ import com.example.demo1.domain.Score;
 import com.example.demo1.domain.SingleChoiceQuestion;
 import com.example.demo1.domain.Test;
 import com.example.demo1.domain.User;
-import com.example.demo1.util.AES;
 import com.example.demo1.util.HttpUtil;
 import com.example.demo1.util.JSONUtil;
 import com.example.demo1.util.ValidateUtil;
@@ -39,7 +34,7 @@ import okhttp3.Callback;
 import okhttp3.Response;
 
 
-public class LoginActivity extends AppCompatActivity implements View.OnClickListener {
+public class LoginActivity extends BaseActivity implements View.OnClickListener {
     //private static String myip = "172.20.10.2";
     private static String myip="10.0.2.2";
     private SharedPreferences pref;

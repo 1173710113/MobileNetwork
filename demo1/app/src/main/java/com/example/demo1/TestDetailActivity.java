@@ -1,7 +1,6 @@
 package com.example.demo1;
 
 import androidx.appcompat.app.ActionBar;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
@@ -41,7 +40,7 @@ import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.Response;
 
-public class TestDetailActivity extends AppCompatActivity {
+public class TestDetailActivity extends BaseActivity {
 
     private Test test;
     private String count;

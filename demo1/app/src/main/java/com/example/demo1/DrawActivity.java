@@ -1,7 +1,5 @@
 package com.example.demo1;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -9,7 +7,7 @@ import android.widget.TextView;
 
 import java.util.Random;
 
-public class DrawActivity extends AppCompatActivity {
+public class DrawActivity extends BaseActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

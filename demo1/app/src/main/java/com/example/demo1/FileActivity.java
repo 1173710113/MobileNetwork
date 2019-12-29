@@ -2,12 +2,12 @@ package com.example.demo1;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
@@ -54,7 +54,7 @@ import okhttp3.Response;
 
 import static com.example.demo1.util.FileUtil.getRealPathFromURI;
 
-public class FileActivity extends AppCompatActivity {
+public class FileActivity extends BaseActivity {
     private String path, uploadfile;
     private List<XFile> fileList = new ArrayList<>();
     private Course course;
@@ -62,11 +62,22 @@ public class FileActivity extends AppCompatActivity {
     private FileRecyclerAdapter adapter;
     private String TAG = "FileUpload";
     private DrawerLayout mDrawerLayout;
+    private SwipeRefreshLayout swipeRefreshLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.custom_layout_1);
+
+        //下拉刷新
+        swipeRefreshLayout = (SwipeRefreshLayout)findViewById(R.id.custom_layout_1_refresh);
+        swipeRefreshLayout.setColorSchemeColors(getResources().getColor(R.color.primary));
+        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                queryFile();
+            }
+        });
 
         androidx.appcompat.widget.Toolbar toolbar = (Toolbar) findViewById(R.id.custom_layout_1_toolbar);
         setSupportActionBar(toolbar);
@@ -279,7 +290,8 @@ public class FileActivity extends AppCompatActivity {
         HttpUtil.sendHttpRequest(url, new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
-                ToastUtils.show("请检查网络");
+                swipeRefreshLayout.setRefreshing(false);
+                ToastUtils.show("刷新失败");
             }
 
             @Override
@@ -294,6 +306,7 @@ public class FileActivity extends AppCompatActivity {
                             fileList.clear();
                             fileList.addAll(list);
                             adapter.notifyDataSetChanged();
+                            swipeRefreshLayout.setRefreshing(false);
                         }
                     });
                 } else {

@@ -1,12 +1,12 @@
 package com.example.demo1;
 
 import androidx.appcompat.app.ActionBar;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import android.os.Bundle;
 import android.view.Menu;
@@ -39,18 +39,29 @@ import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.Response;
 
-public class DiscussionActivity extends AppCompatActivity {
+public class DiscussionActivity extends BaseActivity {
 
     private DrawerLayout mDrawerLayout;
     private List<Discussion> discussionList = new ArrayList<>();
     private RecyclerView recyclerView;
     private DiscussionRecyclerAdapter adapter;
     private Course course;
+    private SwipeRefreshLayout swipeRefreshLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.custom_layout_1);
+
+        //下拉刷新
+        swipeRefreshLayout = (SwipeRefreshLayout)findViewById(R.id.custom_layout_1_refresh);
+        swipeRefreshLayout.setColorSchemeColors(getResources().getColor(R.color.primary));
+        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                queryDiscussion();
+            }
+        });
 
         course = (Course) getIntent().getSerializableExtra("course");
 
@@ -158,7 +169,8 @@ public class DiscussionActivity extends AppCompatActivity {
             HttpUtil.sendHttpRequest(url, new Callback() {
                 @Override
                 public void onFailure(Call call, IOException e) {
-
+                    swipeRefreshLayout.setRefreshing(false);
+                    ToastUtils.show("刷新失败");
                 }
 
                 @Override
@@ -183,6 +195,7 @@ public class DiscussionActivity extends AppCompatActivity {
                                 discussionList.clear();
                                 discussionList.addAll(list);
                                 adapter.notifyDataSetChanged();
+                                swipeRefreshLayout.setRefreshing(false);
                             } catch (JSONException e) {
                                 e.printStackTrace();
                             }
@@ -196,7 +209,8 @@ public class DiscussionActivity extends AppCompatActivity {
             HttpUtil.sendHttpRequest(url, new Callback() {
                 @Override
                 public void onFailure(Call call, IOException e) {
-
+                    swipeRefreshLayout.setRefreshing(false);
+                    ToastUtils.show("刷新失败");
                 }
 
                 @Override
@@ -221,6 +235,7 @@ public class DiscussionActivity extends AppCompatActivity {
                                 discussionList.clear();
                                 discussionList.addAll(list);
                                 adapter.notifyDataSetChanged();
+                                swipeRefreshLayout.setRefreshing(false);
                             } catch (JSONException e) {
                                 e.printStackTrace();
                             }

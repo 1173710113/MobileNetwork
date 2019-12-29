@@ -1,7 +1,6 @@
 package com.example.demo1;
 
 import androidx.appcompat.app.ActionBar;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
@@ -46,7 +45,7 @@ import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.Response;
 
-public class AddTestActivity extends AppCompatActivity {
+public class AddTestActivity extends BaseActivity {
     private List<SingleChoiceQuestion> questionList = new ArrayList<>();
     private RecyclerView recyclerView;
     private SingleChoiceRecyclerAdapter adapter;

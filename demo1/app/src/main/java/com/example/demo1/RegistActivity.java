@@ -1,11 +1,8 @@
 package com.example.demo1;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.EditText;
 import android.widget.Spinner;
 
 import com.example.demo1.util.AES;
@@ -21,7 +18,7 @@ import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.Response;
 
-public class RegistActivity extends AppCompatActivity {
+public class RegistActivity extends BaseActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

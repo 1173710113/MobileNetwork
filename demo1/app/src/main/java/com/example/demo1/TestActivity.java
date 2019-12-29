@@ -1,12 +1,12 @@
 package com.example.demo1;
 
 import androidx.appcompat.app.ActionBar;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -24,6 +24,7 @@ import com.example.demo1.util.JSONUtil;
 import com.example.demo1.util.MyNavView;
 import com.example.demo1.util.ValidateUtil;
 import com.google.android.material.navigation.NavigationView;
+import com.hjq.toast.ToastUtils;
 
 import org.litepal.crud.DataSupport;
 
@@ -37,7 +38,7 @@ import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.Response;
 
-public class TestActivity extends AppCompatActivity {
+public class TestActivity extends BaseActivity {
 
     private DrawerLayout mDrawerLayout;
     private List<Test> testList = new ArrayList<>();
@@ -45,11 +46,23 @@ public class TestActivity extends AppCompatActivity {
     private RecyclerView recyclerView;
     private TestRecyclerAdapter adapter;
     private Course course;
+    private SwipeRefreshLayout swipeRefreshLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.custom_layout_1);
+
+        //下拉刷新
+        swipeRefreshLayout = (SwipeRefreshLayout)findViewById(R.id.custom_layout_1_refresh);
+        swipeRefreshLayout.setColorSchemeColors(getResources().getColor(R.color.primary));
+        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                queryTest();
+            }
+        });
+
         course = (Course) getIntent().getSerializableExtra("course");
         recyclerView = (RecyclerView) findViewById(R.id.custom_layout_1_recycler_list);
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
@@ -111,7 +124,8 @@ public class TestActivity extends AppCompatActivity {
         HttpUtil.sendHttpRequest(url, new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
-
+                swipeRefreshLayout.setRefreshing(false);
+                ToastUtils.show("刷新失败");
             }
 
             @Override
@@ -134,7 +148,8 @@ public class TestActivity extends AppCompatActivity {
                             HttpUtil.sendHttpRequest(url, new Callback() {
                                 @Override
                                 public void onFailure(Call call, IOException e) {
-
+                                    swipeRefreshLayout.setRefreshing(false);
+                                    ToastUtils.show("刷新失败");
                                 }
 
                                 @Override
@@ -149,6 +164,7 @@ public class TestActivity extends AppCompatActivity {
                                                         DataSupport.deleteAll(Score.class, "scoreId = ?", score.getId());
                                                         score.save();
                                                         adapter.notifyDataSetChanged();
+                                                        swipeRefreshLayout.setRefreshing(false);
                                                     }
                                                 });
                                             }
@@ -165,7 +181,8 @@ public class TestActivity extends AppCompatActivity {
                     HttpUtil.sendHttpRequest(url, new Callback() {
                         @Override
                         public void onFailure(Call call, IOException e) {
-
+                            swipeRefreshLayout.setRefreshing(false);
+                            ToastUtils.show("刷新失败");
                         }
 
                         @Override
@@ -183,6 +200,7 @@ public class TestActivity extends AppCompatActivity {
                         testList.addAll(list);
                         mMap.putAll(map);
                         adapter.notifyDataSetChanged();
+                        swipeRefreshLayout.setRefreshing(false);
                     }
                 });
             }

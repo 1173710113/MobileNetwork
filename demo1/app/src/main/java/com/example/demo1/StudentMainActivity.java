@@ -1,13 +1,12 @@
 package com.example.demo1;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import android.os.Bundle;
 import android.view.Menu;
@@ -41,18 +40,29 @@ import okhttp3.Callback;
 import okhttp3.OkHttpClient;
 import okhttp3.Response;
 
-public class StudentMainActivity extends AppCompatActivity {
+public class StudentMainActivity extends BaseActivity {
     private DrawerLayout mDrawerLayout;
     //private static String myip = "172.20.10.2";
     private static String myip="10.0.2.2";
     private List<Course> courseList = new ArrayList<>();
     private RecyclerView recyclerView;
     private CourseRecyclerAdapter adapter;
+    private SwipeRefreshLayout swipeRefreshLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.custom_layout_1);
+
+        //下拉刷新
+        swipeRefreshLayout = (SwipeRefreshLayout)findViewById(R.id.custom_layout_1_refresh);
+        swipeRefreshLayout.setColorSchemeColors(getResources().getColor(R.color.primary));
+        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                queryCourse();
+            }
+        });
 
         recyclerView = (RecyclerView) findViewById(R.id.custom_layout_1_recycler_list);
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
@@ -211,9 +221,11 @@ public class StudentMainActivity extends AppCompatActivity {
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
+                        ToastUtils.show("刷新失败");
                         courseList.clear();
                         courseList.addAll(DataSupport.findAll(Course.class));
                         adapter.notifyDataSetChanged();
+                        swipeRefreshLayout.setRefreshing(false);
                     }
                 });
             }
@@ -228,6 +240,7 @@ public class StudentMainActivity extends AppCompatActivity {
                             courseList.clear();
                             courseList.addAll(DataSupport.findAll(Course.class));
                             adapter.notifyDataSetChanged();
+                            swipeRefreshLayout.setRefreshing(false);
                         }
                     });
                     return;
@@ -248,6 +261,7 @@ public class StudentMainActivity extends AppCompatActivity {
                             DataSupport.deleteAll(Course.class);
                             courseList.addAll(list);
                             adapter.notifyDataSetChanged();
+                            swipeRefreshLayout.setRefreshing(false);
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }

@@ -1,12 +1,12 @@
 package com.example.demo1;
 
 import androidx.appcompat.app.ActionBar;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import android.os.Bundle;
 import android.util.Log;
@@ -43,19 +43,30 @@ import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.Response;
 
-public class TeacherHomeworkActivity extends AppCompatActivity {
+public class TeacherHomeworkActivity extends BaseActivity {
 
     private DrawerLayout mDrawerLayout;
     private RecyclerView recyclerView;
     private HomeworkRecyclerAdapter adapter;
     private List<Homework> homeworkList = new ArrayList<>();
     private Course course;
+    private SwipeRefreshLayout swipeRefreshLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.custom_layout_1);
         course = (Course) getIntent().getSerializableExtra("course");
+
+        //下拉刷新
+        swipeRefreshLayout = (SwipeRefreshLayout)findViewById(R.id.custom_layout_1_refresh);
+        swipeRefreshLayout.setColorSchemeColors(getResources().getColor(R.color.primary));
+        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                queryHomework();
+            }
+        });
 
         recyclerView = (RecyclerView) findViewById(R.id.custom_layout_1_recycler_list);
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
@@ -169,7 +180,8 @@ public class TeacherHomeworkActivity extends AppCompatActivity {
         HttpUtil.sendHttpRequest(url, new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
-
+                swipeRefreshLayout.setRefreshing(false);
+                ToastUtils.show("刷新失败");
             }
 
             @Override
@@ -192,6 +204,7 @@ public class TeacherHomeworkActivity extends AppCompatActivity {
                             homeworkList.clear();
                             homeworkList.addAll(list);
                             adapter.notifyDataSetChanged();
+                            swipeRefreshLayout.setRefreshing(false);
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }

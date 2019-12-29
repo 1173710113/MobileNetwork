@@ -9,8 +9,11 @@ import android.widget.TextView;
 
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.view.GravityCompat;
+import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.example.demo1.adapter.ReplyRecyclerAdapter;
 import com.example.demo1.dialog.AddReplyDialog;
@@ -18,10 +21,11 @@ import com.example.demo1.domain.Discussion;
 import com.example.demo1.domain.Reply;
 import com.example.demo1.util.HttpUtil;
 import com.example.demo1.util.JSONUtil;
+import com.example.demo1.util.MyNavView;
 import com.example.demo1.util.TimeUtil;
 import com.example.demo1.util.ValidateUtil;
 import com.google.android.material.appbar.CollapsingToolbarLayout;
-import com.google.gson.JsonObject;
+import com.google.android.material.navigation.NavigationView;
 import com.hjq.toast.ToastUtils;
 
 import org.json.JSONArray;
@@ -44,11 +48,24 @@ public class DiscussionDetailActivity extends BaseActivity {
     private List<Reply> replyList = new ArrayList<>();
     private RecyclerView recyclerView;
     private ReplyRecyclerAdapter adapter;
+    private SwipeRefreshLayout swipeRefreshLayout;
+    private DrawerLayout mDrawerLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.discussion_detail);
+
+        //下拉刷新
+        swipeRefreshLayout = (SwipeRefreshLayout)findViewById(R.id.discussion_detail_refresh);
+        swipeRefreshLayout.setColorSchemeColors(getResources().getColor(R.color.primary));
+        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                queryReply();
+            }
+        });
+
         discussion = (Discussion) getIntent().getSerializableExtra("discussion");
         CollapsingToolbarLayout collapsingToolbarLayout = (CollapsingToolbarLayout) findViewById(R.id.discussion_detail_collapse_toolbar);
 
@@ -69,11 +86,30 @@ public class DiscussionDetailActivity extends BaseActivity {
         postDateText.setText(discussion.getPostTime());
         countText.setText(Integer.toString(discussion.getReplyCount()));
 
+        mDrawerLayout = (DrawerLayout) findViewById(R.id.discussion_detail_drawer);
+        final NavigationView navView = (NavigationView) findViewById(R.id.discussion_detail_nav);
+        // MyNavView.initNavView(DiscussionActivity.this, DiscussionActivity.this, navView);
+        //MyNavView.initNavView(AddTestActivity.this, AddTestActivity.this, navView);
+        MyNavView myNavView = new MyNavView(DiscussionDetailActivity.this, DiscussionDetailActivity.this, navView).setNameChangeListener(new MyNavView.NameChangeListener() {
+            @Override
+            public void onNameChange(final String name) {
+                View view = navView.getHeaderView(0);
+                final TextView nameText = view.findViewById(R.id.main_nav_header_name);
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        nameText.setText(name);
+                    }
+                });
+            }
+        });
+
         Toolbar toolbar = (Toolbar) findViewById(R.id.discussion_detail_toolbar);
         setSupportActionBar(toolbar);
         ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
             actionBar.setDisplayHomeAsUpEnabled(true);
+            actionBar.setHomeAsUpIndicator(R.drawable.ic_menu_white_18dp);
         }
 
 
@@ -93,7 +129,7 @@ public class DiscussionDetailActivity extends BaseActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
-                finish();
+                mDrawerLayout.openDrawer(GravityCompat.START);
                 break;
             case R.id.main_toolbar_add:
                 AddReplyDialog dialog = new AddReplyDialog(this);
@@ -127,41 +163,6 @@ public class DiscussionDetailActivity extends BaseActivity {
                             public void onResponse(Call call, Response response) throws IOException {
                                 queryReply();
                                 ToastUtils.show("添加成功");
-                                String url = "http://10.0.2.2:8081/mobile/discussion/query/id/" + discussion.getId();
-                                HttpUtil.sendHttpRequest(url, new Callback() {
-                                    @Override
-                                    public void onFailure(Call call, IOException e) {
-
-                                    }
-
-                                    @Override
-                                    public void onResponse(Call call, Response response) throws IOException {
-                                        String data = response.body().string();
-                                        if (!ValidateUtil.isEmpty(data)) {
-                                            try {
-                                                JSONObject object1 = new JSONObject(data);
-                                                final Discussion newDiscussion = JSONUtil.JSONParseDiscussion(object1);
-                                                runOnUiThread(new Runnable() {
-                                                    @Override
-                                                    public void run() {
-                                                        titleText.setText(newDiscussion.getTitle());
-                                                        posterNameText.setText(newDiscussion.getPosterName());
-                                                        String content = newDiscussion.getContent();
-                                                        if (ValidateUtil.isEmpty(content)) {
-                                                            contentText.setVisibility(View.GONE);
-                                                        } else {
-                                                            contentText.setText(newDiscussion.getContent());
-                                                        }
-                                                        postDateText.setText(newDiscussion.getPostTime());
-                                                        countText.setText(Integer.toString(newDiscussion.getReplyCount()));
-                                                    }
-                                                });
-                                            } catch (JSONException e) {
-                                                e.printStackTrace();
-                                            }
-                                        }
-                                    }
-                                });
                             }
                         });
                         dialog.dismiss();
@@ -180,6 +181,8 @@ public class DiscussionDetailActivity extends BaseActivity {
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
+                        swipeRefreshLayout.setRefreshing(false);
+                        ToastUtils.show("刷新失败");
                         replyList.clear();
                         replyList.addAll(DataSupport.where("replyDiscussion = ?", discussion.getId()).find(Reply.class));
                         adapter.notifyDataSetChanged();
@@ -209,6 +212,7 @@ public class DiscussionDetailActivity extends BaseActivity {
                             replyList.clear();
                             replyList.addAll(list);
                             adapter.notifyDataSetChanged();
+                            swipeRefreshLayout.setRefreshing(false);
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
@@ -216,5 +220,49 @@ public class DiscussionDetailActivity extends BaseActivity {
                 });
             }
         });
+
+        String url1 = "http://10.0.2.2:8081/mobile/discussion/query/id/" + discussion.getId();
+        HttpUtil.sendHttpRequest(url1, new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                swipeRefreshLayout.setRefreshing(false);
+                ToastUtils.show("刷新失败");
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                String data = response.body().string();
+                if (!ValidateUtil.isEmpty(data)) {
+                    try {
+                        JSONObject object1 = new JSONObject(data);
+                        final Discussion newDiscussion = JSONUtil.JSONParseDiscussion(object1);
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                titleText.setText(newDiscussion.getTitle());
+                                posterNameText.setText(newDiscussion.getPosterName());
+                                String content = newDiscussion.getContent();
+                                if (ValidateUtil.isEmpty(content)) {
+                                    contentText.setVisibility(View.GONE);
+                                } else {
+                                    contentText.setText(newDiscussion.getContent());
+                                }
+                                postDateText.setText(newDiscussion.getPostTime());
+                                countText.setText(Integer.toString(newDiscussion.getReplyCount()));
+                                swipeRefreshLayout.setRefreshing(false);
+                            }
+                        });
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        });
+    }
+
+    public void onResume(){
+        super.onResume();
+        mDrawerLayout.closeDrawers();
+        queryReply();
     }
 }
