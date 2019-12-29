@@ -18,6 +18,7 @@ import com.example.demo1.R;
 import com.example.demo1.domain.LocalFile;
 import com.example.demo1.domain.XFile;
 import com.example.demo1.util.MyFileProvider;
+import com.example.demo1.util.OpenFileUtils;
 import com.hjq.toast.ToastUtils;
 
 import org.litepal.crud.DataSupport;
@@ -136,14 +137,9 @@ public class FileRecyclerAdapter extends RecyclerView.Adapter<FileRecyclerAdapte
                     File file1 = new File(localFile.getFilePath());
                     try{
                         System.out.println(localFile.getFilePath());
-                    Intent intent = new Intent("android.intent.action.View");
-                    intent.addCategory("android.intent.category.DEFAULT");
-                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                    Uri uri = MyFileProvider.getUriForFile(holder.itemView.getContext(), "com.example.demo1", file1);
-                    intent.setDataAndType(uri, "image/jpeg");
-                    holder.itemView.getContext().startActivity(intent);
+                        OpenFileUtils.openFile(holder.itemView.getContext(), file1);
                     return;}catch (Exception e) {
-
+                        e.printStackTrace();
                     }
                 }
             }

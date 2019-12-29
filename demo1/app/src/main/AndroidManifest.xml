@@ -84,8 +84,8 @@
             android:launchMode="singleTop" />
 
         <provider
-            android:name=".util.MyFileProvider"
-            android:authorities="com.example.demo1"
+            android:name="androidx.core.content.FileProvider"
+            android:authorities="com.example.demo1.fileProvider"
             android:exported="false"
             android:grantUriPermissions="true">
             <meta-data
