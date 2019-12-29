@@ -65,5 +65,30 @@ public class TestServiceImp implements TestService {
 		System.out.println(list.toString());
 		return list;
 	}
+	
+	public List<String> teacherQueryScore(String courseId) {
+		List<String> list = new ArrayList<>();
+		System.out.println(courseId);
+		List<Test> testList = testMapper.getTestList(courseId);
+		System.out.println(testList.size());
+		for(Test test : testList) {
+			List<Score> scoreList = testMapper.queryScoreByTest(test.getId());
+			System.out.println(scoreList.size());
+			if(scoreList.isEmpty()) {
+				list.add("0");
+			} else {
+				int count = 0;
+				for(Score score : scoreList) {
+					count += Integer.parseInt(score.getScore());
+				}
+				System.out.println(count);
+				float temp = Float.parseFloat(Integer.toString(count))/ scoreList.size();
+				System.out.println(temp);
+				list.add(Float.toString(temp));
+				System.out.println(list.size());
+			}
+ 		}
+		return list;
+	}
 
 }

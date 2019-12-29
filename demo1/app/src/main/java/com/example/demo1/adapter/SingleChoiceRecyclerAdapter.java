@@ -104,7 +104,9 @@ public class SingleChoiceRecyclerAdapter extends RecyclerView.Adapter<SingleChoi
                         List<String> scores =Arrays.asList(result.get(0).getEveryScore().split("/"));
                         String score = scores.get(position);
                         String first = score.substring(0,1);
+                        holder.holderMap.get(question.getAnswer()).setTextColor(Color.parseColor("#448AFF"));
                         if(first.equals("1")){
+
                         } else {
                             String second = score.substring(1);
                             if(second.equals("0")) {

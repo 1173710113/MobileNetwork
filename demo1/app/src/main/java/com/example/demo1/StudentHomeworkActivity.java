@@ -28,6 +28,7 @@ import com.hjq.toast.ToastUtils;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.litepal.crud.DataSupport;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -45,13 +46,14 @@ public class StudentHomeworkActivity extends BaseActivity {
     private List<Homework> homeworkList = new ArrayList<>();
     private Course course;
     private SwipeRefreshLayout swipeRefreshLayout;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.custom_layout_1);
 
         //下拉刷新
-        swipeRefreshLayout = (SwipeRefreshLayout)findViewById(R.id.custom_layout_1_refresh);
+        swipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.custom_layout_1_refresh);
         swipeRefreshLayout.setColorSchemeColors(getResources().getColor(R.color.primary));
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
@@ -63,7 +65,7 @@ public class StudentHomeworkActivity extends BaseActivity {
         course = (Course) getIntent().getSerializableExtra("course");
 
         //设置fba
-        FloatingActionButton fab = (FloatingActionButton)findViewById(R.id.custom_layout_1_fab);
+        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.custom_layout_1_fab);
         fab.setImageResource(R.drawable.ic_refresh_white_24dp);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -127,39 +129,60 @@ public class StudentHomeworkActivity extends BaseActivity {
             public void onFailure(Call call, IOException e) {
                 swipeRefreshLayout.setRefreshing(false);
                 ToastUtils.show("刷新失败");
+                final List<Homework> cache = DataSupport.where("courseId = ?", course.getId()).find(Homework.class);
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        homeworkList.clear();
+                        homeworkList.addAll(cache);
+                        adapter.notifyDataSetChanged();
+                    }
+                });
             }
 
             @Override
             public void onResponse(Call call, Response response) throws IOException {
                 final String data = response.body().string();
                 if (ValidateUtil.isEmpty(data)) {
+                    final List<Homework> cache = DataSupport.where("courseId = ?", course.getId()).find(Homework.class);
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            homeworkList.clear();
+                            homeworkList.addAll(cache);
+                            adapter.notifyDataSetChanged();
+                        }
+                    });
                     return;
                 }
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        List<Homework> list = new ArrayList<>();
-                        try {
-                            JSONArray jsonArray = new JSONArray(data);
-                            for (int i = 0; i < jsonArray.length(); i++) {
-                                JSONObject object = jsonArray.getJSONObject(i);
-                                Homework homework = JSONUtil.JSONParseHomework(object);
-                                list.add(homework);
+                runOnUiThread(
+                        new Runnable() {
+                            @Override
+                            public void run() {
+                                List<Homework> list = new ArrayList<>();
+                                try {
+                                    DataSupport.deleteAll(Homework.class, "courseId = ?", course.getId());
+                                    JSONArray jsonArray = new JSONArray(data);
+                                    for (int i = 0; i < jsonArray.length(); i++) {
+                                        JSONObject object = jsonArray.getJSONObject(i);
+                                        Homework homework = JSONUtil.JSONParseHomework(object);
+                                        list.add(homework);
+                                        homework.save();
+                                    }
+                                    homeworkList.clear();
+                                    homeworkList.addAll(list);
+                                    adapter.notifyDataSetChanged();
+                                    swipeRefreshLayout.setRefreshing(false);
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
+                                }
                             }
-                            homeworkList.clear();
-                            homeworkList.addAll(list);
-                            adapter.notifyDataSetChanged();
-                            swipeRefreshLayout.setRefreshing(false);
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
-                    }
-                });
+                        });
             }
         });
     }
 
-    public void onResume(){
+    public void onResume() {
         super.onResume();
         queryHomework();
         mDrawerLayout.closeDrawers();

@@ -175,13 +175,22 @@ public class DiscussionActivity extends BaseActivity {
     private void queryDiscussion() {
 
         if (course != null) {
-            String courseId = course.getId();
+            final String courseId = course.getId();
             String url = "http://10.0.2.2:8081/mobile/discussion/querydiscussion/" + courseId;
             HttpUtil.sendHttpRequest(url, new Callback() {
                 @Override
                 public void onFailure(Call call, IOException e) {
                     swipeRefreshLayout.setRefreshing(false);
                     ToastUtils.show("刷新失败");
+                    final List<Discussion> cache = DataSupport.where("courseId = ?", courseId).find(Discussion.class);
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            discussionList.clear();
+                            discussionList.addAll(cache);
+                            adapter.notifyDataSetChanged();
+                        }
+                    });
                 }
 
                 @Override
@@ -222,6 +231,15 @@ public class DiscussionActivity extends BaseActivity {
                 public void onFailure(Call call, IOException e) {
                     swipeRefreshLayout.setRefreshing(false);
                     ToastUtils.show("刷新失败");
+                    final List<Discussion> cache = DataSupport.where("courseId = ?", course.getId()).find(Discussion.class);
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            discussionList.clear();
+                            discussionList.addAll(cache);
+                            adapter.notifyDataSetChanged();
+                        }
+                    });
                 }
 
                 @Override

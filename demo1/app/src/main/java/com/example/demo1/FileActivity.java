@@ -3,6 +3,7 @@ package com.example.demo1;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.content.FileProvider;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -38,6 +39,8 @@ import com.example.demo1.util.PermissionUtil;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
 import com.hjq.toast.ToastUtils;
+
+import org.litepal.crud.DataSupport;
 
 import java.io.File;
 import java.io.IOException;
@@ -303,6 +306,15 @@ public class FileActivity extends BaseActivity {
             public void onFailure(Call call, IOException e) {
                 swipeRefreshLayout.setRefreshing(false);
                 ToastUtils.show("刷新失败");
+                final List<XFile> cache = DataSupport.where("courseId = ?", course.getId()).find(XFile.class);
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        fileList.clear();
+                        fileList.addAll(cache);
+                        adapter.notifyDataSetChanged();
+                    }
+                });
             }
 
             @Override
@@ -311,6 +323,10 @@ public class FileActivity extends BaseActivity {
                 if (response.code() == 200) {
                     String data = response.body().string();
                     final List<XFile> list = JSONUtil.JSONParseFileList(data);
+                    DataSupport.deleteAll(XFile.class, "courseId = ?", course.getId());
+                    for(XFile xFile : list) {
+                        xFile.save();
+                    }
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {

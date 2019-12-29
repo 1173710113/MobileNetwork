@@ -29,5 +29,7 @@ public interface TestMapper {
 	public List<String> getStudentList(@Param("testId") String testId);
 	
 	public List<String> studentQueryScore(String courseId, String studentId);
+	
+	public List<Score> queryScoreByTest(String testId);
 
 }

@@ -15,4 +15,5 @@ public interface TestService {
 	public Score queryScore(String testId,String studentId);
 	public List<String> getStudentList(String testId);
 	public List<String> studentQueryScore(String courseId, String studentId);
+	public List<String> teacherQueryScore(String courseId);
 }

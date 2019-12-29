@@ -73,5 +73,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		FROM test_table t, score_table s
 		WHERE t.course_id=#{courseId} and s.test_id=t.test_id and s.student_id=#{studentId}
 	</select>
+	
+	<select id="queryScoreByTest" resultMap="score">
+		SELECT *
+		FROM score_table
+		WHERE test_id=#{testId}
+	</select>
 
 </mapper>

@@ -44,7 +44,7 @@ import okhttp3.Response;
 public class StudentMainActivity extends BaseActivity {
     private DrawerLayout mDrawerLayout;
     //private static String myip = "172.20.10.2";
-    private static String myip="10.0.2.2";
+    private static String myip = "10.0.2.2";
     private List<Course> courseList = new ArrayList<>();
     private RecyclerView recyclerView;
     private CourseRecyclerAdapter adapter;
@@ -56,7 +56,7 @@ public class StudentMainActivity extends BaseActivity {
         setContentView(R.layout.custom_layout_1);
 
         //下拉刷新
-        swipeRefreshLayout = (SwipeRefreshLayout)findViewById(R.id.custom_layout_1_refresh);
+        swipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.custom_layout_1_refresh);
         swipeRefreshLayout.setColorSchemeColors(getResources().getColor(R.color.primary));
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
@@ -66,7 +66,7 @@ public class StudentMainActivity extends BaseActivity {
         });
 
         //设置fba
-        FloatingActionButton fab = (FloatingActionButton)findViewById(R.id.custom_layout_1_fab);
+        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.custom_layout_1_fab);
         fab.setImageResource(R.drawable.ic_refresh_white_24dp);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -96,7 +96,7 @@ public class StudentMainActivity extends BaseActivity {
                             ToastUtils.show("退选失败");
                             return;
                         }
-                        String url = "http://"+ myip+ ":8081/mobile/course/drop/" + studentId + "/" + courseId;
+                        String url = "http://" + myip + ":8081/mobile/course/drop/" + studentId + "/" + courseId;
                         HttpUtil.sendHttpRequest(url, new Callback() {
                             @Override
                             public void onFailure(Call call, IOException e) {
@@ -131,8 +131,8 @@ public class StudentMainActivity extends BaseActivity {
 
         mDrawerLayout = (DrawerLayout) findViewById(R.id.custom_layout_1_drawer);
 
-       final NavigationView navView = (NavigationView) findViewById(R.id.custom_layout_1_nav);
-       //MyNavView.initNavView(StudentMainActivity.this, StudentMainActivity.this, navView);
+        final NavigationView navView = (NavigationView) findViewById(R.id.custom_layout_1_nav);
+        //MyNavView.initNavView(StudentMainActivity.this, StudentMainActivity.this, navView);
         //MyNavView.initNavView(AddTestActivity.this, AddTestActivity.this, navView);
         MyNavView myNavView = new MyNavView(StudentMainActivity.this, StudentMainActivity.this, navView).setNameChangeListener(new MyNavView.NameChangeListener() {
             @Override
@@ -156,11 +156,12 @@ public class StudentMainActivity extends BaseActivity {
         queryCourse();
     }
 
-    public void onResume(){
+    public void onResume() {
         super.onResume();
         mDrawerLayout.closeDrawers();
         queryCourse();
     }
+
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.main_toolbar, menu);
         return true;
@@ -187,7 +188,7 @@ public class StudentMainActivity extends BaseActivity {
                             return;
                         }
                         String studentId = getSharedPreferences("userInfo", MODE_PRIVATE).getString("id", "ERROR");
-                        String url = "http://" + myip+":8081/mobile/course/enroll/" + code + "/" + studentId;
+                        String url = "http://" + myip + ":8081/mobile/course/enroll/" + code + "/" + studentId;
                         HttpUtil.sendHttpRequest(url, new Callback() {
                             @Override
                             public void onFailure(Call call, IOException e) {
@@ -223,7 +224,7 @@ public class StudentMainActivity extends BaseActivity {
         if (id == null) {
             return;
         }
-        String url = "http://" + myip +":8081/mobile/course/query/student/" + id;
+        String url = "http://" + myip + ":8081/mobile/course/query/student/" + id;
         OkHttpClient client = new OkHttpClient();
 
         HttpUtil.sendHttpRequest(url, new Callback() {
@@ -260,6 +261,7 @@ public class StudentMainActivity extends BaseActivity {
                     @Override
                     public void run() {
                         List<Course> list = new ArrayList<>();
+                        DataSupport.deleteAll(Course.class);
                         try {
                             JSONArray jsonArray = new JSONArray(data);
                             for (int i = 0; i < jsonArray.length(); i++) {
@@ -269,7 +271,6 @@ public class StudentMainActivity extends BaseActivity {
                                 list.add(course);
                             }
                             courseList.clear();
-                            DataSupport.deleteAll(Course.class);
                             courseList.addAll(list);
                             adapter.notifyDataSetChanged();
                             swipeRefreshLayout.setRefreshing(false);

@@ -137,6 +137,15 @@ public class TestActivity extends BaseActivity {
             public void onFailure(Call call, IOException e) {
                 swipeRefreshLayout.setRefreshing(false);
                 ToastUtils.show("刷新失败");
+                final List<Test> cache = DataSupport.where("courseId = ?", course.getId()).find(Test.class);
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        testList.clear();
+                        testList.addAll(cache);
+                        adapter.notifyDataSetChanged();
+                    }
+                });
             }
 
             @Override

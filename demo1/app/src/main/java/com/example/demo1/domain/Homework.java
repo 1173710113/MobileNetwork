@@ -1,10 +1,12 @@
 package com.example.demo1.domain;
 
+import org.litepal.crud.DataSupport;
+
 import java.io.Serializable;
 
-public class Homework implements Serializable {
+public class Homework extends DataSupport implements Serializable {
 
-    private String id;
+    private String homeworkId;
     private String posterId;
     private String posterName;
     private String title;
@@ -25,7 +27,7 @@ public class Homework implements Serializable {
     public Homework(String id, String posterId, String posterName, String title, String content, String deadline,
                     String postTime, String courseId) {
         super();
-        this.id = id;
+        this.homeworkId = id;
         this.posterId = posterId;
         this.posterName = posterName;
         this.title = title;
@@ -38,7 +40,7 @@ public class Homework implements Serializable {
      * @return the id
      */
     public String getId() {
-        return id;
+        return homeworkId;
     }
     /**
      * @return the posterId

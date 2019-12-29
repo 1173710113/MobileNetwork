@@ -3,11 +3,13 @@
  */
 package com.example.demo1.domain;
 
+import org.litepal.crud.DataSupport;
+
 /**
  * @author msi-user
  *
  */
-public class XFile {
+public class XFile extends DataSupport {
 
 	private String fileId;
 	private String filePath;

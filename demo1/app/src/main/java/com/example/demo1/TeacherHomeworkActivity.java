@@ -34,6 +34,7 @@ import com.hjq.toast.ToastUtils;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.litepal.crud.DataSupport;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -193,24 +194,44 @@ public class TeacherHomeworkActivity extends BaseActivity {
             public void onFailure(Call call, IOException e) {
                 swipeRefreshLayout.setRefreshing(false);
                 ToastUtils.show("刷新失败");
+                final List<Homework> cache = DataSupport.where("courseId = ?", course.getId()).find(Homework.class);
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        homeworkList.clear();
+                        homeworkList.addAll(cache);
+                        adapter.notifyDataSetChanged();
+                    }
+                });
             }
 
             @Override
             public void onResponse(Call call, Response response) throws IOException {
                 final String data = response.body().string();
                 if (ValidateUtil.isEmpty(data)) {
+                    final List<Homework> cache = DataSupport.where("courseId = ?", course.getId()).find(Homework.class);
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            homeworkList.clear();
+                            homeworkList.addAll(cache);
+                            adapter.notifyDataSetChanged();
+                        }
+                    });
                     return;
                 }
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
                         List<Homework> list = new ArrayList<>();
+                        DataSupport.deleteAll(Homework.class,"courseId = ?", course.getId());
                         try {
                             JSONArray jsonArray = new JSONArray(data);
                             for (int i = 0; i < jsonArray.length(); i++) {
                                 JSONObject object = jsonArray.getJSONObject(i);
                                 Homework homework = JSONUtil.JSONParseHomework(object);
                                 list.add(homework);
+                                homework.save();
                             }
                             homeworkList.clear();
                             homeworkList.addAll(list);

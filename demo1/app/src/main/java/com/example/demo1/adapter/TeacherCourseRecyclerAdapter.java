@@ -1,6 +1,7 @@
 package com.example.demo1.adapter;
 
 import android.content.Intent;
+import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,15 +10,25 @@ import android.widget.TextView;
 
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.demo1.AnalysisActivity;
 import com.example.demo1.DiscussionActivity;
 import com.example.demo1.FileActivity;
 import com.example.demo1.R;
 import com.example.demo1.TeacherHomeworkActivity;
 import com.example.demo1.TestActivity;
 import com.example.demo1.domain.TeacherCourse;
+import com.example.demo1.util.HttpUtil;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.Response;
 
 public class TeacherCourseRecyclerAdapter extends RecyclerView.Adapter<TeacherCourseRecyclerAdapter.ViewHolder> {
     private List<TeacherCourse> mTeacherCourseList = new ArrayList<>();
@@ -25,7 +36,7 @@ public class TeacherCourseRecyclerAdapter extends RecyclerView.Adapter<TeacherCo
 
     static class ViewHolder extends RecyclerView.ViewHolder{
         TextView nameText, codeText, teacherNameText, destinationText, realVolText, startDateText, endDateText;
-        ImageView testImage, homeworkImage, discussionImage, fileImage, deleteImage;
+        ImageView analysisImage, testImage, homeworkImage, discussionImage, fileImage, deleteImage;
 
         public ViewHolder(View view) {
             super(view);
@@ -35,6 +46,7 @@ public class TeacherCourseRecyclerAdapter extends RecyclerView.Adapter<TeacherCo
             destinationText = (TextView)view.findViewById(R.id.teacher_course_recycler_item_destination);
             realVolText = (TextView)view.findViewById(R.id.teacher_course_recycler_item_real_vol);
             startDateText = (TextView)view.findViewById(R.id.teacher_course_recycler_item_start_date);
+            analysisImage = (ImageView)view.findViewById(R.id.teacher_course_recycler_item_analysis);
             endDateText = (TextView)view.findViewById(R.id.teacher_course_recycler_item_end_date);
             testImage = (ImageView)view.findViewById(R.id.teacher_course_recycler_item_test);
             homeworkImage = (ImageView)view.findViewById(R.id.teacher_course_recycler_item_homework);
@@ -65,6 +77,41 @@ public class TeacherCourseRecyclerAdapter extends RecyclerView.Adapter<TeacherCo
         holder.realVolText.setText(Integer.toString(course.getRealVol()));
         holder.startDateText.setText(course.getStartTime());
         holder.endDateText.setText(course.getEndTime());
+        holder.analysisImage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String courseId = course.getId();
+                String url = "http://10.0.2.2:8081/mobile/test/teacher/score/" + courseId;
+                HttpUtil.sendHttpRequest(url, new Callback() {
+                    @Override
+                    public void onFailure(Call call, IOException e) {
+
+                    }
+
+                    @Override
+                    public void onResponse(Call call, Response response) throws IOException {
+                        String data = response.body().string();
+                        System.out.println(data);
+                        try {
+                            ArrayList<String> scores = new ArrayList<>();
+                            JSONArray jsonArray = new JSONArray(data);
+                            for(int i=0; i < jsonArray.length(); i++) {
+                                String temp = jsonArray.getString(i);
+                                scores.add(temp);
+                            }
+                            Intent intent = new Intent(holder.itemView.getContext(), AnalysisActivity.class);
+                            intent.putExtra("course", course);
+                            Bundle bundle = new Bundle();
+                            bundle.putStringArrayList("score", scores);
+                            intent.putExtras(bundle);
+                            holder.itemView.getContext().startActivity(intent);
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                });
+            }
+        });
         holder.testImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

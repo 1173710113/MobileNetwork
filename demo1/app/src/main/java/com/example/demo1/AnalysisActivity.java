@@ -104,6 +104,7 @@ public class AnalysisActivity extends BaseActivity {
      */
     private void getAxisPoints() {
         for (int i = 0; i < scores.size(); i++) {
+            System.out.println(scores.get(i));
             mPointValues.add(new PointValue(i, Float.parseFloat(scores.get(i))));
         }
     }

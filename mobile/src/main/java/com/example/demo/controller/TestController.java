@@ -74,5 +74,13 @@ public class TestController {
 	public List<String> studentQueryScore(String courseId, String studentId) {
 		return service.studentQueryScore(courseId, studentId);
 	}
+	
+	@RequestMapping("/teacher/score/{courseId}")
+	@ResponseBody
+	public List<String> teacherQueryScore(@PathVariable("courseId")String courseId){
+		List<String> list = service.teacherQueryScore(courseId);
+		System.out.println(list.size() + "123");
+		return list;
+	}
 
 }

@@ -8,6 +8,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
+import android.media.Ringtone;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -31,6 +32,7 @@ import com.google.android.material.navigation.NavigationView;
 import com.hjq.toast.ToastUtils;
 
 import org.json.JSONObject;
+import org.litepal.crud.DataSupport;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -245,6 +247,16 @@ public class TeacherMainActivity extends BaseActivity {
             public void onFailure(Call call, IOException e) {
                 swipeRefreshLayout.setRefreshing(false);
                 ToastUtils.show("刷新失败");
+                final List<TeacherCourse> cache = DataSupport.findAll(TeacherCourse.class);
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        courseList.clear();;
+                        courseList.addAll(cache);
+                        adapter.notifyDataSetChanged();
+
+                    }
+                });
             }
 
             @Override
@@ -257,7 +269,11 @@ public class TeacherMainActivity extends BaseActivity {
                     @Override
                     public void run() {
                        courseList.clear();
-                       courseList.addAll(JSONUtil.JSONParseTeacherCourse(data));
+                       List<TeacherCourse> tCourse = JSONUtil.JSONParseTeacherCourse(data);
+                       for(TeacherCourse tc: tCourse){
+                           tc.save();
+                       }
+                       courseList.addAll(tCourse);
                        adapter.notifyDataSetChanged();
                        swipeRefreshLayout.setRefreshing(false);
                     }
