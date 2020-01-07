@@ -23,7 +23,7 @@
         <activity
             android:name=".TestDetailActivity"
             android:label=""
-            android:launchMode="singleTop"></activity>
+            android:launchMode="singleTop" />
         <activity
             android:name=".TestActivity"
             android:label=""
@@ -38,12 +38,12 @@
             android:launchMode="singleTop" />
         <activity
             android:name=".StudentHomeworkActivity"
-            android:launchMode="singleTop"
-            android:label=""/>
+            android:label=""
+            android:launchMode="singleTop" />
         <activity
             android:name=".DiscussionDetailActivity"
             android:label=""
-            android:launchMode="singleTop"/>
+            android:launchMode="singleTop" />
         <activity
             android:name=".DiscussionActivity"
             android:label=""
