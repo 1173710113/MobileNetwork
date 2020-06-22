@@ -20,6 +20,14 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme1"
         android:usesCleartextTraffic="true">
+        <activity android:name=".WebViewActivity"
+            android:hardwareAccelerated="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+
+        </activity>
         <activity
             android:name=".TestDetailActivity"
             android:label=""
@@ -68,11 +76,7 @@
             android:name=".LoginActivity"
             android:label=""
             android:launchMode="singleTop">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
         </activity>
         <activity
             android:name=".FileActivity"

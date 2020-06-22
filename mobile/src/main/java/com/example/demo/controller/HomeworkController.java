@@ -21,8 +21,7 @@ public class HomeworkController {
 	@RequestMapping(value = "/add", method = RequestMethod.POST)
 	@ResponseBody
 	public void add(@RequestBody Homework homework) {
-		service.addHomework(homework.getPosterId(), homework.getTitle(), 
-				homework.getContent(), homework.getDeadline(), homework.getPostTime(), homework.getCourseId());
+		service.addHomework(homework);
 	}
 	@RequestMapping("/init/{courseId}")
 	@ResponseBody

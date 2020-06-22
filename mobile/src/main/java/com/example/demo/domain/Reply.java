@@ -3,77 +3,25 @@
  */
 package com.example.demo.domain;
 
+import java.util.Date;
+
+import com.fasterxml.jackson.annotation.JsonFormat;
+
+import lombok.Data;
+
 /**
  * @author msi-user
  *
  */
+
+@Data
 public class Reply {
 
-	private String id;
-	private String replyDiscussion;
+	private String replyId;
+	private String discussionId;
 	private String posterId;
 	private String posterName;
-	private String time;
+	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
+	private Date time;
 	private String content;
-
-	/**
-	 * @param id
-	 * @param replyDiscussion
-	 * @param posterId
-	 * @param posterName
-	 * @param time
-	 * @param content
-	 */
-	public Reply(String id, String replyDiscussion, String posterId, String posterName, String time, String content) {
-		super();
-		this.id = id;
-		this.replyDiscussion = replyDiscussion;
-		this.posterId = posterId;
-		this.posterName = posterName;
-		this.time = time;
-		this.content = content;
-	}
-
-	/**
-	 * @return the id
-	 */
-	public String getId() {
-		return id;
-	}
-
-	/**
-	 * @return the replyDiscussion
-	 */
-	public String getReplyDiscussion() {
-		return replyDiscussion;
-	}
-
-	/**
-	 * @return the posterId
-	 */
-	public String getPosterId() {
-		return posterId;
-	}
-
-	/**
-	 * @return the posterName
-	 */
-	public String getPosterName() {
-		return posterName;
-	}
-
-	/**
-	 * @return the time
-	 */
-	public String getTime() {
-		return time;
-	}
-
-	/**
-	 * @return the content
-	 */
-	public String getContent() {
-		return content;
-	}
-
 }

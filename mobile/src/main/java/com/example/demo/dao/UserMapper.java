@@ -16,47 +16,20 @@ import com.example.demo.domain.User;
  */
 @Mapper
 public interface UserMapper {
+	
+	public void addUser(User user);
 
-	/**
-	 * 
-	 * @param id should not be null or ''.
-	 * @param password should not be null or ''.
-	 * @param type should be one of 学生\教师\管理员.
-	 * @param name
-	 * @param sex should be one of 男\女 or null.
-	 * @param iconPath
-	 */
-	public void register(@Param("id") String id, @Param("password") String password, @Param("type") String type,
-			@Param("name") String name, @Param("sex") String sex, @Param("icon_path") String iconPath);
-
-	/**
-	 * 
-	 * @param id
-	 */
-	public void deleteUser(@Param("id") String id);
-
-	/**
-	 * 
-	 * @param id
-	 * @param password
-	 * @param type
-	 * @param name
-	 * @param sex
-	 * @param iconPath
-	 */
-	public void updateUser(@Param("id") String id, @Param("password") String password, @Param("type") String type,
-			@Param("name") String name, @Param("sex") String sex, @Param("icon_path") String iconPath);
-
-	/**
-	 * 
-	 * @param id
-	 * @param type
-	 * @param name
-	 * @param sex
-	 * @return
-	 */
-	public List<User> queryUser(@Param("id") String id, @Param("type") String type, @Param("name") String name,
-			@Param("sex") String sex);
+	public void deleteUser(String id);
+	
+	public void updateUserName(String id, String name);
+	
+	public void updateUserPassword(String id, String password);
+	
+	public User queryUser(String id);
+	
+	public List<User> queryStudentByCourse(String courseId);
+	
+	public List<User> queryStudentByTest(String testId);
 	/**
 	 * 
 	 * @param account
@@ -65,11 +38,10 @@ public interface UserMapper {
 	 */
 	public User login(@Param("account")String account, @Param("password")String password);
 	
-	public void updateUserPassword(@Param("password") String password);
 	
-	public User getUserById(@Param("account")String account);
 	
-	public void updateUserName(String name, String id);
 	
-	public void updateUserPass(String id, String pass);
+	
+	
+	
 }

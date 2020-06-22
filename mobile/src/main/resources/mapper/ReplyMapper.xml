@@ -4,9 +4,10 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.example.demo.dao.ReplyMapper">
+
 	<insert id="addReply">
 		INSERT INTO reply_table(discussion_id, user, content, time)
-		VALUES(#{discussion},#{poster_id},#{content}, #{time})
+		VALUES(#{discussionId},#{posterId},#{content}, #{time})
 	</insert>
 	
 	<delete id="deleteReply">
@@ -15,22 +16,18 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	</delete>
 	
 	<select id="queryReplyByDiscussion" resultMap="reply">
-		SELECT
-		r.id as id,
-		r.discussion_id as discussion,
-		r.user as user_id,
-		u.name as user_name,
-		r.time as time,
-		r.content as content
-		FROM user_table u,reply_table r
-		WHERE r.discussion_id=#{discussion} and u.id=r.user
+		SELECT *
+		FROM reply_extend
+		WHERE discussion_id=#{discussionId}
 	</select>
+	
 	<resultMap id="reply" type="Reply">
-		<id column="id" property="id"/>
-		<result column="discussion" property="replyDiscussion"/>
+		<id column="id" property="replyId"/>
+		<result column="discussion_id" property="discussionId"/>
 		<result column="user_id" property="posterId"/>
 		<result column="user_name" property="posterName"/>
 		<result column="time" property="time"/>
 		<result column="content" property="content"/>
 	</resultMap>
+	
 </mapper>

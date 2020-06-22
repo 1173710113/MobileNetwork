@@ -15,6 +15,8 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
 import com.bigkoo.pickerview.builder.TimePickerBuilder;
 import com.bigkoo.pickerview.listener.OnTimeSelectListener;
 import com.bigkoo.pickerview.view.TimePickerView;
@@ -31,9 +33,6 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
 import com.hjq.toast.ToastUtils;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
 import org.litepal.crud.DataSupport;
 
 import java.io.IOException;
@@ -161,9 +160,9 @@ public class TeacherHomeworkActivity extends BaseActivity {
                             ToastUtils.show("请填完");
                             return;
                         }
-                        String postTime = TimeUtil.getTime();
-                        String courseId = course.getId();
-                        Homework homework = new Homework("", posterId, "", title, content, deadline, postTime, courseId);
+                        Date postTime = new Date();
+                        String courseId = course.getCourseId();
+                        Homework homework = new Homework("", posterId, "", title, content, TimeUtil.parseDate(deadline), postTime, courseId);
                         JSONObject object = JSONUtil.HomeworkParseJSON(homework);
                         Log.e("Homework", object.toString());
                         String url = "http://10.0.2.2:8081/mobile/homework/add";
@@ -188,13 +187,13 @@ public class TeacherHomeworkActivity extends BaseActivity {
     }
 
     private void queryHomework() {
-        String url = "http://10.0.2.2:8081/mobile/homework/init/" + course.getId();
+        String url = "http://10.0.2.2:8081/mobile/homework/init/" + course.getCourseId();
         HttpUtil.sendHttpRequest(url, new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
                 swipeRefreshLayout.setRefreshing(false);
                 ToastUtils.show("刷新失败");
-                final List<Homework> cache = DataSupport.where("courseId = ?", course.getId()).find(Homework.class);
+                final List<Homework> cache = DataSupport.where("courseId = ?", course.getCourseId()).find(Homework.class);
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
@@ -209,7 +208,7 @@ public class TeacherHomeworkActivity extends BaseActivity {
             public void onResponse(Call call, Response response) throws IOException {
                 final String data = response.body().string();
                 if (ValidateUtil.isEmpty(data)) {
-                    final List<Homework> cache = DataSupport.where("courseId = ?", course.getId()).find(Homework.class);
+                    final List<Homework> cache = DataSupport.where("courseId = ?", course.getCourseId()).find(Homework.class);
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
@@ -224,10 +223,9 @@ public class TeacherHomeworkActivity extends BaseActivity {
                     @Override
                     public void run() {
                         List<Homework> list = new ArrayList<>();
-                        DataSupport.deleteAll(Homework.class,"courseId = ?", course.getId());
-                        try {
-                            JSONArray jsonArray = new JSONArray(data);
-                            for (int i = 0; i < jsonArray.length(); i++) {
+                        DataSupport.deleteAll(Homework.class,"courseId = ?", course.getCourseId());
+                            JSONArray jsonArray = JSONArray.parseArray(data);
+                            for (int i = 0; i < jsonArray.size(); i++) {
                                 JSONObject object = jsonArray.getJSONObject(i);
                                 Homework homework = JSONUtil.JSONParseHomework(object);
                                 list.add(homework);
@@ -237,9 +235,6 @@ public class TeacherHomeworkActivity extends BaseActivity {
                             homeworkList.addAll(list);
                             adapter.notifyDataSetChanged();
                             swipeRefreshLayout.setRefreshing(false);
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
                     }
                 });
             }

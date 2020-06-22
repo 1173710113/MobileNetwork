@@ -93,7 +93,7 @@ public class FileActivity extends BaseActivity {
             }
         });
 
-        androidx.appcompat.widget.Toolbar toolbar = (Toolbar) findViewById(R.id.custom_layout_1_toolbar);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.custom_layout_1_toolbar);
         setSupportActionBar(toolbar);
         mDrawerLayout = (DrawerLayout) findViewById(R.id.custom_layout_1_drawer);
         final NavigationView navView = (NavigationView) findViewById(R.id.custom_layout_1_nav);
@@ -129,7 +129,7 @@ public class FileActivity extends BaseActivity {
             @Override
             public void onDownload(final XFile targetFile, final int position) {
                 String fileName = targetFile.getFileName();
-                String courseId = course.getId();
+                String courseId = course.getCourseId();
                 String url = "http://10.0.2.2:8081/mobile/file/download/" + fileName + "/" + courseId;
                 //请求之前获得文件读写权限
                 PermissionUtil.getReadWriteExternalPermission(FileActivity.this);
@@ -267,7 +267,7 @@ public class FileActivity extends BaseActivity {
                     .setType(MultipartBody.FORM)
                     .addFormDataPart("file", uploadfile, RequestBody.create(MediaType.parse("*/*"), file)) // 第一个参数传到服务器的字段名，第二个你自己的文件名，第三个MediaType.parse("*/*")和我们之前说的那个type其实是一样的
                     .addFormDataPart("posterId", getSharedPreferences("userInfo", MODE_PRIVATE).getString("id", "ERROR"))
-                    .addFormDataPart("courseId", course.getId())
+                    .addFormDataPart("courseId", course.getCourseId())
                     .build();
             String url = "http://10.0.2.2:8081/mobile/file/upload";
             final Request request = new Request.Builder().url(url).post(FileProgressUtil.addProgressRequestBody(requestBody, uiProgressRequestListener)).build();
@@ -300,13 +300,13 @@ public class FileActivity extends BaseActivity {
     }
 
     private void queryFile() {
-        String url = "http://10.0.2.2:8081/mobile/file/query/" + course.getId();
+        String url = "http://10.0.2.2:8081/mobile/file/query/" + course.getCourseId();
         HttpUtil.sendHttpRequest(url, new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
                 swipeRefreshLayout.setRefreshing(false);
                 ToastUtils.show("刷新失败");
-                final List<XFile> cache = DataSupport.where("courseId = ?", course.getId()).find(XFile.class);
+                final List<XFile> cache = DataSupport.where("courseId = ?", course.getCourseId()).find(XFile.class);
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
@@ -323,7 +323,7 @@ public class FileActivity extends BaseActivity {
                 if (response.code() == 200) {
                     String data = response.body().string();
                     final List<XFile> list = JSONUtil.JSONParseFileList(data);
-                    DataSupport.deleteAll(XFile.class, "courseId = ?", course.getId());
+                    DataSupport.deleteAll(XFile.class, "courseId = ?", course.getCourseId());
                     for(XFile xFile : list) {
                         xFile.save();
                     }

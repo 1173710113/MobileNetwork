@@ -8,14 +8,13 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
-import android.content.Intent;
-import android.media.Ringtone;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 
+import com.alibaba.fastjson.JSONObject;
 import com.bigkoo.pickerview.builder.TimePickerBuilder;
 import com.bigkoo.pickerview.listener.OnTimeSelectListener;
 import com.bigkoo.pickerview.view.TimePickerView;
@@ -23,7 +22,6 @@ import com.example.demo1.adapter.TeacherCourseRecyclerAdapter;
 import com.example.demo1.dialog.AddCourseDialog;
 import com.example.demo1.dialog.CustomDialog;
 import com.example.demo1.domain.Course;
-import com.example.demo1.domain.TeacherCourse;
 import com.example.demo1.util.HttpUtil;
 import com.example.demo1.util.JSONUtil;
 import com.example.demo1.util.MyNavView;
@@ -32,7 +30,6 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
 import com.hjq.toast.ToastUtils;
 
-import org.json.JSONObject;
 import org.litepal.crud.DataSupport;
 
 import java.io.IOException;
@@ -48,7 +45,7 @@ import okhttp3.Response;
 public class TeacherMainActivity extends BaseActivity {
 
     private DrawerLayout mDrawerLayout;
-    private List<TeacherCourse> courseList = new ArrayList<>();
+    private List<Course> courseList = new ArrayList<>();
     private RecyclerView recyclerView;
     private TeacherCourseRecyclerAdapter adapter;
     private SwipeRefreshLayout swipeRefreshLayout;
@@ -206,7 +203,7 @@ public class TeacherMainActivity extends BaseActivity {
                             return;
                         }
                         String id = getSharedPreferences("userInfo", MODE_PRIVATE).getString("id", null);
-                        Course course = new Course("", name, id, "", maxVol, destination, startDate, endDate, 0);
+                        Course course = new Course("", name, id, "", maxVol, destination, new Date(startDate), new Date(endDate), 0, "");
                         JSONObject object = JSONUtil.CourseParseJSON(course);
                         String url = "http://10.0.2.2:8081/mobile/course/add";
                         HttpUtil.sendHttpRequest(url, object, new Callback() {
@@ -248,7 +245,7 @@ public class TeacherMainActivity extends BaseActivity {
             public void onFailure(Call call, IOException e) {
                 swipeRefreshLayout.setRefreshing(false);
                 ToastUtils.show("刷新失败");
-                final List<TeacherCourse> cache = DataSupport.findAll(TeacherCourse.class);
+                final List<Course> cache = DataSupport.findAll(Course.class);
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
@@ -270,8 +267,8 @@ public class TeacherMainActivity extends BaseActivity {
                     @Override
                     public void run() {
                        courseList.clear();
-                       List<TeacherCourse> tCourse = JSONUtil.JSONParseTeacherCourse(data);
-                       for(TeacherCourse tc: tCourse){
+                       List<Course> tCourse = JSONUtil.JSONParseCourses(data);
+                       for(Course tc: tCourse){
                            tc.save();
                        }
                        courseList.addAll(tCourse);

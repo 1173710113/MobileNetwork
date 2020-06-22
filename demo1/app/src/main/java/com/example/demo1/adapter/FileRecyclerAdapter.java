@@ -19,6 +19,7 @@ import com.example.demo1.domain.LocalFile;
 import com.example.demo1.domain.XFile;
 import com.example.demo1.util.MyFileProvider;
 import com.example.demo1.util.OpenFileUtils;
+import com.example.demo1.util.TimeUtil;
 import com.hjq.toast.ToastUtils;
 
 import org.litepal.crud.DataSupport;
@@ -78,7 +79,7 @@ public class FileRecyclerAdapter extends RecyclerView.Adapter<FileRecyclerAdapte
         final XFile file = mFileList.get(position);
         holder.progressBar.setVisibility(View.GONE);
         holder.fileNameText.setText(file.getFileName());
-        holder.postDateText.setText(file.getPostTime());
+        holder.postDateText.setText(TimeUtil.parseTime(file.getPostTime()));
         holder.posterNameText.setText(file.getPosterName());
         //大小设置
         long fileSize = file.getFileSize();

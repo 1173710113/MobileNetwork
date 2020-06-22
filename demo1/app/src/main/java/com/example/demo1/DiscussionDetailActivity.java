@@ -15,6 +15,9 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
 import com.example.demo1.adapter.ReplyRecyclerAdapter;
 import com.example.demo1.dialog.AddReplyDialog;
 import com.example.demo1.domain.Discussion;
@@ -29,13 +32,11 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
 import com.hjq.toast.ToastUtils;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
 import org.litepal.crud.DataSupport;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import okhttp3.Call;
@@ -93,7 +94,7 @@ public class DiscussionDetailActivity extends BaseActivity {
         } else {
             contentText.setText(discussion.getContent());
         }
-        postDateText.setText(discussion.getPostTime());
+        postDateText.setText(TimeUtil.parseTime(discussion.getPostTime()));
         countText.setText(Integer.toString(discussion.getReplyCount()));
 
         mDrawerLayout = (DrawerLayout) findViewById(R.id.discussion_detail_drawer);
@@ -156,8 +157,9 @@ public class DiscussionDetailActivity extends BaseActivity {
                             ToastUtils.show("内容不能为空");
                             return;
                         }
-                        String replyDiscussion = discussion.getId();
-                        String time = TimeUtil.getTime();
+                        String replyDiscussion = discussion.getDiscussionId();
+                        System.out.println(replyDiscussion);
+                        Date time = new Date();
                         SharedPreferences pref = getSharedPreferences("userInfo", MODE_PRIVATE);
                         String posterId = pref.getString("id", "ERROR");
                         Reply reply = new Reply("", replyDiscussion, posterId, "", time, content);
@@ -184,7 +186,7 @@ public class DiscussionDetailActivity extends BaseActivity {
     }
 
     private void queryReply() {
-        String url = "http://10.0.2.2:8081/mobile/discussion/queryreply/" + discussion.getId();
+        String url = "http://10.0.2.2:8081/mobile/discussion/queryreply/" + discussion.getDiscussionId();
         HttpUtil.sendHttpRequest(url, new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
@@ -194,7 +196,7 @@ public class DiscussionDetailActivity extends BaseActivity {
                         swipeRefreshLayout.setRefreshing(false);
                         ToastUtils.show("刷新失败");
                         replyList.clear();
-                        replyList.addAll(DataSupport.where("replyDiscussion = ?", discussion.getId()).find(Reply.class));
+                        replyList.addAll(DataSupport.where("discussionId = ?", discussion.getDiscussionId()).find(Reply.class));
                         adapter.notifyDataSetChanged();
                     }
                 });
@@ -209,11 +211,11 @@ public class DiscussionDetailActivity extends BaseActivity {
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        try {
-                            DataSupport.deleteAll(Reply.class, "replyDiscussion = ?", discussion.getId());
-                            JSONArray jsonArray = new JSONArray(data);
+
+                            DataSupport.deleteAll(Reply.class, "discussionId = ?", discussion.getDiscussionId());
+                            JSONArray jsonArray = JSONArray.parseArray(data);
                             List<Reply> list = new ArrayList<>();
-                            for (int i = 0; i < jsonArray.length(); i++) {
+                            for (int i = 0; i < jsonArray.size(); i++) {
                                 JSONObject object = jsonArray.getJSONObject(i);
                                 Reply reply = JSONUtil.JSONParseReply(object);
                                 reply.save();
@@ -223,15 +225,13 @@ public class DiscussionDetailActivity extends BaseActivity {
                             replyList.addAll(list);
                             adapter.notifyDataSetChanged();
                             swipeRefreshLayout.setRefreshing(false);
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
+
                     }
                 });
             }
         });
 
-        String url1 = "http://10.0.2.2:8081/mobile/discussion/query/id/" + discussion.getId();
+        String url1 = "http://10.0.2.2:8081/mobile/discussion/query/id/" + discussion.getDiscussionId();
         HttpUtil.sendHttpRequest(url1, new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
@@ -243,8 +243,7 @@ public class DiscussionDetailActivity extends BaseActivity {
             public void onResponse(Call call, Response response) throws IOException {
                 String data = response.body().string();
                 if (!ValidateUtil.isEmpty(data)) {
-                    try {
-                        JSONObject object1 = new JSONObject(data);
+                        JSONObject object1 = JSON.parseObject(data);
                         final Discussion newDiscussion = JSONUtil.JSONParseDiscussion(object1);
                         runOnUiThread(new Runnable() {
                             @Override
@@ -257,14 +256,12 @@ public class DiscussionDetailActivity extends BaseActivity {
                                 } else {
                                     contentText.setText(newDiscussion.getContent());
                                 }
-                                postDateText.setText(newDiscussion.getPostTime());
+                                postDateText.setText(TimeUtil.parseTime(newDiscussion.getPostTime()));
                                 countText.setText(Integer.toString(newDiscussion.getReplyCount()));
                                 swipeRefreshLayout.setRefreshing(false);
                             }
                         });
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
+
                 }
             }
         });

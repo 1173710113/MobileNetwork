@@ -27,7 +27,7 @@ public class SingleChoiceQuestion {
     }
 
     public SingleChoiceQuestion(Question question) {
-        this.questionId = question.getId();
+        this.questionId = question.getQuestionId();
         this.answer = question.getAnswer();
         this.testId = question.getTestId();
         this.score = question.getScore();

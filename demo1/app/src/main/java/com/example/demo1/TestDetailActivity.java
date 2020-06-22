@@ -14,6 +14,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 
+import com.alibaba.fastjson.JSONObject;
 import com.example.demo1.adapter.SingleChoiceRecyclerAdapter;
 import com.example.demo1.dialog.CustomDialog;
 import com.example.demo1.domain.Question;
@@ -23,12 +24,12 @@ import com.example.demo1.util.HttpUtil;
 import com.example.demo1.util.JSONUtil;
 import com.example.demo1.util.MyNavView;
 import com.example.demo1.domain.Score;
+import com.example.demo1.util.TimeUtil;
 import com.example.demo1.util.ValidateUtil;
 import com.google.android.material.appbar.CollapsingToolbarLayout;
 import com.google.android.material.navigation.NavigationView;
 import com.hjq.toast.ToastUtils;
 
-import org.json.JSONObject;
 import org.litepal.crud.DataSupport;
 
 import java.io.IOException;
@@ -63,8 +64,8 @@ public class TestDetailActivity extends BaseActivity {
         countText = (TextView) findViewById(R.id.test_detail_count);
 
         titleText.setText(test.getName());
-        startDateText.setText(test.getStartTime());
-        endDateText.setText(test.getEndTime());
+        startDateText.setText(TimeUtil.parseTime(test.getStartTime()));
+        endDateText.setText(TimeUtil.parseTime(test.getEndTime()));
         countText.setText(count);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.test_detail_toolbar);
@@ -119,7 +120,7 @@ public class TestDetailActivity extends BaseActivity {
                     case "学生":
                         String id = getSharedPreferences("userInfo", Context.MODE_PRIVATE).getString("id", null);
                         if(id != null) {
-                            List<Score> result = DataSupport.where("testId = ? and studentId = ?", test.getId(), id).find(Score.class);
+                            List<Score> result = DataSupport.where("testId = ? and studentId = ?", test.getTestId(), id).find(Score.class);
                             if(result != null && result.size() != 0) {
                                 return true;
                             }
@@ -133,7 +134,7 @@ public class TestDetailActivity extends BaseActivity {
                         }).setConfirmListener(new CustomDialog.IOnConfirmListener() {
                             @Override
                             public void onConfirm() {
-                                String testId = test.getId();
+                                String testId = test.getTestId();
                                 String studentId = getSharedPreferences("userInfo", MODE_PRIVATE).getString("id", null);
                                 String everyScore = adapter.getScore();
                                 List<String> scoreList = Arrays.asList(everyScore.split("/"));
@@ -142,8 +143,7 @@ public class TestDetailActivity extends BaseActivity {
                                     String c = s.substring(0,1);
                                     scoreInt += Integer.parseInt(c);
                                 }
-                                String scoreStr = Integer.toString(scoreInt);
-                                Score score = new Score(null, testId, studentId, scoreStr, everyScore);
+                                Score score = new Score(null, testId, studentId,scoreInt, everyScore);
                                 JSONObject object = JSONUtil.ScoreParseJSON(score);
                                 String url = "http://10.0.2.2:8081/mobile/test/addscore";
                                 HttpUtil.sendHttpRequest(url, object, new Callback() {
@@ -167,7 +167,7 @@ public class TestDetailActivity extends BaseActivity {
     }
 
     public void queryQuestion() {
-        String url = "http://10.0.2.2:8081/mobile/test/getteststudent/" + test.getId();
+        String url = "http://10.0.2.2:8081/mobile/test/getteststudent/" + test.getTestId();
         HttpUtil.sendHttpRequest(url, new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
@@ -176,7 +176,7 @@ public class TestDetailActivity extends BaseActivity {
             @Override
             public void onResponse(Call call, Response response) throws IOException {
                 final String count = response.body().string();
-                String url = "http://10.0.2.2:8081/mobile/test/getquestion/" + test.getId();
+                String url = "http://10.0.2.2:8081/mobile/test/getquestion/" + test.getTestId();
                 HttpUtil.sendHttpRequest(url, new Callback() {
                     @Override
                     public void onFailure(Call call, IOException e) {

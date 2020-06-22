@@ -14,6 +14,8 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
 import com.example.demo1.adapter.CourseRecyclerAdapter;
 import com.example.demo1.dialog.CustomDialog;
 import com.example.demo1.dialog.EnrollDialog;
@@ -26,9 +28,6 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
 import com.hjq.toast.ToastUtils;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
 import org.litepal.crud.DataSupport;
 
 import java.io.IOException;
@@ -262,9 +261,8 @@ public class StudentMainActivity extends BaseActivity {
                     public void run() {
                         List<Course> list = new ArrayList<>();
                         DataSupport.deleteAll(Course.class);
-                        try {
-                            JSONArray jsonArray = new JSONArray(data);
-                            for (int i = 0; i < jsonArray.length(); i++) {
+                            JSONArray jsonArray = JSONArray.parseArray(data);
+                            for (int i = 0; i < jsonArray.size(); i++) {
                                 JSONObject object = jsonArray.getJSONObject(i);
                                 Course course = JSONUtil.JSONParseCourse(object);
                                 course.save();
@@ -274,9 +272,6 @@ public class StudentMainActivity extends BaseActivity {
                             courseList.addAll(list);
                             adapter.notifyDataSetChanged();
                             swipeRefreshLayout.setRefreshing(false);
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
                     }
                 });
             }

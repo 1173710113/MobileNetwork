@@ -3,108 +3,31 @@
  */
 package com.example.demo.domain;
 
+import java.util.Date;
+
+import com.fasterxml.jackson.annotation.JsonFormat;
+
+import lombok.Data;
+
 /**
  * @author msi-user
  *
  */
+@Data
 public class Course {
 
-	protected String id;
-	protected String name;
-	protected String teacherId;
-	protected String teacherName;
-	protected int maxVol;
-	protected String destination;
-	protected String startTime;
-	protected String endTime;
-	protected int realVol;
+	private String courseId;
+	private String name;
+	private String teacherId;
+	private String teacherName;
+	private int maxVol;
+	private String destination;
+	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
+	private Date startTime;
+	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
+	private Date endTime;
+	private int realVol;
+	private String code;
 
-	/**
-	 * @param id
-	 * @param name
-	 * @param teacherId
-	 * @param teacherName
-	 * @param maxVol
-	 * @param destination
-	 * @param startTime
-	 * @param endTime
-	 * @param realVol
-	 */
-	public Course(String id, String name, String teacherId, String teacherName, int maxVol, String destination,
-			String startTime, String endTime, int realVol) {
-		super();
-		this.id = id;
-		this.name = name;
-		this.teacherId = teacherId;
-		this.teacherName = teacherName;
-		this.maxVol = maxVol;
-		this.destination = destination;
-		this.startTime = startTime;
-		this.endTime = endTime;
-		this.realVol = realVol;
-	}
-
-	/**
-	 * @return the id
-	 */
-	public String getId() {
-		return id;
-	}
-
-	/**
-	 * @return the name
-	 */
-	public String getName() {
-		return name;
-	}
-
-	/**
-	 * @return the teacherId
-	 */
-	public String getTeacherId() {
-		return teacherId;
-	}
-
-	/**
-	 * @return the teacherName
-	 */
-	public String getTeacherName() {
-		return teacherName;
-	}
-
-	/**
-	 * @return the maxVol
-	 */
-	public int getMaxVol() {
-		return maxVol;
-	}
-
-	/**
-	 * @return the destination
-	 */
-	public String getDestination() {
-		return destination;
-	}
-
-	/**
-	 * @return the startTime
-	 */
-	public String getStartTime() {
-		return startTime;
-	}
-
-	/**
-	 * @return the endTime
-	 */
-	public String getEndTime() {
-		return endTime;
-	}
-
-	/**
-	 * @return the realVol
-	 */
-	public int getRealVol() {
-		return realVol;
-	}
 
 }

@@ -5,12 +5,11 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Spinner;
 
+import com.alibaba.fastjson.JSONObject;
 import com.example.demo1.util.AES;
 import com.example.demo1.util.HttpUtil;
 import com.hjq.toast.ToastUtils;
 import com.rengwuxian.materialedittext.MaterialEditText;
-
-import org.json.JSONObject;
 
 import java.io.IOException;
 
@@ -43,7 +42,7 @@ public class RegistActivity extends BaseActivity {
         }
         try {
             JSONObject obj = new JSONObject();
-            obj.put("id", id);
+            obj.put("userId", id);
             obj.put("password", password);
             obj.put("type", type);
             obj.put("name", AES.Encrypt(name, AES.sKey));

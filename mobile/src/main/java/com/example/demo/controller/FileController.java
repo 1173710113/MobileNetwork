@@ -7,6 +7,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.net.URLEncoder;
+import java.util.Date;
 import java.util.List;
 
 import javax.servlet.ServletOutputStream;
@@ -23,7 +24,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.example.demo.domain.XFile;
 import com.example.demo.service.FileService;
-import com.example.demo.util.TimeUtil;
 
 /**
  * @author msi-user
@@ -50,8 +50,14 @@ public class FileController {
 		try {
 			file.transferTo(dir);
 			long fileSize = dir.length();
-			String postTime = TimeUtil.getTime();
-			XFile temp = new XFile(null, realPath, fileName, fileSize, posterId, null, courseId, postTime);
+			Date postTime = new Date();
+			XFile temp = new XFile();
+			temp.setFilePath(realPath);
+			temp.setFileName(fileName);
+			temp.setFileSize(fileSize);
+			temp.setPosterId(posterId);
+			temp.setCourseId(courseId);
+			temp.setPostTime(postTime);
 			fileService.addFile(temp);
 			return temp.getFileId();
 		} catch (IllegalStateException | IOException e) {

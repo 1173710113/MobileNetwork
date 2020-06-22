@@ -6,21 +6,23 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 <mapper namespace="com.example.demo.dao.TestMapper">
 	<insert id="addTest" useGeneratedKeys="true" keyProperty="id">
 		INSERT INTO test_table(start_time,end_time,name,course_id)
-		VALUES(#{startTime},#{endTime},#{name},#{course_id});
+		VALUES(#{startTime},#{endTime},#{name},#{courseId});
 	</insert>
 	
-	<select id="getTestList" resultMap="test">
+	<select id="queryTestByCourse" resultMap="test">
 		SELECT *
-		FROM test_table
+		FROM test_extend
 		WHERE course_id = #{courseId} 
 	</select>
 	
 	<resultMap type="Test" id="test">
-		<id column="id" property="id"/>
+		<id column="id" property="testId"/>
 		<result column="start_time" property="startTime"/>
 		<result column="end_time" property="endTime"/>
 		<result column="name" property="name"/>
-		<result column="course_id" property="course_id"/>
+		<result column="course_id" property="courseId"/>
+		<result column="test_count" property="testCount"/>
+		<result column="avg_score" property="avgScore"/>
 	</resultMap>
 	
 	<insert id="addQuestion">
@@ -34,7 +36,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	</select>
 	
 	<resultMap type="Question" id="question">
-		<id column="id" property="id"/>
+		<id column="id" property="questionId"/>
 		<result column="content" property="content"/>
 		<result column="answer" property="answer"/>
 		<result column="test_id" property="testId"/>
@@ -42,7 +44,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	</resultMap>
 	<insert id="addScore">
 		INSERT INTO score_table(test_id,student_id,score,every_score)
-		VALUES(#{test_id},#{student_id},#{score},#{everyScore});
+		VALUES(#{testId},#{studentId},#{score},#{everyScore});
 	</insert>
 	<select id="queryScore" resultMap="score">
 		SELECT *
@@ -50,7 +52,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		WHERE test_id = #{test_id} and student_id = #{student_id} 
 	</select>
 	<resultMap type="Score" id="score">
-		<id column="id" property="id"/>
+		<id column="id" property="scoreId"/>
 		<result column="student_id" property="studentId"/>
 		<result column="test_id" property="testId"/>
 		<result column="score" property="score"/>

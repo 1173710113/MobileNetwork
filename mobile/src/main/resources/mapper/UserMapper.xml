@@ -5,43 +5,67 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
 <mapper namespace="com.example.demo.dao.UserMapper">
 
-	<select id="login" resultMap="user">
-		SELECT *
-		FROM user_table
-		WHERE id = #{account} AND password = #{password} 
-	</select>
-	
-	<select id="getUserById" resultMap="user">
-		SELECT *
-		FROM user_table
-		WHERE id = #{account} 
-	</select>
-	
-	<resultMap type="User" id="user">
-		<id column="id" property="id"/>
-		<result column="password" property="password"/>
-		<result column="type" property="type"/>
-		<result column="name" property="name"/>
-		<result column="sex" property="sex"/>
-		<result column="icon_path" property="iconPath"/>
-	</resultMap>
-	
-	<insert id="register">
+
+	<insert id="addUser">
 		INSERT INTO user_table
-		VALUES(#{id},#{password},#{type},#{name},#{sex},#{icon_path});
+		VALUES(#{id},#{password},#{type},#{name},#{sex},#{iconPath});
 	</insert>
-	
+
+	<delete id="deleteUser">
+		DELETE FROM user_table
+		WHERE id=#{id}
+	</delete>
+
 	<update id="updateUserName">
 		UPDATE user_table
 		SET name=#{name}
 		WHERE id=#{id}
 	</update>
-	
-	<update id="updateUserPass">
+
+	<update id="updateUserPassword">
 		UPDATE user_table
-		SET password=#{pass}
-		WHERE id=#{id}
+		SET password=#{password}
+		WHERE
+		id=#{id}
 	</update>
+
+	<select id="login" resultMap="user">
+		SELECT *
+		FROM user_table
+		WHERE id =
+		#{account} AND password = #{password}
+	</select>
+
+	<select id="queryUser" resultMap="user">
+		SELECT *
+		FROM user_table
+		WHERE
+		id
+		= #{id}
+	</select>
 	
+	<select id="queryStudentByCourse" resultMap="user">
+		SELECT *
+		FROM user_table
+		WHERE id IN (SELECT student FROM course_student WHERE course=#{courseId})
+	</select>
 	
+	<select id="queryStudentByTest" resultMap="user">
+		SELECT *
+		FROM user_table
+		WHERE id IN (SELECT student_id FROM score_table WHERE test_id=#{testId})
+	</select>
+
+	<resultMap type="User" id="user">
+		<id column="id" property="userId" />
+		<result column="password" property="password" />
+		<result column="type" property="type" />
+		<result column="name" property="name" />
+		<result column="sex" property="sex" />
+		<result column="icon_path" property="iconPath" />
+	</resultMap>
+
+
+
+
 </mapper>

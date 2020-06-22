@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <!--视口的设置，让网页能等比例的缩放到对应设备中-->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <!--告诉ie浏览器用最新内核去渲染网页-->
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Document</title>
+    <link rel="stylesheet" href="../../mobile/css/bootstrap.css">
+     <script src="https://cdn.jsdelivr.net/npm/vue"></script>
+     <script src="https://cdn.staticfile.org/jquery/2.0.0/jquery.min.js"></script>
+         <script type="text/javascript" src="../../mobile/js/bootstrap.js" ></script>
+</head>
+<body>
+
+    <!--
+        作者：bilaisheng@163.com
+        时间：2017-10-11
+        描述：bootstrap 中文网 布局排列
+    -->
+
+    <style type="text/css">
+        .container .items{border: 1px solid #EEEEEE;padding: 10px;margin-bottom: 15px;}
+    </style>
+    <div class="container" id="app">
+        <div class="row">
+            <div class="col-lg-3 col-md-4" v-for="item in courses" οnclick="window.open('http://www.baidu.com')">
+                <div class="items text-center">
+                    <h3>{{item.name}}</h3>
+                    <p>{{item.teacherName}}</p>
+                    <a href="/mobile/video.html">听课</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!--jquery.js 一定要放在bootstrap.min.js之前，如果不放报错-->
+
+    <script type="text/javascript">
+    var app = new Vue({
+        el:'#app',
+        data:{
+            courses:[]
+        },
+        created:function(){
+        	this.getCourse()
+        },
+        methods:{
+        	getCourse:function(){
+        		$.ajax({
+        			type:"GET",
+        			url:"/mobile/course/query/student/1173710113",
+        			dataType:"json",
+        			success:(response)=>{
+        				this.$data.courses=response
+        			}
+        		})
+        	}
+        }
+    });
+</script>
+</body>
+</html>

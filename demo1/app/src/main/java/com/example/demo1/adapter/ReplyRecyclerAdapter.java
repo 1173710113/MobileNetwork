@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.demo1.R;
 import com.example.demo1.domain.Reply;
+import com.example.demo1.util.TimeUtil;
 
 import java.util.List;
 
@@ -46,7 +47,7 @@ public class ReplyRecyclerAdapter extends RecyclerView.Adapter<ReplyRecyclerAdap
         Reply reply = mReplyList.get(position);
         holder.posterNameText.setText(reply.getPosterName());
         holder.contentText.setText(reply.getContent());
-        holder.postDateText.setText(reply.getTime());
+        holder.postDateText.setText(TimeUtil.parseTime(reply.getTime()));
     }
 
     @Override

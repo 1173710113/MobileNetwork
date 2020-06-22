@@ -23,17 +23,14 @@ public class TestController {
 
 	@RequestMapping("/addtest/{name}/{startTime}/{endTime}/{courseId}")
 	@ResponseBody
-	public void addTest(@PathVariable("name") String name, @PathVariable("startTime") String startTime,
-			@PathVariable("endTime") String endTime, @PathVariable("courseId") String courseId,
-			@RequestBody List<Question> list) {
-		Test test = new Test(null, name, startTime, endTime, courseId);
+	public void addTest(@RequestBody Test test, @RequestBody List<Question> list) {
 		service.addTest(test, list);
 	}
 
 	@RequestMapping("/gettest/{courseId}")
 	@ResponseBody
 	public List<Test> getTestList(@PathVariable("courseId") String courseId) {
-		return service.getTestList(courseId);
+		return service.queryTestByCourse(courseId);
 	}
 
 	@RequestMapping("/getquestion/{testId}")
@@ -45,19 +42,13 @@ public class TestController {
 	@RequestMapping("/addscore")
 	@ResponseBody
 	public void addScore(@RequestBody Score score) {
-		service.addScore(score.getTestId(), score.getStudentId(), score.getScore(), score.getEveryScore());
+		service.addScore(score);
 	}
 
 	@RequestMapping(value = "/queryscore/{testId}/{studentId}", method = RequestMethod.GET)
 	@ResponseBody
 	public Score queryScore(@PathVariable("testId") String testId, @PathVariable("studentId") String studentId) {
 		return service.queryScore(testId, studentId);
-	}
-
-	@RequestMapping("/getteststudent/{testId}")
-	@ResponseBody
-	public int getStudentNumber(@PathVariable("testId") String testId) {
-		return service.getStudentList(testId).size();
 	}
 
 	@RequestMapping("/isjoin/{testId}/{studentId}")
@@ -69,18 +60,17 @@ public class TestController {
 		return "true";
 	}
 	
+	@RequestMapping("/getteststudent/{testId}")
+	@ResponseBody
+	public int getStudentNumber(@PathVariable("testId") String testId) {
+		return service.getStudentList(testId);
+	}
+	
 	@RequestMapping("/student/score")
 	@ResponseBody
 	public List<String> studentQueryScore(String courseId, String studentId) {
 		return service.studentQueryScore(courseId, studentId);
 	}
 	
-	@RequestMapping("/teacher/score/{courseId}")
-	@ResponseBody
-	public List<String> teacherQueryScore(@PathVariable("courseId")String courseId){
-		List<String> list = service.teacherQueryScore(courseId);
-		System.out.println(list.size() + "123");
-		return list;
-	}
 
 }

@@ -3,7 +3,7 @@
  */
 package com.example.demo.service;
 
-import java.sql.SQLIntegrityConstraintViolationException;
+import java.util.List;
 
 import com.example.demo.domain.User;
 
@@ -22,7 +22,7 @@ public interface UserService {
 	 * @param sex
 	 * @return
 	 */
-	public void register(String id, String password, String type, String name, String sex) throws SQLIntegrityConstraintViolationException;
+	public void register(User user);
 	
 	/**
 	 * 
@@ -37,21 +37,15 @@ public interface UserService {
 	 * @param password should not be null or '' and should only contain valid character.
 	 * @return
 	 */
-	public void updateUserPassword(String password);
+	public void updateUserPassword(String id, String password);
 	
 	/**
 	 * 
 	 * @param name should not be null or ''.
 	 * @return
 	 */
-	public String updateUserName(String name);
+	public void updateUserName(String id, String name);
 	
-	/**
-	 * 
-	 * @param sex should be 男\女.
-	 * @return
-	 */
-	public String updateUserSex(String sex);
 	
 	/**
 	 * 
@@ -62,7 +56,6 @@ public interface UserService {
 	
 	public User getUserById(String userId);
 	
-	public void updateUserName(String name, String id);
+	public List<User> queryStudentByCourse(String courseId);
 	
-	public void updateUserPass(String id, String pass);
 }

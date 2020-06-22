@@ -10,6 +10,8 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
 import com.example.demo1.domain.Course;
 import com.example.demo1.domain.Discussion;
 import com.example.demo1.domain.LocalFile;
@@ -23,8 +25,6 @@ import com.example.demo1.util.JSONUtil;
 import com.example.demo1.util.ValidateUtil;
 import com.hjq.toast.ToastUtils;
 
-import org.json.JSONException;
-import org.json.JSONObject;
 import org.litepal.crud.DataSupport;
 
 import java.io.IOException;
@@ -176,9 +176,8 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
      * @param data
      */
     private void writeUserInfo(String data) {
-        try {
-            JSONObject object = new JSONObject(data);
-            String id = object.getString("id");
+            JSONObject object = JSON.parseObject(data);
+            String id = object.getString("userId");
             String pre = getSharedPreferences("userInfo", MODE_PRIVATE).getString("id", null);
             if(pre == null || !id.equals(pre)) {
                 DataSupport.deleteAll(Course.class);
@@ -202,9 +201,6 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
             editor.putString("type", type);
             editor.putString("sex", sex);
             editor.apply();
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
 
     }
 

@@ -3,7 +3,6 @@
  */
 package com.example.demo.controller;
 
-import java.sql.SQLIntegrityConstraintViolationException;
 import java.util.List;
 import java.util.Random;
 
@@ -13,11 +12,9 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.example.demo.domain.User;
-import com.example.demo.service.CourseService;
 import com.example.demo.service.UserService;
 
 /**
@@ -29,51 +26,57 @@ import com.example.demo.service.UserService;
 public class UserController {
 	@Autowired
 	private UserService userService;
-	@Autowired
-	private CourseService courseService;
 
 	@RequestMapping("/login")
 	@ResponseBody
 	public User login(@RequestBody User user) {
-		User us = userService.login(user.getId(), user.getPassword());
+		User us = userService.login(user.getUserId(), user.getPassword());
 		System.out.println("userlogin");
+		return us;
+	}
+	
+	@RequestMapping("/html/login")
+	public String hLogin(String id, String password) {
+		User user = userService.login(id, password);
+		return "course";
+	}
+
+	@RequestMapping("/login/test")
+	@ResponseBody
+	public User login(String id, String password) {
+		User us = userService.login(id, password);
 		return us;
 	}
 
 	@RequestMapping(value = "/add", method = RequestMethod.POST)
 	@ResponseBody
 	public String add(@RequestBody User user) {
-
-		try {
-			userService.register(user.getId(), user.getPassword(), user.getType(), user.getName(), user.getSex());
-		} catch (SQLIntegrityConstraintViolationException e) {
-			System.out.println("用户名已存在");
-		}
+		userService.register(user);
 		return "success";
 	}
 
 	@RequestMapping("/updatepassword")
-	public void updatePasssword(@RequestParam(value = "password", required = true) String password) {
-		userService.updateUserPassword(password);
+	public void updatePasssword(String id, String password) {
+		userService.updateUserPassword(id, password);
 
 	}
 
 	@RequestMapping("/getrandomstudnet/{courseId}")
 	public User getRandomUser(@PathVariable("courseId") String courseId) {
-		List<String> studnets = courseService.getCourseStudent(courseId);
+		List<User> studnets = userService.queryStudentByCourse(courseId);
 		Random r = new Random();
 		int n = r.nextInt(studnets.size());
-		String student = studnets.get(n);
-		return userService.getUserById(student);
+		User student = studnets.get(n);
+		return student;
 	}
-	
-	@RequestMapping("/updatename")
-	public void updateUserName(String name, String id) {
-		userService.updateUserName(name, id);
+
+	@RequestMapping("/update/name")
+	public void updateUserName(String id, String name) {
+		userService.updateUserName(id, name);
 	}
-	
-	@RequestMapping("update/pass")
-	public void updateUserPass(String id, String pass) {
-		userService.updateUserPass(id, pass);
+
+	@RequestMapping("update/password")
+	public void updateUserPass(String id, String password) {
+		userService.updateUserPassword(id, password);
 	}
 }

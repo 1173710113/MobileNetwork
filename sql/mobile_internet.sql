@@ -11,7 +11,7 @@
  Target Server Version : 80018
  File Encoding         : 65001
 
- Date: 21/12/2019 01:01:19
+ Date: 07/01/2020 17:51:13
 */
 
 SET NAMES utf8mb4;
@@ -25,9 +25,9 @@ CREATE TABLE `course_student`  (
   `student` char(15) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
   `course` int(10) UNSIGNED NOT NULL,
   INDEX `cours_id`(`course`) USING BTREE,
-  INDEX `student_id`(`student`) USING BTREE,
+  INDEX `course_student`(`student`) USING BTREE,
   CONSTRAINT `cours_id` FOREIGN KEY (`course`) REFERENCES `course_table` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT `student_id` FOREIGN KEY (`student`) REFERENCES `user_table` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+  CONSTRAINT `course_student` FOREIGN KEY (`student`) REFERENCES `user_table` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
@@ -45,9 +45,11 @@ CREATE TABLE `course_table`  (
   `real_vol` int(3) UNSIGNED NOT NULL DEFAULT 0,
   PRIMARY KEY (`id`) USING BTREE,
   INDEX `name`(`name`) USING BTREE,
-  INDEX `course_table`(`teacher`) USING BTREE,
-  CONSTRAINT `course_table` FOREIGN KEY (`teacher`) REFERENCES `user_table` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE = InnoDB AUTO_INCREMENT = 4 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
+  INDEX `start_time`(`start_time`) USING BTREE,
+  INDEX `start_time_2`(`start_time`, `end_time`) USING BTREE,
+  INDEX `teacher`(`teacher`) USING BTREE,
+  CONSTRAINT `teacher` FOREIGN KEY (`teacher`) REFERENCES `user_table` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE = InnoDB AUTO_INCREMENT = 18 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Table structure for discussion_table
@@ -62,29 +64,43 @@ CREATE TABLE `discussion_table`  (
   `course` int(10) UNSIGNED NULL DEFAULT NULL,
   `reply_count` int(10) UNSIGNED NOT NULL DEFAULT 0,
   PRIMARY KEY (`id`) USING BTREE,
-  INDEX `user_id`(`user`) USING BTREE,
   INDEX `reply_course`(`course`) USING BTREE,
-  CONSTRAINT `reply_course` FOREIGN KEY (`course`) REFERENCES `course_table` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT `user_id` FOREIGN KEY (`user`) REFERENCES `user_table` (`id`) ON DELETE SET NULL ON UPDATE CASCADE
-) ENGINE = InnoDB AUTO_INCREMENT = 31 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
+  INDEX `discussion_poster`(`user`) USING BTREE,
+  CONSTRAINT `discussion_poster` FOREIGN KEY (`user`) REFERENCES `user_table` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `reply_course` FOREIGN KEY (`course`) REFERENCES `course_table` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE = InnoDB AUTO_INCREMENT = 59 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Table structure for enroll_table
+-- ----------------------------
+DROP TABLE IF EXISTS `enroll_table`;
+CREATE TABLE `enroll_table`  (
+  `code` char(6) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+  `course_id` int(10) UNSIGNED NOT NULL,
+  `due_time` datetime(0) NOT NULL,
+  INDEX `enroll_course`(`course_id`) USING BTREE,
+  INDEX `enroll_due`(`due_time`) USING BTREE,
+  CONSTRAINT `enroll_course` FOREIGN KEY (`course_id`) REFERENCES `course_table` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Table structure for file_table
 -- ----------------------------
 DROP TABLE IF EXISTS `file_table`;
 CREATE TABLE `file_table`  (
+  `id` int(255) UNSIGNED NOT NULL AUTO_INCREMENT,
   `path` char(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
   `name` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
   `size` bigint(50) UNSIGNED NOT NULL DEFAULT 0,
   `user` char(15) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
   `course` int(10) UNSIGNED NOT NULL,
   `time` datetime(6) NOT NULL,
-  PRIMARY KEY (`path`) USING BTREE,
-  INDEX `post_user`(`user`) USING BTREE,
+  PRIMARY KEY (`id`) USING BTREE,
   INDEX `file_course`(`course`) USING BTREE,
+  INDEX `file_poster`(`user`) USING BTREE,
   CONSTRAINT `file_course` FOREIGN KEY (`course`) REFERENCES `course_table` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT `post_user` FOREIGN KEY (`user`) REFERENCES `user_table` (`id`) ON DELETE SET NULL ON UPDATE CASCADE
-) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
+  CONSTRAINT `file_poster` FOREIGN KEY (`user`) REFERENCES `user_table` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE = InnoDB AUTO_INCREMENT = 19 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Table structure for homework_table
@@ -99,11 +115,26 @@ CREATE TABLE `homework_table`  (
   `time` datetime(6) NOT NULL,
   `course` int(10) UNSIGNED NOT NULL,
   PRIMARY KEY (`id`) USING BTREE,
-  INDEX `homework_poster`(`user`) USING BTREE,
   INDEX `homework_course`(`course`) USING BTREE,
-  CONSTRAINT `homework_course` FOREIGN KEY (`course`) REFERENCES `course_table` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT `homework_poster` FOREIGN KEY (`user`) REFERENCES `user_table` (`id`) ON DELETE SET NULL ON UPDATE CASCADE
-) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
+  INDEX `homework-poster`(`user`) USING BTREE,
+  CONSTRAINT `homework-poster` FOREIGN KEY (`user`) REFERENCES `user_table` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `homework_course` FOREIGN KEY (`course`) REFERENCES `course_table` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE = InnoDB AUTO_INCREMENT = 14 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Table structure for question_table
+-- ----------------------------
+DROP TABLE IF EXISTS `question_table`;
+CREATE TABLE `question_table`  (
+  `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT,
+  `content` varchar(1000) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+  `answer` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+  `test_id` int(10) UNSIGNED NOT NULL,
+  `score` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+  PRIMARY KEY (`id`) USING BTREE,
+  INDEX `question_test`(`test_id`) USING BTREE,
+  CONSTRAINT `question_test` FOREIGN KEY (`test_id`) REFERENCES `test_table` (`test_id`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE = InnoDB AUTO_INCREMENT = 21 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Table structure for reply_table
@@ -116,21 +147,53 @@ CREATE TABLE `reply_table`  (
   `content` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '',
   `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT,
   PRIMARY KEY (`id`) USING BTREE,
-  INDEX `reply_user_id`(`user`) USING BTREE,
   INDEX `reply_discussion_id`(`discussion_id`) USING BTREE,
+  INDEX `reply_poster`(`user`) USING BTREE,
   CONSTRAINT `reply_discussion_id` FOREIGN KEY (`discussion_id`) REFERENCES `discussion_table` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT `reply_user_id` FOREIGN KEY (`user`) REFERENCES `user_table` (`id`) ON DELETE SET NULL ON UPDATE CASCADE
-) ENGINE = InnoDB AUTO_INCREMENT = 19 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
+  CONSTRAINT `reply_poster` FOREIGN KEY (`user`) REFERENCES `user_table` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE = InnoDB AUTO_INCREMENT = 82 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Table structure for score_table
+-- ----------------------------
+DROP TABLE IF EXISTS `score_table`;
+CREATE TABLE `score_table`  (
+  `id` int(20) UNSIGNED NOT NULL AUTO_INCREMENT,
+  `student_id` char(15) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+  `test_id` int(10) UNSIGNED NULL DEFAULT NULL,
+  `score` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+  `every_score` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
+  PRIMARY KEY (`id`) USING BTREE,
+  INDEX `score_test`(`test_id`) USING BTREE,
+  INDEX `score-student`(`student_id`) USING BTREE,
+  CONSTRAINT `score-student` FOREIGN KEY (`student_id`) REFERENCES `user_table` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `score_test` FOREIGN KEY (`test_id`) REFERENCES `test_table` (`test_id`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE = InnoDB AUTO_INCREMENT = 8 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Table structure for test_table
+-- ----------------------------
+DROP TABLE IF EXISTS `test_table`;
+CREATE TABLE `test_table`  (
+  `test_id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT,
+  `name` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+  `start_time` datetime(0) NOT NULL,
+  `end_time` datetime(0) NOT NULL,
+  `course_id` int(10) UNSIGNED NULL DEFAULT NULL,
+  PRIMARY KEY (`test_id`) USING BTREE,
+  INDEX `test_course`(`course_id`) USING BTREE,
+  CONSTRAINT `test_course` FOREIGN KEY (`course_id`) REFERENCES `course_table` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE = InnoDB AUTO_INCREMENT = 23 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Table structure for user_table
 -- ----------------------------
 DROP TABLE IF EXISTS `user_table`;
 CREATE TABLE `user_table`  (
-  `id` char(15) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
-  `password` char(20) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+  `id` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+  `password` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
   `type` enum('管理员','教师','学生') CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
-  `name` char(36) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
+  `name` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
   `sex` enum('男','女') CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
   `icon_path` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
   PRIMARY KEY (`id`) USING BTREE

@@ -3,6 +3,7 @@
  */
 package com.example.demo.dao;
 
+import java.util.Date;
 import java.util.List;
 
 import org.apache.ibatis.annotations.Mapper;
@@ -17,56 +18,23 @@ import com.example.demo.domain.Course;
 @Mapper
 public interface CourseMapper {
 
-	/**
-	 * 
-	 * @param name
-	 * @param teacherId
-	 * @param maxVol
-	 * @param destination
-	 * @param startTime
-	 * @param endTime
-	 */
 	public void addCourse(Course course);
+	
+	public void enroll(String studentId, String courseId);
 
-	/**
-	 * 
-	 * @param id is the id of course.
-	 */
-	public void deleteCourse(@Param("id") String id);
+	public void deleteCourse(String id);
+	
+	public void dropCourse(String studentId, String courseId);
+	
+	public Course queryCourse(String id);
 
-	/**
-	 * 
-	 * @param studentId
-	 * @return
-	 */
-	public List<Course> queryCourseByStudentId(@Param("student_id") String studentId);
+	public List<Course> queryCourseByStudentId(String studentId);
 
-	/**
-	 * 
-	 * @param teacherId
-	 * @return
-	 */
-	public List<Course> queryCourseByTeacherId(@Param("teacher_id") String teacherId);
+	public List<Course> queryCourseByTeacherId(String teacherId);
 
-	public List<String> getStudentByCourse(@Param("courseId") String courseId);
-
-	public String queryCode(@Param("code") String code);
+	public String queryCode(String code);
 
 	public String queryCodeByCourse(@Param("course_id") String courseId);
-
-	public void enroll(@Param("student") String student, @Param("course") String course);
-
-	public void updateCourseCountPlus(@Param("course_id") String courseId);
-
-	public void updateCourseCountMinus(@Param("course_id") String courseId);
-
-	public int queryCourseMaxVol(@Param("course_id") String courseId);
-
-	public int queryCourseRealVol(@Param("course_id") String courseId);
-
-	public String isStudentInCourse(@Param("student_id") String studentId, @Param("course_id") String courseId);
-
-	public void dropCourse(@Param("student_id") String studentId, @Param("course_id") String courseId);
 	
-	public void addCode(@Param("course_id")String courseId, @Param("code")String code, @Param("due_time")String dueTime);
+	public void addCode(@Param("course_id")String courseId, @Param("code")String code, @Param("due_time")Date dueTime);
 }

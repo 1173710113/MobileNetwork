@@ -8,14 +8,13 @@ import org.apache.ibatis.annotations.Param;
 import com.example.demo.domain.Question;
 import com.example.demo.domain.Score;
 import com.example.demo.domain.Test;
-import com.example.demo.domain.User;
 
 @Mapper
 public interface TestMapper {
 
 	public void addTest(Test test);
 
-	public List<Test> getTestList(@Param("courseId") String courseId);
+	public List<Test> queryTestByCourse(String courseId);
 
 	public void addQuestion(Question question);
 
@@ -23,10 +22,7 @@ public interface TestMapper {
 
 	public Score queryScore(@Param("student_id") String studentId, @Param("test_id") String testId);
 
-	public void addScore(@Param("test_id") String testId, @Param("student_id") String studentId,
-			@Param("score") String score, @Param("everyScore") String everyScore);
-
-	public List<String> getStudentList(@Param("testId") String testId);
+	public void addScore(Score score);
 	
 	public List<String> studentQueryScore(String courseId, String studentId);
 	

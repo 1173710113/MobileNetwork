@@ -16,13 +16,15 @@ import com.example.demo1.FileActivity;
 import com.example.demo1.R;
 import com.example.demo1.TeacherHomeworkActivity;
 import com.example.demo1.TestActivity;
-import com.example.demo1.domain.TeacherCourse;
+import com.example.demo1.domain.Course;
 import com.example.demo1.util.HttpUtil;
+import com.example.demo1.util.TimeUtil;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 
 import java.io.IOException;
+import java.sql.Time;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -31,7 +33,7 @@ import okhttp3.Callback;
 import okhttp3.Response;
 
 public class TeacherCourseRecyclerAdapter extends RecyclerView.Adapter<TeacherCourseRecyclerAdapter.ViewHolder> {
-    private List<TeacherCourse> mTeacherCourseList = new ArrayList<>();
+    private List<Course> mTeacherCourseList = new ArrayList<>();
     private IOnDeleteListener onDeleteListener;
 
     static class ViewHolder extends RecyclerView.ViewHolder{
@@ -56,7 +58,7 @@ public class TeacherCourseRecyclerAdapter extends RecyclerView.Adapter<TeacherCo
         }
     }
 
-    public TeacherCourseRecyclerAdapter(List<TeacherCourse> courseList) {
+    public TeacherCourseRecyclerAdapter(List<Course> courseList) {
         mTeacherCourseList = courseList;
     }
 
@@ -69,18 +71,18 @@ public class TeacherCourseRecyclerAdapter extends RecyclerView.Adapter<TeacherCo
 
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
-        final TeacherCourse course = mTeacherCourseList.get(position);
+        final Course course = mTeacherCourseList.get(position);
         holder.nameText.setText(course.getName());
         holder.codeText.setText(course.getCode());
         holder.teacherNameText.setText(course.getTeacherName());
         holder.destinationText.setText(course.getDestination());
         holder.realVolText.setText(Integer.toString(course.getRealVol()));
-        holder.startDateText.setText(course.getStartTime());
-        holder.endDateText.setText(course.getEndTime());
+        holder.startDateText.setText(TimeUtil.parseTime(course.getStartTime()));
+        holder.endDateText.setText(TimeUtil.parseTime(course.getEndTime()));
         holder.analysisImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String courseId = course.getId();
+                String courseId = course.getCourseId();
                 String url = "http://10.0.2.2:8081/mobile/test/teacher/score/" + courseId;
                 HttpUtil.sendHttpRequest(url, new Callback() {
                     @Override
@@ -148,7 +150,7 @@ public class TeacherCourseRecyclerAdapter extends RecyclerView.Adapter<TeacherCo
             @Override
             public void onClick(View v) {
                 if(onDeleteListener != null) {
-                    onDeleteListener.onDelete(course.getId());
+                    onDeleteListener.onDelete(course.getCourseId());
                 }
             }
         });

@@ -67,7 +67,7 @@ public class TestRecyclerAdapter extends RecyclerView.Adapter<TestRecyclerAdapte
                 holder.countText.setVisibility(View.GONE);
                 String id = holder.itemView.getContext().getSharedPreferences("userInfo", Context.MODE_PRIVATE).getString("id", null);
                 if(id != null) {
-                    List<Score> result = DataSupport.where("testId = ? and studentId = ?", test.getId(), id).find(Score.class);
+                    List<Score> result = DataSupport.where("testId = ? and studentId = ?", test.getTestId(), id).find(Score.class);
                     if(result != null && result.size() != 0) {
                         holder.signImage.setVisibility(View.GONE);
                         holder.countText.setVisibility(View.VISIBLE);
@@ -87,23 +87,23 @@ public class TestRecyclerAdapter extends RecyclerView.Adapter<TestRecyclerAdapte
                 }
                 break;
         }
-        String startDate = test.getStartTime();
+        String startDate = TimeUtil.parseTime(test.getStartTime());
         final int state;
         if(TimeUtil.isAfter(startDate)) {
             //未开始
             holder.signImage.setImageResource(R.color.primary_light);
-            holder.timeText.setText(test.getStartTime());
+            holder.timeText.setText(TimeUtil.parseTime(test.getStartTime()));
             state = 0;
         } else {
-            String endDate = test.getEndTime();
+            String endDate = TimeUtil.parseTime(test.getEndTime());
             if(TimeUtil.isAfter(endDate)) {
                 //正在进行
                 holder.signImage.setImageResource(R.color.primary_dark);
-                holder.timeText.setText(test.getEndTime());
+                holder.timeText.setText(TimeUtil.parseTime(test.getEndTime()));
                 state = 1;
             } else {
                 holder.signImage.setImageResource(R.color.secondary_text);
-                holder.timeText.setText(test.getEndTime());
+                holder.timeText.setText(TimeUtil.parseTime(test.getEndTime()));
                 state = 2;
             }
         }

@@ -1,11 +1,21 @@
 package com.example.demo1.domain;
 
-import com.example.demo1.util.JSONUtil;
+import com.fasterxml.jackson.annotation.JsonFormat;
 
 import org.litepal.crud.DataSupport;
 
 import java.io.Serializable;
+import java.util.Date;
 
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
+
+@Data
+@AllArgsConstructor(suppressConstructorProperties = true)
+@NoArgsConstructor
+@EqualsAndHashCode(callSuper = true)
 public class Course extends DataSupport implements Serializable {
     private String courseId;
     private String name;
@@ -13,101 +23,13 @@ public class Course extends DataSupport implements Serializable {
     private String teacherName;
     private int maxVol;
     private String destination;
-    private String startTime;
-    private String endTime;
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
+    private Date startTime;
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
+    private Date endTime;
     private int realVol;
+    private String code;
 
-    /**
-     * @param id
-     * @param name
-     * @param teacherId
-     * @param teacherName
-     * @param maxVol
-     * @param destination
-     * @param startTime
-     * @param endTime
-     * @param realVol
-     */
-    public Course(String id, String name, String teacherId, String teacherName, int maxVol, String destination,
-                  String startTime, String endTime, int realVol) {
-        super();
-        this.courseId = id;
-        this.name = name;
-        this.teacherId = teacherId;
-        this.teacherName = teacherName;
-        this.maxVol = maxVol;
-        this.destination = destination;
-        this.startTime = startTime;
-        this.endTime = endTime;
-        this.realVol = realVol;
-    }
 
-    /**
-     * @return the id
-     */
-    public String getId() {
-        return courseId;
-    }
-
-    /**
-     * @return the name
-     */
-    public String getName() {
-        return name;
-    }
-
-    /**
-     * @return the teacherId
-     */
-    public String getTeacherId() {
-        return teacherId;
-    }
-
-    /**
-     * @return the teacherName
-     */
-    public String getTeacherName() {
-        return teacherName;
-    }
-
-    /**
-     * @return the maxVol
-     */
-    public int getMaxVol() {
-        return maxVol;
-    }
-
-    /**
-     * @return the destination
-     */
-    public String getDestination() {
-        return destination;
-    }
-
-    /**
-     * @return the startTime
-     */
-    public String getStartTime() {
-        return startTime;
-    }
-
-    /**
-     * @return the endTime
-     */
-    public String getEndTime() {
-        return endTime;
-    }
-
-    /**
-     * @return the realVol
-     */
-    public int getRealVol() {
-        return realVol;
-    }
-
-    @Override
-    public String toString() {
-        return JSONUtil.CourseParseJSON(this).toString();
-    }
 
 }

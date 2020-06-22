@@ -50,7 +50,7 @@ public class HomeworkRecyclerAdapter extends RecyclerView.Adapter<HomeworkRecycl
         holder.titleText.setText(homework.getTitle());
         //holder.posterNameText.setText(homework.getPosterName());
         holder.contentText.setText(homework.getContent());
-        String deadline = homework.getDeadline();
+        String deadline = TimeUtil.parseTime(homework.getDeadline());
         holder.deadlineText.setText(deadline);
         if(!TimeUtil.isAfter(deadline)) {
             holder.deadlineText.setTextColor(Color.parseColor("#757575"));

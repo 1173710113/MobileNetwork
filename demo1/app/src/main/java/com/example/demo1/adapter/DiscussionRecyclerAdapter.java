@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.demo1.DiscussionDetailActivity;
 import com.example.demo1.R;
 import com.example.demo1.domain.Discussion;
+import com.example.demo1.util.TimeUtil;
 import com.example.demo1.util.ValidateUtil;
 
 import java.util.List;
@@ -56,7 +57,7 @@ public class DiscussionRecyclerAdapter extends RecyclerView.Adapter<DiscussionRe
         } else {
             holder.contentText.setText(discussion.getContent());
         }
-        holder.postDateText.setText(discussion.getPostTime());
+        holder.postDateText.setText(TimeUtil.parseTime(discussion.getPostTime()));
         holder.countText.setText(Integer.toString(discussion.getReplyCount()));
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override

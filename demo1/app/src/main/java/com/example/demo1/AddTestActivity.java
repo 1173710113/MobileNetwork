@@ -14,6 +14,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 
+import com.alibaba.fastjson.JSONArray;
 import com.bigkoo.pickerview.builder.TimePickerBuilder;
 import com.bigkoo.pickerview.listener.OnTimeSelectListener;
 import com.bigkoo.pickerview.view.TimePickerView;
@@ -32,8 +33,6 @@ import com.example.demo1.util.ValidateUtil;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
 import com.hjq.toast.ToastUtils;
-
-import org.json.JSONArray;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -159,9 +158,9 @@ public class AddTestActivity extends BaseActivity {
                                     QuestionContentSingleChoice content = new QuestionContentSingleChoice(questionList.get(i));
                                     String contentStr = content.toString();
                                     Question question = new Question(null, contentStr, questionList.get(i).getAnswer(), null, "4");
-                                    jsonArray.put(JSONUtil.QuestionParseJSON(question));
+                                    jsonArray.add(JSONUtil.QuestionParseJSON(question));
                                 }
-                                String url = "http://10.0.2.2:8081/mobile/test/addtest/" + name + "/" + startDate + "/" + endDate + "/" + course.getId();
+                                String url = "http://10.0.2.2:8081/mobile/test/addtest/" + name + "/" + startDate + "/" + endDate + "/" + course.getCourseId();
 
                                 HttpUtil.sendHttpRequest(url, jsonArray, new Callback() {
                                     @Override

@@ -18,6 +18,7 @@ import com.example.demo1.R;
 import com.example.demo1.StudentHomeworkActivity;
 import com.example.demo1.TestActivity;
 import com.example.demo1.domain.Course;
+import com.example.demo1.util.TimeUtil;
 import com.hjq.toast.ToastUtils;
 
 import org.json.JSONArray;
@@ -25,6 +26,7 @@ import org.json.JSONException;
 
 import java.io.IOException;
 import java.io.Serializable;
+import java.sql.Time;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
@@ -80,8 +82,8 @@ public class CourseRecyclerAdapter extends RecyclerView.Adapter<CourseRecyclerAd
         holder.teacherNameText.setText(course.getTeacherName());
         holder.destinationText.setText(course.getDestination());
         holder.realVolText.setText(Integer.toString(course.getRealVol()));
-        holder.startDateText.setText(course.getStartTime());
-        holder.endDateText.setText(course.getEndTime());
+        holder.startDateText.setText(TimeUtil.parseTime(course.getStartTime()));
+        holder.endDateText.setText(TimeUtil.parseTime(course.getEndTime()));
         holder.analysisImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(final View v) {
@@ -92,7 +94,7 @@ public class CourseRecyclerAdapter extends RecyclerView.Adapter<CourseRecyclerAd
                 }
                 RequestBody requestBody = new MultipartBody.Builder()
                         .setType(MultipartBody.FORM)
-                        .addFormDataPart("courseId", course.getId())
+                        .addFormDataPart("courseId", course.getCourseId())
                         .addFormDataPart("studentId", studentId)
                         .build();
                 String url = "http://10.0.2.2:8081/mobile/test/student/score";
@@ -165,7 +167,7 @@ public class CourseRecyclerAdapter extends RecyclerView.Adapter<CourseRecyclerAd
             @Override
             public void onClick(View v) {
                 if(onDeleteListener != null) {
-                    onDeleteListener.onDelete(course.getId());
+                    onDeleteListener.onDelete(course.getCourseId());
                 }
             }
         });

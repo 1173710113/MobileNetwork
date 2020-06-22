@@ -67,7 +67,7 @@ public class SingleChoiceRecyclerAdapter extends RecyclerView.Adapter<SingleChoi
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.single_choice_item, parent, false);
-        SingleChoiceRecyclerAdapter.ViewHolder viewHolder = new SingleChoiceRecyclerAdapter.ViewHolder(view);
+        ViewHolder viewHolder = new ViewHolder(view);
         return viewHolder;
     }
 

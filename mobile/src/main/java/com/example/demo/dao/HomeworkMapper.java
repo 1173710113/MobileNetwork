@@ -6,7 +6,6 @@ package com.example.demo.dao;
 import java.util.List;
 
 import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Param;
 
 import com.example.demo.domain.Homework;
 
@@ -16,42 +15,13 @@ import com.example.demo.domain.Homework;
  */
 @Mapper
 public interface HomeworkMapper {
-	/**
-	 * 
-	 * @param id
-	 * @param poster
-	 * @param title
-	 * @param content
-	 * @param deadline
-	 * @param postTime
-	 * @param course
-	 */
-	public void addHomework( @Param("userId") String poster, @Param("title") String title,
-			@Param("content") String content, @Param("deadline") String deadline, @Param("time") String postTime,
-			@Param("course") String course);
 
-	/**
-	 * 
-	 * @param id
-	 */
-	public void deleteHomework(@Param("id") String id);
+	public void addHomework(Homework homework);
 
-	/**
-	 * 
-	 * @param id
-	 * @param title
-	 * @param content
-	 * @param deadline
-	 */
-	public void updateCourse(@Param("id") String id, @Param("title") String title, @Param("content") String content,
-			@Param("deadline") String deadline);
+	public void deleteHomework(String id);
 
-	/**
-	 * 
-	 * @param id
-	 * @param title
-	 * @return
-	 */
-	public List<Homework> queryHomework(@Param("id") String id);
+	public List<Homework> queryHomework(String id);
+	
+	public List<Homework> queryHomeworkByCourse(String courseId);
 
 }

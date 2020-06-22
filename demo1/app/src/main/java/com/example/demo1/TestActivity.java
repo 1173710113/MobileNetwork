@@ -131,13 +131,13 @@ public class TestActivity extends BaseActivity {
     }
 
     private void queryTest() {
-        String url = "http://10.0.2.2:8081/mobile/test/gettest/" + course.getId();
+        String url = "http://10.0.2.2:8081/mobile/test/gettest/" + course.getCourseId();
         HttpUtil.sendHttpRequest(url, new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
                 swipeRefreshLayout.setRefreshing(false);
                 ToastUtils.show("刷新失败");
-                final List<Test> cache = DataSupport.where("courseId = ?", course.getId()).find(Test.class);
+                final List<Test> cache = DataSupport.where("courseId = ?", course.getCourseId()).find(Test.class);
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
@@ -164,7 +164,7 @@ public class TestActivity extends BaseActivity {
                             return;
                         }
                         for(Test test: list){
-                            String url = "http://10.0.2.2:8081/mobile/test/queryscore/" + test.getId() + "/" + id;
+                            String url = "http://10.0.2.2:8081/mobile/test/queryscore/" + test.getTestId() + "/" + id;
                             HttpUtil.sendHttpRequest(url, new Callback() {
                                 @Override
                                 public void onFailure(Call call, IOException e) {
@@ -181,7 +181,7 @@ public class TestActivity extends BaseActivity {
                                                     @Override
                                                     public void run() {
                                                         Score score = JSONUtil.JSONParseScore(data);
-                                                        DataSupport.deleteAll(Score.class, "scoreId = ?", score.getId());
+                                                        DataSupport.deleteAll(Score.class, "scoreId = ?", score.getScoreId());
                                                         score.save();
                                                         adapter.notifyDataSetChanged();
                                                         swipeRefreshLayout.setRefreshing(false);
@@ -196,7 +196,7 @@ public class TestActivity extends BaseActivity {
                 }
                 final Map<Test, Integer> map = new HashMap<>();
                 for (int i = 0; i < list.size(); i++) {
-                    String url = "http://10.0.2.2:8081/mobile/test/getteststudent/" + list.get(i).getId();
+                    String url = "http://10.0.2.2:8081/mobile/test/getteststudent/" + list.get(i).getTestId();
                     final int finalI = i;
                     HttpUtil.sendHttpRequest(url, new Callback() {
                         @Override

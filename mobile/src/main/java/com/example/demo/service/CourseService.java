@@ -6,7 +6,6 @@ package com.example.demo.service;
 import java.util.List;
 
 import com.example.demo.domain.Course;
-import com.example.demo.domain.TeacherCourse;
 
 /**
  * @author msi-user
@@ -38,9 +37,7 @@ public interface CourseService {
 	 * @param teacherId
 	 * @return
 	 */
-	public List<TeacherCourse> queryCourseByTeacherId(String teacherId);
-
-	public List<String> getCourseStudent(String courseId);
+	public List<Course> queryCourseByTeacherId(String teacherId);
 
 	public String enroll(String code, String studentId);
 

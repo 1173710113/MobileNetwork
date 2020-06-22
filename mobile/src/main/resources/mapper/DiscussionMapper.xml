@@ -6,7 +6,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 <mapper namespace="com.example.demo.dao.DiscussionMapper">
 	<insert id="addDiscussion">
 		INSERT INTO discussion_table(user, time, title, content, course)
-		VALUES(#{user}, #{time}, #{title}, #{content}, #{course})
+		VALUES(#{posterId}, #{postTime}, #{title}, #{content}, #{courseId})
 	</insert>
 	
 	<delete id="deleteDiscussion">
@@ -26,83 +26,39 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		WHERE id=#{id}
 	</update>
 	
-	<update id="updateDiscussionReplyCountPlus">
-		UPDATE discussion_table
-		SET reply_count = reply_count + 1
-		WHERE id = #{id}
-	</update>
-	
-	<update id="updateDiscussionReplyCountMinus">
-		UPDATE discussion_table
-		SET reply_count = reply_count - 1
-		WHERE id = #{id}
-	</update>
-	
 	<select id="queryDiscussionByCourse" resultMap="discussion">
-		SELECT 
-		d.id as id,
-		u.id as user_id,
-		u.name as user_name,
-		d.course as course_id,
-		d.time as time,
-		d.title as title,
-		d.content as content,
-		d.reply_count as reply_count
-		FROM user_table u,discussion_table d
-		WHERE d.course=#{course_id} and u.id=d.user
+		SELECT *
+		FROM discussion_extend
+		WHERE course=#{courseId}
 	</select>
 	
 	<select id="queryDiscussionByCourseAndTitle" resultMap="discussion">
-		SELECT 
-		d.id as id,
-		u.id as user_id,
-		u.name as user_name,
-		d.course as course_id,
-		d.time as time,
-		d.title as title,
-		d.content as content,
-		d.reply_count as reply_count
-		FROM user_table u,discussion_table d
-		WHERE d.course=#{course_id} and d.title LIKE "%"#{title}"%"
+		SELECT *
+		FROM discussion_extend
+		WHERE course=#{courseId} AND title LIKE "%"#{title}"%"
 	</select>
 	
 	<select id="queryDiscussionByPoster" resultMap="discussion">
-		SELECT 
-		d.id as id,
-		d.user as user_id,
-		u.name as user_name,
-		d.course as course_id,
-		d.time as time,
-		d.title as title,
-		d.content as content,
-		d.reply_count as reply_count
-		FROM user_table u,discussion_table d
-		WHERE d.user=#{poster_id} and u.id=#{poster_id}
+		SELECT *
+		FROM discussion_extend
+		WHERE user_id=#{posterId}
 	</select>
 	
 	<resultMap type="Discussion" id="discussion">
-		<id column="id" property="id"/>
+		<id column="id" property="discussionId"/>
 		<result column="user_id" property="posterId"/>
 		<result column="user_name" property="posterName"/>
-		<result column="course_id" property="courseId"/>
+		<result column="course" property="courseId"/>
 		<result column="time" property="postTime"/>
 		<result column="title" property="title"/>
 		<result column="content" property="content"/>
 		<result column="reply_count" property="replyCount"/>
 	</resultMap>
 	
-	<select id="queryDiscussionById" resultMap="discussion">
-		SELECT
-		d.id as id,
-		d.user as user_id,
-		u.name as user_name,
-		d.course as course_id,
-		d.time as time,
-		d.title as title,
-		d.content as content,
-		d.reply_count as reply_count
-		FROM user_table u,discussion_table d
-		WHERE d.id=#{id} and u.id=d.user
+	<select id="queryDiscussion" resultMap="discussion">
+		SELECT *
+		FROM discussion_extend
+		WHERE id=#{id}
 	</select>
 	
 </mapper>
